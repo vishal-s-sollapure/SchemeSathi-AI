@@ -3,30 +3,18 @@ import {
   GraduationCap, 
   FileCheck2, 
   Search, 
-  Filter, 
-  Sparkles, 
   CheckCircle2, 
   XCircle, 
-  AlertTriangle, 
   FileWarning, 
-  ArrowRight, 
   UserCheck, 
-  Building2, 
   Award,
-  UploadCloud,
-  RefreshCw,
   Info
 } from 'lucide-react';
-import { useLanguage } from '../context/LanguageContext';
-import { StatusBadge } from '../components/common/StatusBadge';
 import { ScholarshipCard } from '../components/common/ScholarshipCard';
-import { EligibilityCard } from '../components/common/EligibilityCard';
 import { MOCK_SCHOLARSHIPS } from '../data/mockData';
-import { Scholarship, StudentProfile } from '../types';
+import { StudentProfile } from '../types';
 
 export const ScholarReadyPage: React.FC = () => {
-  const { t } = useLanguage();
-
   // 1. Student Profile State
   const [profile, setProfile] = useState<StudentProfile>({
     fullName: 'Ananya Sharma',

@@ -1,27 +1,16 @@
 import React, { useState } from 'react';
 import { 
   Search, 
-  Filter, 
   Building2, 
-  Sparkles, 
-  CheckCircle2, 
-  HelpCircle, 
-  ArrowRight,
-  SlidersHorizontal,
-  X,
-  FileCheck2
+  X
 } from 'lucide-react';
-import { useLanguage } from '../context/LanguageContext';
-import { StatusBadge } from '../components/common/StatusBadge';
 import { SchemeCard } from '../components/common/SchemeCard';
 import { EligibilityCard } from '../components/common/EligibilityCard';
 import { EmptyState } from '../components/common/EmptyState';
 import { MOCK_SCHEMES } from '../data/mockData';
-import { Scheme, SchemeCategory } from '../types';
+import { Scheme } from '../types';
 
 export const SchemeDiscoveryPage: React.FC = () => {
-  const { t } = useLanguage();
-
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<string>('All');
   const [selectedLevel, setSelectedLevel] = useState<string>('All');

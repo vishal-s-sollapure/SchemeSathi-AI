@@ -9,15 +9,8 @@ import {
   ArrowRight, 
   CheckCircle2, 
   Sparkles, 
-  FileCheck2, 
-  Globe2, 
   Lock, 
-  Building2, 
-  Users, 
-  BookOpen, 
-  HelpCircle,
-  Clock,
-  Award
+  BookOpen
 } from 'lucide-react';
 import { useLanguage } from '../context/LanguageContext';
 import { StatusBadge } from '../components/common/StatusBadge';
@@ -27,7 +20,7 @@ import { ScholarshipCard } from '../components/common/ScholarshipCard';
 import { CitationCard } from '../components/common/CitationCard';
 
 export const LandingPage: React.FC = () => {
-  const { t, language, setLanguage } = useLanguage();
+  const { language, setLanguage } = useLanguage();
 
   return (
     <div className="space-y-20 py-8 sm:py-12">

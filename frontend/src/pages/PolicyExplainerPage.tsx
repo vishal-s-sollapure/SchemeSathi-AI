@@ -2,30 +2,19 @@ import React, { useState } from 'react';
 import { 
   FileText, 
   HelpCircle, 
-  Search, 
-  Sparkles, 
   CheckCircle2, 
   AlertTriangle, 
-  BookOpen, 
-  ShieldCheck, 
-  ArrowRight,
-  ExternalLink,
-  Copy,
-  Check,
-  Send,
-  FileCheck2,
-  Calendar,
-  Layers
+  Copy, 
+  Check, 
+  Send, 
+  FileCheck2 
 } from 'lucide-react';
-import { useLanguage } from '../context/LanguageContext';
 import { StatusBadge } from '../components/common/StatusBadge';
 import { DocumentUpload } from '../components/common/DocumentUpload';
 import { CitationCard } from '../components/common/CitationCard';
-import { MOCK_CITATIONS, MOCK_DOCUMENT_ANALYSIS } from '../data/mockData';
+import { MOCK_CITATIONS } from '../data/mockData';
 
 export const PolicyExplainerPage: React.FC = () => {
-  const { t } = useLanguage();
-
   const [activeDocument, setActiveDocument] = useState<{ name: string; size: string } | null>({
     name: 'Karnataka_Raita_Vidya_Nidhi_Gazette_Circular_2024.pdf',
     size: '1.42 MB'
