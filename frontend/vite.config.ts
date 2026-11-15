@@ -7,6 +7,21 @@ export default defineConfig({
   server: {
     port: 5173,
     host: true,
+    strictPort: true,
+    watch: {
+      usePolling: true,
+    },
+  },
+  optimizeDeps: {
+    include: [
+      'react',
+      'react-dom',
+      'react-router-dom',
+      'lucide-react',
+      'axios',
+      'clsx',
+      'tailwind-merge',
+    ],
+    holdUntilCrawlEnd: true,
   },
 })
-
