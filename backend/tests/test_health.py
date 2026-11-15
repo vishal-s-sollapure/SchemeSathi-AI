@@ -26,3 +26,4 @@ def test_api_v1_health_endpoint():
     data = response.json()
     assert data["status"] == "healthy"
     assert data["application"] == "SchemeSathi AI"
+
