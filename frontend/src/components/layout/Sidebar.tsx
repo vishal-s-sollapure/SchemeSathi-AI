@@ -11,9 +11,7 @@ import {
   ChevronLeft, 
   ChevronRight,
   ShieldCheck,
-  CheckCircle2,
-  FileCheck2,
-  Sparkles
+  CheckCircle2
 } from 'lucide-react';
 import { useLanguage } from '../../context/LanguageContext';
 

@@ -4,24 +4,18 @@ import {
   ShieldCheck, 
   Menu, 
   X, 
-  Sparkles, 
   GraduationCap, 
   Search, 
   FileText, 
   Bot, 
   LayoutDashboard, 
   Info,
-  CheckCircle2,
   FileSearch
 } from 'lucide-react';
 import { LanguageSelector } from '../common/LanguageSelector';
 import { useLanguage } from '../../context/LanguageContext';
 
-interface NavbarProps {
-  backendOnline?: boolean;
-}
-
-export const Navbar: React.FC<NavbarProps> = ({ backendOnline = true }) => {
+export const Navbar: React.FC = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const location = useLocation();
   const { t } = useLanguage();

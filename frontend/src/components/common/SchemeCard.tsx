@@ -7,9 +7,6 @@ import {
   FileText, 
   ArrowRight,
   Sparkles,
-  Info,
-  ShieldCheck,
-  ChevronRight,
   X
 } from 'lucide-react';
 import { Scheme } from '../../types';
@@ -149,7 +146,7 @@ export const SchemeCard: React.FC<SchemeCardProps> = ({ scheme, onEvaluate }) =>
               {/* Benefit Box */}
               <div className="p-4 rounded-xl bg-emerald-50 border border-emerald-200">
                 <div className="text-xs font-bold text-emerald-800 uppercase tracking-wide">
-                  Benefit Amount & Delivery Channel
+                  Benefit Amount &amp; Delivery Channel
                 </div>
                 <div className="text-xl font-extrabold text-govgreen-900 mt-1">
                   {scheme.annualBenefit}
@@ -162,7 +159,7 @@ export const SchemeCard: React.FC<SchemeCardProps> = ({ scheme, onEvaluate }) =>
               {/* Description */}
               <div>
                 <h4 className="text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
-                  Scheme Overview & Purpose
+                  Scheme Overview &amp; Purpose
                 </h4>
                 <p className="text-sm text-slate-700 leading-relaxed">
                   {scheme.description}

@@ -1,5 +1,5 @@
 import React from 'react';
-import { CheckCircle2, XCircle, AlertTriangle, HelpCircle, FileText, ExternalLink } from 'lucide-react';
+import { CheckCircle2, XCircle, AlertTriangle, FileText } from 'lucide-react';
 import { EligibilityStatus } from '../../types';
 import { StatusBadge } from './StatusBadge';
 
@@ -73,7 +73,6 @@ export const EligibilityCard: React.FC<EligibilityCardProps> = ({
           {criteriaResults.map((result, idx) => {
             const isPass = result.status === 'passed';
             const isFail = result.status === 'failed';
-            const isWarn = result.status === 'warning';
 
             return (
               <div 

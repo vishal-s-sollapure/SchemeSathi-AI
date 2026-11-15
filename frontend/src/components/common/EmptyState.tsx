@@ -1,5 +1,5 @@
 import React from 'react';
-import { SearchX, FilterX, ArrowRight, LucideIcon } from 'lucide-react';
+import { SearchX, ArrowRight, LucideIcon } from 'lucide-react';
 
 interface EmptyStateProps {
   title?: string;

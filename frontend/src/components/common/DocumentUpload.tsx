@@ -1,5 +1,5 @@
 import React, { useState, useRef } from 'react';
-import { UploadCloud, FileText, CheckCircle2, AlertCircle, Sparkles, Shield, ArrowRight } from 'lucide-react';
+import { UploadCloud, FileText, CheckCircle2, Sparkles, Shield, ArrowRight } from 'lucide-react';
 import { StatusBadge } from './StatusBadge';
 
 interface DocumentUploadProps {
@@ -180,7 +180,7 @@ export const DocumentUpload: React.FC<DocumentUploadProps> = ({
       {/* Privacy Guarantee */}
       <div className="flex items-center gap-2 text-[11px] text-slate-500 justify-center">
         <Shield className="w-3.5 h-3.5 text-govgreen-700 flex-shrink-0" />
-        <span>Client-side parsing & secure processing. No citizen documents are retained without consent.</span>
+        <span>Client-side parsing &amp; secure processing. No citizen documents are retained without consent.</span>
       </div>
     </div>
   );

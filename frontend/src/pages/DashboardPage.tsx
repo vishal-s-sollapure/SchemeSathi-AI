@@ -1,36 +1,25 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { 
-  ShieldCheck, 
   GraduationCap, 
   Search, 
   FileText, 
   Bot, 
-  ArrowRight, 
   CheckCircle2, 
   Clock, 
-  AlertCircle, 
   FileWarning, 
   Sparkles,
-  TrendingUp,
-  FileCheck2,
-  Calendar,
-  ExternalLink,
   ChevronRight,
-  User,
-  Plus
+  User
 } from 'lucide-react';
-import { useLanguage } from '../context/LanguageContext';
 import { StatusBadge } from '../components/common/StatusBadge';
 import { MOCK_SCHEMES, MOCK_SCHOLARSHIPS } from '../data/mockData';
 import { SchemeCard } from '../components/common/SchemeCard';
 import { ScholarshipCard } from '../components/common/ScholarshipCard';
 
 export const DashboardPage: React.FC = () => {
-  const { t } = useLanguage();
-
   // Active Profile State for demo
-  const [profile, setProfile] = useState({
+  const [profile] = useState({
     name: 'Ananya Sharma',
     role: 'Undergraduate Engineering Student & Farmer Ward',
     state: 'Karnataka',

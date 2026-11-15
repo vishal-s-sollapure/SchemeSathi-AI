@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { ShieldCheck, ExternalLink, Heart, Globe, BookOpen } from 'lucide-react';
+import { ShieldCheck, ExternalLink } from 'lucide-react';
 import { DEMO_DATA_DISCLAIMER } from '../../data/mockData';
 
 export const Footer: React.FC = () => {
@@ -45,7 +45,7 @@ export const Footer: React.FC = () => {
               </li>
               <li>
                 <Link to="/policy-explainer" className="hover:text-emerald-400 transition">
-                  Policy & Circular Explainer
+                  Policy &amp; Circular Explainer
                 </Link>
               </li>
               <li>
@@ -146,7 +146,7 @@ export const Footer: React.FC = () => {
           </div>
           <div className="flex items-center gap-4">
             <Link to="/about" className="hover:text-white transition">
-              About & Methodology
+              About &amp; Methodology
             </Link>
             <span>&bull;</span>
             <span className="text-emerald-400 font-semibold">

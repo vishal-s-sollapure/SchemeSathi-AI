@@ -6,12 +6,10 @@ import {
   Check, 
   Volume2, 
   BookOpen, 
-  Sparkles,
   ArrowRight
 } from 'lucide-react';
 import { ChatMessage as ChatMessageType } from '../../types';
 import { CitationCard } from './CitationCard';
-import { StatusBadge } from './StatusBadge';
 
 interface ChatMessageProps {
   message: ChatMessageType;
