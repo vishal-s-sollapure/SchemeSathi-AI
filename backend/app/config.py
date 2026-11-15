@@ -1,5 +1,5 @@
 from typing import List, Union
-from pydantic import AnyHttpUrl, validator
+from pydantic import field_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
@@ -30,6 +30,19 @@ class Settings(BaseSettings):
     # Supported Languages
     DEFAULT_LANGUAGE: str = "en"
     SUPPORTED_LANGUAGES: List[str] = ["en", "kn", "hi"]
+
+    @field_validator("DEBUG", mode="before")
+    @classmethod
+    def parse_debug(cls, v: Union[bool, str]) -> bool:
+        if isinstance(v, bool):
+            return v
+        if isinstance(v, str):
+            normalized = v.strip().lower()
+            if normalized in ("release", "false", "0", "prod", "production"):
+                return False
+            if normalized in ("debug", "true", "1", "dev", "development"):
+                return True
+        return bool(v)
 
     model_config = SettingsConfigDict(
         env_file=".env",
