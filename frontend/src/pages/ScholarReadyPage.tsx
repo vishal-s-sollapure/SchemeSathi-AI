@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { 
   GraduationCap, 
   FileCheck2, 
-  Search, 
   CheckCircle2, 
   XCircle, 
   AlertCircle,
@@ -12,8 +11,6 @@ import {
   Info,
   ExternalLink,
   ShieldAlert,
-  Clock,
-  Sparkles,
   RefreshCw,
   FileText
 } from 'lucide-react';
@@ -497,16 +494,39 @@ export const ScholarReadyPage: React.FC = () => {
                 <span>Verified Scholarship Evaluation Catalog</span>
               </h3>
 
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-2 flex-wrap">
                 <input
                   type="text"
                   placeholder="Filter scholarships..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="px-2.5 py-1 text-xs border border-slate-300 rounded-lg focus:outline-none focus:border-ashoka-600 w-36 sm:w-48"
+                  className="px-2.5 py-1 text-xs border border-slate-300 rounded-lg focus:outline-none focus:border-ashoka-600 w-32 sm:w-44"
                 />
+
+                <div className="flex items-center bg-slate-100 rounded-lg p-0.5 text-[11px] font-semibold">
+                  {(['All', 'MEETS_REQUIREMENT', 'MISSING_INFORMATION', 'DOES_NOT_MEET_REQUIREMENT'] as const).map(st => (
+                    <button
+                      key={st}
+                      onClick={() => setStatusFilter(st)}
+                      className={`px-2 py-1 rounded transition text-[10px] ${
+                        statusFilter === st 
+                          ? 'bg-ashoka-700 text-white shadow-xs' 
+                          : 'text-slate-600 hover:text-slate-900'
+                      }`}
+                    >
+                      {st === 'All' ? 'All' : st === 'MEETS_REQUIREMENT' ? 'Eligible' : st === 'MISSING_INFORMATION' ? 'Missing' : 'Unmet'}
+                    </button>
+                  ))}
+                </div>
               </div>
             </div>
+
+            {evalError && (
+              <div className="p-3 bg-amber-50 border border-amber-200 rounded-xl text-xs text-amber-900 flex items-center gap-2">
+                <AlertCircle className="w-4 h-4 text-amber-600 flex-shrink-0" />
+                <span>{evalError}</span>
+              </div>
+            )}
 
             <div className="space-y-3">
               {filteredScholarships.map((sch) => {
@@ -646,14 +666,28 @@ export const ScholarReadyPage: React.FC = () => {
                     Personalized Application Checklist: {selectedScholarship.official_name}
                   </h3>
                 </div>
-                <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded bg-slate-100 text-slate-600">
-                  Statutory Track
-                </span>
+                {checklist ? (
+                  <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded bg-emerald-100 text-emerald-800 border border-emerald-300">
+                    Checklist Score: {checklist.readiness_score}% ({checklist.overall_status})
+                  </span>
+                ) : (
+                  <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded bg-slate-100 text-slate-600">
+                    Statutory Track
+                  </span>
+                )}
               </div>
 
               {/* Dynamic Checklist Items */}
               <div className="space-y-2.5">
-                {selectedScholarship.required_documents.map((doc, idx) => (
+                {(checklist?.checklist_items && checklist.checklist_items.length > 0 
+                  ? checklist.checklist_items 
+                  : selectedScholarship.required_documents.map(d => ({
+                      name: d.title,
+                      document_type: d.document_type,
+                      is_mandatory: d.is_mandatory,
+                      status: 'REQUIRED' as const
+                    }))
+                ).map((item, idx) => (
                   <div
                     key={idx}
                     className="p-3.5 rounded-xl border border-slate-200 bg-white flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs"
@@ -662,17 +696,23 @@ export const ScholarReadyPage: React.FC = () => {
                       <FileText className="w-4 h-4 text-ashoka-700 mt-0.5 flex-shrink-0" />
                       <div className="space-y-0.5">
                         <div className="font-bold text-charcoal-900">
-                          {doc.title}
+                          {item.name}
                         </div>
                         <div className="text-[11px] text-slate-500">
-                          Type: <span className="font-mono text-slate-700">{doc.document_type}</span> &bull; {doc.is_mandatory ? <strong className="text-rose-700">Mandatory</strong> : 'Optional / Waiver Allowed'}
+                          Type: <span className="font-mono text-slate-700">{item.document_type}</span> &bull; {item.is_mandatory ? <strong className="text-rose-700">Mandatory</strong> : 'Optional / Waiver Allowed'}
                         </div>
                       </div>
                     </div>
 
                     <div className="flex items-center gap-2 self-start sm:self-center">
-                      <span className="text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-full bg-slate-100 text-slate-700 border border-slate-200">
-                        REQUIRED
+                      <span className={`text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-full border ${
+                        item.status === 'CONFIRMED' ? 'bg-emerald-100 text-emerald-800 border-emerald-300' :
+                        item.status === 'UPLOADED' ? 'bg-sky-100 text-sky-800 border-sky-300' :
+                        item.status === 'NEEDS_REVIEW' ? 'bg-amber-100 text-amber-800 border-amber-300' :
+                        item.status === 'NOT_APPLICABLE' ? 'bg-slate-100 text-slate-500 border-slate-200' :
+                        'bg-slate-100 text-slate-700 border-slate-200'
+                      }`}>
+                        {item.status}
                       </span>
                       <a
                         href="/documents"
