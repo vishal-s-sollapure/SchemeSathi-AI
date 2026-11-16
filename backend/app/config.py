@@ -31,6 +31,14 @@ class Settings(BaseSettings):
     DEFAULT_LANGUAGE: str = "en"
     SUPPORTED_LANGUAGES: List[str] = ["en", "kn", "hi"]
 
+    # AI & RAG Configuration
+    GEMINI_API_KEY: Union[str, None] = None
+    LLM_PROVIDER: str = "auto"  # auto, gemini, grounded_engine
+    LLM_MODEL: str = "gemini-1.5-flash"
+    RAG_TOP_K: int = 4
+    RAG_MIN_SIMILARITY: float = 0.25
+    EMBEDDING_DIM: int = 128
+
     @field_validator("DEBUG", mode="before")
     @classmethod
     def parse_debug(cls, v: Union[bool, str]) -> bool:
