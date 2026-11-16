@@ -1,6 +1,6 @@
 from datetime import date, datetime
 from typing import List, Optional
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, ConfigDict, Field
 
 from app.schemas.common import InformationStatus
 from app.schemas.rule import EligibilityRuleResponse, RequirementResponse
@@ -58,8 +58,7 @@ class GovernmentSchemeResponse(GovernmentSchemeBase):
     eligibility_rules: List[EligibilityRuleResponse] = []
     requirements: List[RequirementResponse] = []
 
-    class Config:
-        from_attributes = True
+    model_config = ConfigDict(from_attributes=True)
 
 
 class GovernmentSchemeFilter(BaseModel):
