@@ -223,7 +223,7 @@ class DynamicChecklistEngine:
                     "annual_family_income": student_profile.annual_family_income,
                     "marks_percentage": student_profile.marks_percentage,
                     "current_course": student_profile.current_course,
-                    "institution": student_profile.institution,
+                    "institution": (student_profile.extra_attributes or {}).get("institution", ""),
                 }
                 assessment = DeterministicRuleEngine.evaluate_scholarship(sch, stu_dict)
                 if assessment.overall_status != "MEETS_REQUIREMENT":

@@ -189,7 +189,7 @@ class DocumentService:
                 pass
 
         # 2. Update any checklists linking to this document
-        checklists = self.checklist_repo.list_all()
+        checklists = self.checklist_repo.list(skip=0, limit=1000)
         for chk in checklists:
             items = list(chk.checklist_items)
             modified = False
