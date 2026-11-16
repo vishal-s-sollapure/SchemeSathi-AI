@@ -1,0 +1,62 @@
+[
+  {
+    "id": "SRC-MOE-PMUSP-CSSS",
+    "source_title": "Guidelines for Central Sector Scheme of Scholarship for College and University Students (PM-USP CSSS)",
+    "issuing_authority": "Department of Higher Education, Ministry of Education, Government of India",
+    "circular_number": "F.No. 1-1/2022-NS-I",
+    "notification_date": "2023-04-01",
+    "official_url": "https://scholarships.gov.in/",
+    "document_checksum": "a8f572c84d723b7e289bf44a1e9e7c54179d68db47ef2d1f7c5e53e4811b2289",
+    "notes": "Authoritative operational guidelines governing selection based on 80th percentile of respective State/CBSE/ICSE boards and ₹4.5L family income cap."
+  },
+  {
+    "id": "SRC-MOSJE-SSP-SC",
+    "source_title": "Centrally Sponsored Scheme of Post-Matric Scholarships for Scheduled Caste Students (PMS-SC) Guidelines",
+    "issuing_authority": "Ministry of Social Justice and Empowerment, Government of India & Social Welfare Department, Government of Karnataka",
+    "circular_number": "11014/02/2018-SCD-I",
+    "notification_date": "2021-03-31",
+    "official_url": "https://ssp.postmatric.karnataka.gov.in/",
+    "document_checksum": "5d2b78129e614f8ab96d11e582d90823c683b54784a9e9e1c3a6e9a6cf7a54a2",
+    "notes": "Revised national operational framework for 2021-22 to 2025-26 governing 100% compulsory non-refundable fees concession and maintenance allowance with ₹2.5L parental income cap."
+  },
+  {
+    "id": "SRC-AICTE-PRAGATI",
+    "source_title": "Guidelines for AICTE Pragati Scholarship Scheme for Girl Students (Degree)",
+    "issuing_authority": "All India Council for Technical Education (AICTE), Ministry of Education, Government of India",
+    "circular_number": "AICTE/StDC/Pragati/2023-24",
+    "notification_date": "2023-08-10",
+    "official_url": "https://www.aicte-india.org/schemes/students-development-schemes/Pragati",
+    "document_checksum": "c92d53bf68a1835e4d293f9c6e5a4d3392418e9a2b5341cd5e927c4918e7b39a",
+    "notes": "Guidelines providing ₹50,000/annum for eligible female technical degree students admitted to AICTE approved institutions with family income <= ₹8,00,000."
+  },
+  {
+    "id": "SRC-MOA-PMKISAN",
+    "source_title": "Revised Operational Guidelines for Pradhan Mantri Kisan Samman Nidhi (PM-KISAN)",
+    "issuing_authority": "Department of Agriculture and Farmers Welfare, Ministry of Agriculture & Farmers Welfare, Government of India",
+    "circular_number": "1-1/2019-Credit-II",
+    "notification_date": "2020-03-01",
+    "official_url": "https://pmkisan.gov.in/",
+    "document_checksum": "7e3b8a1c94d528ef3b491a6d7c82e5b4198273645e91283746a5b6c7d8e9f012",
+    "notes": "Governs direct benefit transfer of ₹6,000/year to landholder farmer families across India subject to official Exclusion Criteria under Clause 5."
+  },
+  {
+    "id": "SRC-KRN-DWCD-GL",
+    "source_title": "Government Order on Gruha Lakshmi Financial Assistance Scheme for Women Head of Household",
+    "issuing_authority": "Department of Women and Child Development, Government of Karnataka",
+    "circular_number": "GO-WCD-41-WES-2023",
+    "notification_date": "2023-06-05",
+    "official_url": "https://sevasindhugs.karnataka.gov.in/",
+    "document_checksum": "3b4f9a8c12d5e67890ab4321ef987654321a0b9c8d7e6f5a4b3c2d1e0f9a8b7c",
+    "notes": "Official Karnataka Gazette notification establishing monthly financial security of ₹2,000 to female heads of household (Yajamani) excluded from IT/GST."
+  },
+  {
+    "id": "SRC-KRN-SSP-EATTEST",
+    "source_title": "Standard Operating Procedure for e-Attestation and Aadhaar DBT Seeding for Karnataka Post-Matric Students",
+    "issuing_authority": "Centre for e-Governance & Social Welfare Department, Government of Karnataka",
+    "circular_number": "CEG-SSP-EATTEST-2023-V2",
+    "notification_date": "2023-09-15",
+    "official_url": "https://ssp.postmatric.karnataka.gov.in/",
+    "document_checksum": "98a7b6c5d4e3f210987654321fedcba0987654321abcdef0123456789abcdef0",
+    "notes": "Mandates automated digital certificate validation via Nadakacheri RD numbers, e-Attestation by designated college nodal officers, and NPCI Aadhaar seeding."
+  }
+]

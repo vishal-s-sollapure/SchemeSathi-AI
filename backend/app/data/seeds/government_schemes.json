@@ -1,0 +1,40 @@
+[
+  {
+    "id": "SCHEME-PM-KISAN",
+    "official_name": "Pradhan Mantri Kisan Samman Nidhi (PM-KISAN)",
+    "category": "Agriculture & Farming",
+    "description": "Central sector income support scheme providing assured financial assistance of ₹6,000 per annum to all landholding farmer families across India having cultivable agricultural land in their names.",
+    "government_department": "Department of Agriculture and Farmers Welfare, Ministry of Agriculture & Farmers Welfare, Government of India",
+    "official_source_url": "https://pmkisan.gov.in/",
+    "application_url": "https://pmkisan.gov.in/RegistrationFormNew.aspx",
+    "policy_cycle": "Continuous (FY 2024-25 / 2025-26)",
+    "verification_date": "2024-11-01",
+    "publication_date": "2020-03-01",
+    "information_status": "VERIFIED",
+    "level": "Central",
+    "benefit_type": "Direct Benefit Transfer (DBT)",
+    "annual_benefit": "₹6,000 / year (disbursed in 3 equal four-monthly installments of ₹2,000 directly via Aadhaar-linked DBT)",
+    "target_beneficiaries": "Small and marginal landholder farmer families with cultivable land recorded in state land revenue portals",
+    "application_deadline": "Continuous Enrollment (Year-round)",
+    "official_source_id": "SRC-MOA-PMKISAN"
+  },
+  {
+    "id": "SCHEME-KAR-GRUHA-LAKSHMI",
+    "official_name": "Karnataka Gruha Lakshmi Scheme",
+    "category": "Social Security & Pensions",
+    "description": "State welfare initiative of the Government of Karnataka granting monthly financial assistance of ₹2,000 to the recognized female head of the family (Yajamani) to support domestic economic autonomy and household stability.",
+    "government_department": "Department of Women and Child Development, Government of Karnataka",
+    "official_source_url": "https://sevasindhugs.karnataka.gov.in/",
+    "application_url": "https://sevasindhu.karnataka.gov.in/Gruhalakshmi/",
+    "policy_cycle": "Continuous (FY 2024-25 / 2025-26)",
+    "verification_date": "2024-11-01",
+    "publication_date": "2023-06-05",
+    "information_status": "VERIFIED",
+    "level": "State (Karnataka)",
+    "benefit_type": "Direct Benefit Transfer (DBT)",
+    "annual_benefit": "₹24,000 / year (paid monthly at ₹2,000 per month via Aadhaar-seeded bank account)",
+    "target_beneficiaries": "Female head of the household (Yajamani) listed on Antyodaya, BPL, or APL ration cards in Karnataka",
+    "application_deadline": "Continuous Enrollment",
+    "official_source_id": "SRC-KRN-DWCD-GL"
+  }
+]
