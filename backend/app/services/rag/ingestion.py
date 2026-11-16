@@ -6,7 +6,7 @@ from typing import Any, Dict, List, Optional
 try:
     import fitz  # PyMuPDF
     PYMUPDF_AVAILABLE = True
-except ImportError:
+except (ImportError, Exception):
     PYMUPDF_AVAILABLE = False
 
 from app.services.rag.chunking import SectionAwareChunker

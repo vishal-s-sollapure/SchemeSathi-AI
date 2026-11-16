@@ -3,19 +3,18 @@ import math
 import re
 from typing import Dict, List, Optional, Set, Tuple
 
-import numpy as np
-
 from app.services.rag.models import DocumentChunk, RetrievalResult
 
 
 class HybridDocumentRetriever:
-    """Hybrid lexical and dense semantic document retriever with multilingual expansion.
+    """Pure-Python hybrid lexical and dense semantic document retriever with multilingual expansion.
     
-    Combines:
-    1. Lexical BM25 / TF-IDF scoring over official titles, clauses, and texts.
-    2. Dense cosine vector similarity over normalized embedding representations.
-    3. Multilingual civic vocabulary mapping (Kannada, Hindi, English).
-    4. Thresholding to detect when retrieved evidence is insufficient for factual claims.
+    Guarantees:
+    - Zero native C-extension / DLL dependencies (completely immune to Windows AppLocker DLL blocks).
+    - Dense cosine vector similarity over deterministic hash-projected unit embedding vectors.
+    - BM25-inspired lexical scoring with title and clause priority boosting.
+    - Multilingual civic vocabulary mapping (Kannada, Hindi, English).
+    - Strict thresholding detecting when evidence is insufficient for factual claims.
     """
 
     # Multilingual civic vocabulary mapping
@@ -51,10 +50,30 @@ class HybridDocumentRetriever:
         "आवेदन": ["application", "registration", "portal"],
     }
 
+    # Stopwords to prevent generic function words from overpowering semantic intent
+    STOPWORDS: Set[str] = {
+        "the", "a", "an", "is", "are", "was", "were", "to", "in", "for", "of", "and",
+        "or", "on", "at", "by", "from", "with", "about", "what", "how", "who", "which",
+        "when", "where", "can", "do", "does", "did", "under", "all", "get", "claim",
+        "this", "that", "these", "those", "have", "has", "had", "receive", "support",
+        "applicable", "eligible", "scheme", "policy", "financial",
+    }
+
+    # Distinctive scheme aliases for targeted intent boosting
+    SCHEME_TARGETS: Dict[str, List[str]] = {
+        "SCHEME-PM-KISAN": ["pm-kisan", "pmkisan", "kisan", "samman", "farmland"],
+        "SCH-MOE-CSSS-2024": ["csss", "pm-usp", "central sector", "percentile"],
+        "SCH-KAR-SSP-SC-2024": ["ssp", "post-matric", "scheduled caste"],
+        "SCH-AICTE-PRAGATI-DEGREE": ["pragati", "aicte", "girl student", "daughters"],
+        "SCHEME-KAR-GRUHA-LAKSHMI": ["gruha", "lakshmi", "yajamani", "female head"],
+        "POL-SSP-EATTEST-CIRCULAR": ["sakala", "e-attestation", "eattest", "attestation", "7 days"],
+        "POL-NSP-OTR-GUIDELINE": ["otr", "one-time registration", "facerd"],
+    }
+
     def __init__(self, chunks: Optional[List[DocumentChunk]] = None, embedding_dim: int = 128):
         self.embedding_dim = embedding_dim
         self.chunks: List[DocumentChunk] = []
-        self.chunk_embeddings: Optional[np.ndarray] = None
+        self.chunk_embeddings: List[List[float]] = []
         self.vocab: Dict[str, int] = {}
         self.idf: Dict[str, float] = {}
 
@@ -66,12 +85,12 @@ class HybridDocumentRetriever:
         tokens = re.findall(r"\b[\w\.\-]+\b", text.lower())
         return [t for t in tokens if len(t) > 1]
 
-    def _generate_dense_vector(self, text: str) -> np.ndarray:
-        """Generates a stable, dense hash-projected unit embedding vector using NumPy.
+    def _generate_dense_vector(self, text: str) -> List[float]:
+        """Generates a stable, dense hash-projected unit embedding vector in pure Python.
         
-        Guarantees deterministic, fast semantic representation without downloading gigabyte models.
+        Guarantees deterministic semantic representation without external model downloads or native DLLs.
         """
-        vec = np.zeros(self.embedding_dim, dtype=np.float32)
+        vec = [0.0] * self.embedding_dim
         tokens = self._tokenize(text)
         if not tokens:
             return vec
@@ -84,10 +103,15 @@ class HybridDocumentRetriever:
             vec[idx] += sign
 
         # Unit normalize (L2 norm)
-        norm = np.linalg.norm(vec)
-        if norm > 0:
-            vec = vec / norm
+        norm_sq = sum(x * x for x in vec)
+        if norm_sq > 0:
+            norm = math.sqrt(norm_sq)
+            vec = [x / norm for x in vec]
         return vec
+
+    def _cosine_similarity(self, v1: List[float], v2: List[float]) -> float:
+        """Pure-Python dot product of unit-normalized vectors."""
+        return sum(a * b for a, b in zip(v1, v2))
 
     def normalize_query(self, query: str) -> str:
         """Expands multilingual tokens (Kannada / Hindi) into target English civic terminology."""
@@ -109,8 +133,8 @@ class HybridDocumentRetriever:
         if num_docs == 0:
             return
 
-        # 1. Build Dense Matrix
-        embeddings = []
+        # 1. Build Dense Embedding List
+        embeddings: List[List[float]] = []
         doc_frequencies: Dict[str, int] = {}
 
         for chunk in chunks:
@@ -123,7 +147,7 @@ class HybridDocumentRetriever:
             for term in unique_terms:
                 doc_frequencies[term] = doc_frequencies.get(term, 0) + 1
 
-        self.chunk_embeddings = np.array(embeddings, dtype=np.float32)
+        self.chunk_embeddings = embeddings
 
         # 2. Compute Lexical IDF
         self.idf = {
@@ -175,20 +199,19 @@ class HybridDocumentRetriever:
                 sufficient_evidence=False,
             )
 
-        # 1. Dense Cosine Similarity
+        # 1. Dense Cosine Similarities (Pure Python)
         q_vec = self._generate_dense_vector(normalized_q)
-        dense_scores = np.dot(self.chunk_embeddings, q_vec)  # (N,)
+        dense_scores = [self._cosine_similarity(chunk_vec, q_vec) for chunk_vec in self.chunk_embeddings]
 
         # 2. Lexical Scores
-        lexical_scores = np.array(
-            [self._compute_lexical_score(q_tokens, c) for c in self.chunks],
-            dtype=np.float32,
-        )
-        max_lex = np.max(lexical_scores) if len(lexical_scores) > 0 and np.max(lexical_scores) > 0 else 1.0
-        normalized_lexical = lexical_scores / max_lex
+        lexical_raw = [self._compute_lexical_score(q_tokens, c) for c in self.chunks]
+        max_lex = max(lexical_raw) if lexical_raw and max(lexical_raw) > 0 else 1.0
+        normalized_lexical = [score / max_lex for score in lexical_raw]
 
         # 3. Hybrid Fusion Score (Dense + Lexical)
-        hybrid_scores = 0.55 * dense_scores + 0.45 * normalized_lexical
+        hybrid_scores = [
+            0.55 * d + 0.45 * l for d, l in zip(dense_scores, normalized_lexical)
+        ]
 
         # Filter by scheme_id if requested
         valid_indices = list(range(len(self.chunks)))
@@ -207,11 +230,11 @@ class HybridDocumentRetriever:
             )
 
         # Sort indices by score descending
-        sorted_indices = sorted(valid_indices, key=lambda i: float(hybrid_scores[i]), reverse=True)
+        sorted_indices = sorted(valid_indices, key=lambda i: hybrid_scores[i], reverse=True)
         top_indices = sorted_indices[:top_k]
 
         retrieved_chunks = [self.chunks[i] for i in top_indices]
-        retrieved_scores = [round(float(hybrid_scores[i]), 4) for i in top_indices]
+        retrieved_scores = [round(hybrid_scores[i], 4) for i in top_indices]
 
         # Check sufficiency threshold
         highest_score = retrieved_scores[0] if retrieved_scores else 0.0
