@@ -1,15 +1,41 @@
 from datetime import date
 import pytest
 from fastapi.testclient import TestClient
+from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker
+from sqlalchemy.pool import StaticPool
+
+from app.database import Base, get_db
 from app.main import app
-from app.database import init_db
+
+# In-memory SQLite with StaticPool so all requests share the in-memory schema
+TEST_DATABASE_URL = "sqlite:///:memory:"
+test_engine = create_engine(
+    TEST_DATABASE_URL,
+    connect_args={"check_same_thread": False},
+    poolclass=StaticPool,
+)
+TestingSessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=test_engine)
+
+
+def override_get_db():
+    db = TestingSessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()
+
+
+app.dependency_overrides[get_db] = override_get_db
 
 client = TestClient(app)
 
 
 @pytest.fixture(scope="module", autouse=True)
-def setup_db():
-    init_db()
+def setup_test_db():
+    Base.metadata.create_all(bind=test_engine)
+    yield
+    Base.metadata.drop_all(bind=test_engine)
 
 
 def test_openapi_schema_generated():
@@ -37,12 +63,10 @@ def test_api_user_and_profile_flow():
         "role": "STUDENT",
     }
     res = client.post("/api/v1/users", json=user_payload)
-    assert res.status_code in (201, 200, 409)  # Handle if previously created
-    if res.status_code == 409:
-        user_list = client.get("/api/v1/users").json()
-        user_id = next(u["id"] for u in user_list if u["email"] == "deepak.kumar@test.gov.in")
-    else:
-        user_id = res.json()["id"]
+    assert res.status_code == 201
+    user_data = res.json()
+    assert user_data["full_name"] == "Deepak Kumar"
+    user_id = user_data["id"]
 
     # 2. Create Student Profile
     profile_payload = {
@@ -60,9 +84,10 @@ def test_api_user_and_profile_flow():
         "extra_attributes": {},
     }
     res_prof = client.post("/api/v1/profiles/student", json=profile_payload)
-    assert res_prof.status_code in (201, 200)
+    assert res_prof.status_code == 201
     prof_data = res_prof.json()
     assert prof_data["annual_family_income"] == 150000.0
+    assert prof_data["user_id"] == user_id
 
 
 def test_api_scheme_and_source_flow():
@@ -77,7 +102,7 @@ def test_api_scheme_and_source_flow():
         "notes": "Verified national health cover circular",
     }
     res_src = client.post("/api/v1/sources", json=source_payload)
-    assert res_src.status_code in (201, 200)
+    assert res_src.status_code == 201
 
     # 2. Create Scheme
     scheme_payload = {
@@ -97,11 +122,12 @@ def test_api_scheme_and_source_flow():
         "official_source_id": "SRC-NHA-PMJAY-2024",
     }
     res_scheme = client.post("/api/v1/schemes", json=scheme_payload)
-    assert res_scheme.status_code in (201, 200)
+    assert res_scheme.status_code == 201
 
-    # 3. List Schemes with category filter using params dict for proper URL encoding
+    # 3. List Schemes with category filter using params
     res_list = client.get("/api/v1/schemes", params={"category": "Healthcare & Ayushman"})
     assert res_list.status_code == 200
     schemes = res_list.json()
-    assert len(schemes) >= 1
-    assert any(s["id"] == "SCHEME-PM-JAY-2024" for s in schemes)
+    assert len(schemes) == 1
+    assert schemes[0]["id"] == "SCHEME-PM-JAY-2024"
+    assert schemes[0]["official_name"] == "Ayushman Bharat Pradhan Mantri Jan Arogya Yojana"

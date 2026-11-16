@@ -1,7 +1,7 @@
 from typing import List, Optional
 from sqlalchemy.orm import Session
 
-from app.core.exceptions import EntityNotFoundException
+from app.core.exceptions import EntityConflictException, EntityNotFoundException
 from app.models.rule import EligibilityRule, Requirement
 from app.models.scholarship import Scholarship
 from app.models.scheme import GovernmentScheme
@@ -50,6 +50,8 @@ class OpportunityService:
         return self.source_repo.list(skip=skip, limit=limit)
 
     def create_source(self, data: OfficialSourceCreate) -> OfficialSource:
+        if data.id and self.source_repo.get_by_id(data.id):
+            raise EntityConflictException(f"OfficialSource with id '{data.id}' already exists.")
         source = OfficialSource(**data.model_dump())
         return self.source_repo.create(source)
 
@@ -79,6 +81,8 @@ class OpportunityService:
         )
 
     def create_scholarship(self, data: ScholarshipCreate) -> Scholarship:
+        if data.id and self.scholarship_repo.get_by_id(data.id):
+            raise EntityConflictException(f"Scholarship with id '{data.id}' already exists.")
         if data.official_source_id:
             self.get_source(data.official_source_id)
         scholarship = Scholarship(**data.model_dump())
@@ -115,6 +119,8 @@ class OpportunityService:
         )
 
     def create_scheme(self, data: GovernmentSchemeCreate) -> GovernmentScheme:
+        if data.id and self.scheme_repo.get_by_id(data.id):
+            raise EntityConflictException(f"GovernmentScheme with id '{data.id}' already exists.")
         if data.official_source_id:
             self.get_source(data.official_source_id)
         scheme = GovernmentScheme(**data.model_dump())
@@ -140,6 +146,8 @@ class OpportunityService:
         return rule
 
     def create_rule(self, data: EligibilityRuleCreate) -> EligibilityRule:
+        if data.id and self.rule_repo.get_by_id(data.id):
+            raise EntityConflictException(f"EligibilityRule with id '{data.id}' already exists.")
         self.get_source(data.source_id)
         if data.scholarship_id:
             self.get_scholarship(data.scholarship_id)
@@ -168,6 +176,8 @@ class OpportunityService:
         return req
 
     def create_requirement(self, data: RequirementCreate) -> Requirement:
+        if data.id and self.requirement_repo.get_by_id(data.id):
+            raise EntityConflictException(f"Requirement with id '{data.id}' already exists.")
         if data.scholarship_id:
             self.get_scholarship(data.scholarship_id)
         if data.scheme_id:
