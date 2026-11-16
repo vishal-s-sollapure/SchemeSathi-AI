@@ -14,7 +14,6 @@ import {
   Calendar,
   Layers,
   ShieldCheck,
-  ListOrdered,
   FileQuestion,
   Search,
   BookOpen
@@ -161,14 +160,17 @@ export const PolicyExplainerPage: React.FC = () => {
   };
 
   // Upload Custom PDF
-  const handlePdfUpload = async (file: File) => {
+  const handlePdfUpload = async (fileObj: { name: string; size: string; isPreset?: boolean; rawFile?: File }) => {
     setIsCustomUpload(true);
-    setUploadedFileName(file.name);
+    setUploadedFileName(fileObj.name);
+    if (!fileObj.rawFile) {
+      return;
+    }
     setLoadingSimplification(true);
     try {
       const res = await apiService.simplifyUploadedPdf(
-        file,
-        file.name.replace(/\.pdf$/i, ''),
+        fileObj.rawFile,
+        fileObj.name.replace(/\.pdf$/i, ''),
         'Government Department / Agency',
         'https://india.gov.in',
         language
@@ -284,7 +286,7 @@ export const PolicyExplainerPage: React.FC = () => {
                   <span className="text-xs font-bold uppercase tracking-wider text-amber-800 bg-amber-100 px-2 py-0.5 rounded-full">
                     Custom Uploaded Gazette PDF
                   </span>
-                  <StatusBadge status="review" label="PyMuPDF Parsed" />
+                  <StatusBadge status="pending_evaluation" label="PyMuPDF Parsed" />
                 </div>
                 <h3 className="text-base font-bold text-charcoal-900 flex items-center gap-2">
                   <FileCheck2 className="w-5 h-5 text-emerald-600" />
@@ -300,7 +302,7 @@ export const PolicyExplainerPage: React.FC = () => {
                   <span className="text-xs font-bold text-govgreen-800 bg-govgreen-100 px-2.5 py-0.5 rounded-full">
                     {activeDocSummary.category}
                   </span>
-                  <StatusBadge status="verified" label="Human Reviewed Knowledge" />
+                  <StatusBadge status="active" label="Human Reviewed Knowledge" />
                 </div>
                 <h3 className="text-base font-bold text-charcoal-900 leading-snug">
                   {activeDocSummary.title}
@@ -721,7 +723,7 @@ export const PolicyExplainerPage: React.FC = () => {
                       Verified Policy Response
                     </span>
                     <StatusBadge
-                      status={explanationResponse.sufficient_evidence ? 'verified' : 'review'}
+                      status={explanationResponse.sufficient_evidence ? 'active' : 'pending_evaluation'}
                       label={explanationResponse.sufficient_evidence ? 'Grounded in Gazette' : 'No Sufficient Evidence'}
                     />
                   </div>
