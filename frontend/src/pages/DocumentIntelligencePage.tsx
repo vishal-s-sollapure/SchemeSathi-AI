@@ -3,31 +3,26 @@ import {
   FileSearch, 
   CheckCircle2, 
   Clock, 
-  Sparkles, 
   Calendar, 
   AlertTriangle, 
   RefreshCw, 
   Layers, 
-  FileCheck2,
   Trash2,
   Check,
   Edit2,
   Info,
   ShieldAlert,
   Percent,
-  Award,
   IndianRupee,
   BookOpen,
   User,
   Building
 } from 'lucide-react';
-import { StatusBadge } from '../components/common/StatusBadge';
 import { DocumentUpload } from '../components/common/DocumentUpload';
 import { apiService } from '../services/api';
 import { 
   DocumentIntelligenceResponse, 
-  EvidenceConfirmationItem, 
-  ExtractedEvidenceItem 
+  EvidenceConfirmationItem
 } from '../types';
 
 export const DocumentIntelligencePage: React.FC = () => {
