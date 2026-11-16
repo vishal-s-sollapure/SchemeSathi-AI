@@ -1,3 +1,4 @@
+import anyio
 from contextlib import asynccontextmanager
 import logging
 from fastapi import FastAPI, Request, status
@@ -24,9 +25,9 @@ logger = logging.getLogger("schemesathi")
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    # Initialize SQLite database schema
+    # Initialize SQLite database schema safely in threadpool
     logger.info("Initializing SchemeSathi AI database tables...")
-    init_db()
+    await anyio.to_thread.run_sync(init_db)
     logger.info("Database initialized successfully.")
     yield
 
