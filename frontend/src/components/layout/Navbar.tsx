@@ -146,7 +146,7 @@ export const Navbar: React.FC = () => {
               <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
               FastAPI Core Online
             </span>
-            <span className="font-mono text-[10px]">Phase 2 Preview</span>
+            <span className="font-mono text-[10px] text-emerald-700 font-bold">System Verified v0.1.0</span>
           </div>
         </div>
       )}
