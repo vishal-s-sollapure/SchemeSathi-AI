@@ -7,23 +7,125 @@
     "publication_date": "2023-09-15",
     "official_gazette_url": "https://ssp.postmatric.karnataka.gov.in/docs/e_attestation_sop_v2.pdf",
     "applicable_cycle": "Academic Year 2024-25 onwards",
+    "category": "State Statutory Guidelines",
     "executive_summary": "Mandates that students enrolled in Karnataka higher education institutions do not need physical gazetted officer attestation for their scholarship submissions. Designates college nodal officers to perform digital e-Attestation within 7 working days under the Karnataka Sakala Guarantee of Services to Citizens Act.",
     "citizen_simplified_points": [
       "No physical visits to government offices are required for attestation of admission receipts or marks cards.",
-      "Designated college e-Attestation officers must verify uploaded documents within 7 days under the Sakala statutory deadline.",
+      "Designated college e-Attestation officers must verify uploaded documents within 7 working days under the Sakala statutory deadline.",
       "Caste and income certificates must be verified digitally through Nadakacheri 15-digit RD numbers.",
-      "Students have a legal right to request inspection and report delays to the Departmental Nodal Officer."
+      "Students have a legal right to request inspection and report delays to the Departmental Nodal Officer.",
+      "Hostel stay certificates and bonafide letters can be uploaded directly to the SSP e-Attestation portal."
+    ],
+    "five_line_summary": {
+      "en": [
+        "1. Physical gazetted officer attestation has been completely abolished for post-matric scholarships in Karnataka.",
+        "2. College e-Attestation Nodal Officers are legally required to verify uploaded student documents within 7 working days.",
+        "3. Caste, Income, and Domicile credentials are automatically validated using 15-digit Nadakacheri RD numbers.",
+        "4. Students can track approval status online in real time on the State Scholarship Portal (SSP).",
+        "5. Failure of college officers to verify within 7 days triggers automatic escalation under the Karnataka Sakala Act."
+      ],
+      "kn": [
+        "1. ಕರ್ನಾಟಕದಲ್ಲಿ ವಿದ್ಯಾರ್ಥಿವೇತನಕ್ಕಾಗಿ ಗೆಜೆಟೆಡ್ ಅಧಿಕಾರಿಗಳಿಂದ ಭೌತಿಕ ದೃಢೀಕರಣ (ಅಟೆಸ್ಟೇಷನ್) ಪಡೆಯುವುದನ್ನು ಸಂಪೂರ್ಣವಾಗಿ ರದ್ದುಗೊಳಿಸಲಾಗಿದೆ.",
+        "2. ಕಾಲೇಜು ಇ-ದೃಢೀಕರಣ ನೋಡಲ್ ಅಧಿಕಾರಿಗಳು ವಿದ್ಯಾರ್ಥಿ ದಾಖಲೆಗಳನ್ನು 7 ಕೆಲಸದ ದಿನಗಳಲ್ಲಿ ಪರಿಶೀಲಿಸುವುದು ಸಕಾಲ ಕಾಯ್ದೆಯಡಿ ಕಡ್ಡಾಯವಾಗಿದೆ.",
+        "3. ಜಾತಿ ಮತ್ತು ಆದಾಯ ಪ್ರಮಾಣಪತ್ರಗಳನ್ನು ನಾದಕಚೇರಿಯ 15-ಅಂಕಿಯ RD ಸಂಖ್ಯೆ ಬಳಸಿ ಡಿಜಿಟಲ್ ರೂಪದಲ್ಲಿ ಪರಿಶೀಲಿಸಲಾಗುತ್ತದೆ.",
+        "4. ವಿದ್ಯಾರ್ಥಿಗಳು ರಾಜ್ಯ ವಿದ್ಯಾರ್ಥಿವೇತನ ಪೋರ್ಟಲ್ (SSP) ನಲ್ಲಿ ನೈಜ ಸಮಯದಲ್ಲಿ ತಮ್ಮ ಅರ್ಜಿಯ ಸ್ಥಿತಿಯನ್ನು ಪರಿಶೀಲಿಸಬಹುದು.",
+        "5. ಕಾಲೇಜು ಅಧಿಕಾರಿಗಳು 7 ದಿನಗಳಲ್ಲಿ ಪರಿಶೀಲಿಸದಿದ್ದಲ್ಲಿ ಸಕಾಲ ಕಾಯ್ದೆಯಡಿ ನೇರವಾಗಿ ಮೇಲ್ಮನವಿ ಸಲ್ಲಿಸುವ ಹಕ್ಕು ವಿದ್ಯಾರ್ಥಿಗಳಿಗೆ ಇರುತ್ತದೆ."
+      ],
+      "hi": [
+        "1. कर्नाटक में पोस्ट-मैट्रिक छात्रवृत्ति के लिए राजपत्रित अधिकारी द्वारा भौतिक सत्यापन (अटेस्टेशन) पूरी तरह समाप्त कर दिया गया है।",
+        "2. कॉलेज ई-सत्यापन नोडल अधिकारियों को 7 कार्य दिवसों के भीतर छात्रों के अपलोड किए गए दस्तावेजों को सत्यापित करना अनिवार्य है।",
+        "3. जाति और आय प्रमाणपत्रों का सत्यापन नाडकचेरी के 15-अंकीय आरडी (RD) नंबर के माध्यम से डिजिटल रूप से किया जाता है।",
+        "4. छात्र राज्य छात्रवृत्ति पोर्टल (SSP) पर वास्तविक समय में अपनी सत्यापन स्थिति की जांच कर सकते हैं।",
+        "5. 7 दिनों के भीतर सत्यापन न होने पर कर्नाटक सकाला अधिनियम के तहत स्वतः निवारण और अपील का अधिकार मिलता है।"
+      ]
+    },
+    "important_conditions": {
+      "en": [
+        "Student must be a registered bona fide student in a recognized Karnataka college with active AISHE code.",
+        "Aadhaar name and Nadakacheri certificate name must match (or Tahsildar relationship certificate must be provided).",
+        "Uploaded documents must be legible PDFs with file size below 2MB.",
+        "Students claiming fee reimbursement must upload official university/CET allotment orders and fee receipts."
+      ],
+      "kn": [
+        "ವಿದ್ಯಾರ್ಥಿಯು ಸಕ್ರಿಯ AISHE ಕೋಡ್ ಹೊಂದಿರುವ ಮಾನ್ಯತೆ ಪಡೆದ ಕರ್ನಾಟಕ ಕಾಲೇಜಿನಲ್ಲಿ ನೋಂದಾಯಿತ ವಿದ್ಯಾರ್ಥಿಯಾಗಿರಬೇಕು.",
+        "ಆಧಾರ್ ಹೆಸರು ಮತ್ತು ನಾದಕಚೇರಿ ಪ್ರಮಾಣಪತ್ರದ ಹೆಸರು ಒಂದೇ ಆಗಿರಬೇಕು (ಅಥವಾ ತಹಸೀಲ್ದಾರ್ ಸಂಬಂಧ ಪ್ರಮಾಣಪತ್ರ ನೀಡಬೇಕು).",
+        "ಅಪ್‌ಲೋಡ್ ಮಾಡಿದ ದಾಖಲೆಗಳು 2MB ಗಿಂತ ಕಡಿಮೆ ಗಾತ್ರದ ಸ್ಪಷ್ಟ PDF ಆಗಿರಬೇಕು.",
+        "ಶುಲ್ಕ ಮರುಪಾವತಿ ಪಡೆಯಲು CET/ವಿಶ್ವವಿದ್ಯಾಲಯದ ಅಧಿಕೃತ ಸೀಟು ಹಂಚಿಕೆ ಆದೇಶ ಮತ್ತು ಶುಲ್ಕ ರಸೀದಿಯನ್ನು ಅಪ್‌ಲೋಡ್ ಮಾಡಬೇಕು."
+      ],
+      "hi": [
+        "छात्र को सक्रिय AISHE कोड वाले मान्यता प्राप्त कर्नाटक कॉलेज में नियमित रूप से नामांकित होना चाहिए।",
+        "आधार कार्ड और नाडकचेरी प्रमाणपत्र में नाम का मिलान होना चाहिए (या तहसीलदार संबंध प्रमाणपत्र अनिवार्य है)।",
+        "अपलोड किए गए दस्तावेज 2MB से कम आकार के स्पष्ट पीडीएफ (PDF) होने चाहिए।",
+        "शुल्क प्रतिपूर्ति के लिए सीईटी/विश्वविद्यालय आवंटन पत्र और आधिकारिक शुल्क रसीद अपलोड करना अनिवार्य है।"
+      ]
+    },
+    "dates_and_deadlines": [
+      {
+        "label": "Sakala Statutory Verification Limit",
+        "timeframe_or_date": "7 Working Days from Document Upload",
+        "statutory_authority": "Karnataka Guarantee of Services to Citizens Act (Sakala)",
+        "is_critical": true
+      },
+      {
+        "label": "Annual Portal Application Window",
+        "timeframe_or_date": "August 1 to January 31 (Annual Cycle)",
+        "statutory_authority": "Social Welfare Department, Govt of Karnataka",
+        "is_critical": false
+      },
+      {
+        "label": "Objection Rectification Window",
+        "timeframe_or_date": "15 Calendar Days from Officer Rejection",
+        "statutory_authority": "Centre for e-Governance, Karnataka",
+        "is_critical": true
+      }
+    ],
+    "required_documents": [
+      {
+        "name": "Caste & Income Certificate",
+        "issuing_authority": "Revenue Department (Nadakacheri / Atalji Janasnehi Kendra)",
+        "format_or_requirement": "15-digit RD Number starting with RD00..."
+      },
+      {
+        "name": "College Admission Fee Receipt",
+        "issuing_authority": "Admitted Higher Education Institution",
+        "format_or_requirement": "Original fee receipt with college seal or digital payment transaction ID"
+      },
+      {
+        "name": "Previous Year Marks Card",
+        "issuing_authority": "University / Pre-University Board (KSEAB)",
+        "format_or_requirement": "Digitally verifiable marks sheet or DigiLocker certified document"
+      },
+      {
+        "name": "Aadhaar Card",
+        "issuing_authority": "UIDAI",
+        "format_or_requirement": "Active biometric Aadhaar linked with student mobile number"
+      }
+    ],
+    "application_steps": [
+      "Step 1: Log in to the Karnataka State Scholarship Portal (SSP) post-matric login with student credentials.",
+      "Step 2: Enter Nadakacheri 15-digit RD number to automatically fetch verified caste and income details.",
+      "Step 3: Upload PDF scans of college admission fee receipt, marks card, and study certificate to the e-Attestation portal.",
+      "Step 4: Note down the e-Attestation application tracking number generated upon upload.",
+      "Step 5: College e-Attestation officer reviews and digitally approves documents within 7 Sakala working days.",
+      "Step 6: Submit the verified final scholarship application on the SSP portal."
+    ],
+    "important_warnings": [
+      "Submitting fabricated fee receipts or forged seal impressions leads to permanent debarment and police complaint under IPC.",
+      "If the college nodal officer rejects an attestation, the student has only 15 days to resubmit corrected documents.",
+      "Private deemed universities not onboarded to the AISHE registry require manual verification by the Joint Director of Collegiate Education."
     ],
     "official_clauses": [
       {
         "clause_number": "Section 4.1",
         "clause_title": "Digital Verification via Revenue Integration",
-        "official_text": "All Caste and Income certificates must be fetched directly through the Atalji Janasnehi Kendra (Nadakacheri) database using the RD Number. In case of mismatch between student name in Aadhaar and Nadakacheri, the Tahsildar certified relationship must be verified by the institutional e-Attestation Officer."
+        "official_text": "All Caste and Income certificates must be fetched directly through the Atalji Janasnehi Kendra (Nadakacheri) database using the RD Number. In case of mismatch between student name in Aadhaar and Nadakacheri, the Tahsildar certified relationship must be verified by the institutional e-Attestation Officer.",
+        "simplified_meaning": "You do not need paper caste or income certificates; your 15-digit RD number pulls verified government records instantly. If names differ slightly, an official relationship certificate from the Tahsildar resolves it."
       },
       {
         "clause_number": "Section 7.3",
         "clause_title": "Statutory Time Limit under Sakala Act",
-        "official_text": "The institutional e-Attestation Officer is bound by the Karnataka Guarantee of Services to Citizens Act (Sakala) to clear or raise specific, actionable objections to a student application within seven working days of online upload."
+        "official_text": "The institutional e-Attestation Officer is bound by the Karnataka Guarantee of Services to Citizens Act (Sakala) to clear or raise specific, actionable objections to a student application within seven working days of online upload.",
+        "simplified_meaning": "College verification officers have a strict legal deadline of 7 working days. If they delay, you have the statutory right to escalate under the Sakala Citizens Charter."
       }
     ],
     "flagged_ambiguities": [
@@ -39,6 +141,7 @@
     "publication_date": "2023-10-20",
     "official_gazette_url": "https://pmkisan.gov.in/Documents/eKYC_Advisory_2023.pdf",
     "applicable_cycle": "Continuous (FY 2024-25 onwards)",
+    "category": "Central Statutory Guidelines",
     "executive_summary": "Enforces three mandatory prerequisites for receiving quarterly financial transfers under PM-KISAN: 1) Aadhaar-based e-KYC (Face Authentication or OTP), 2) Active Land-Seeding in state revenue records, and 3) NPCI Direct Benefit Transfer (DBT) mapped bank account.",
     "citizen_simplified_points": [
       "Every eligible farmer must complete e-KYC using the PM-KISAN mobile app or at Common Service Centres (CSC).",
@@ -46,16 +149,111 @@
       "Bank accounts must be actively mapped to the Aadhaar Payment Bridge (APB); traditional IFSC/Account number transfers are no longer processed.",
       "Any beneficiary who paid income tax in the preceding financial year is automatically de-registered and required to refund wrongful receipts."
     ],
+    "five_line_summary": {
+      "en": [
+        "1. PM-KISAN quarterly installments of ₹2,000 are conditional on Aadhaar-based e-KYC authentication.",
+        "2. Farmland ownership must be formally seeded with the state land registry portal (Bhoomi or Bhulekh).",
+        "3. Financial transfers are routed strictly through the NPCI Aadhaar Payment Bridge (APB) to the linked bank account.",
+        "4. Institutional landholders, government employees, and income tax payers are legally disqualified from receiving benefits.",
+        "5. Ineligible recipients who wrongly claimed payments are required by law to refund all transferred amounts."
+      ],
+      "kn": [
+        "1. ಪಿಎಂ-ಕಿಸಾನ್ ಯೋಜನೆಯ ₹2,000 ಕಂತುಗಳನ್ನು ಪಡೆಯಲು ಆಧಾರ್ ಆಧಾರಿತ ಇ-ಕೆವೈಸಿ (e-KYC) ಕಡ್ಡಾಯವಾಗಿದೆ.",
+        "2. ಕೃಷಿ ಭೂಮಿಯ ವಿವರಗಳು ರಾಜ್ಯ ಭೂಮಿ (Bhoomi) ಅಥವಾ ಕಂದಾಯ ಪೋರ್ಟಲ್‌ನಲ್ಲಿ ಅಧಿಕೃತವಾಗಿ ಲಿಂಕ್ (Seeded) ಆಗಿರಬೇಕು.",
+        "3. ಹಣವನ್ನು ಕೇವಲ NPCI ಆಧಾರ್ ಪೇಮೆಂಟ್ ಬ್ರಿಡ್ಜ್ (APB) ಮೂಲಕ ಲಿಂಕ್ ಆಗಿರುವ ಬ್ಯಾಂಕ್ ಖಾತೆಗೆ ಜಮೆ ಮಾಡಲಾಗುತ್ತದೆ.",
+        "4. ಸಾಂಸ್ಥಿಕ ಭೂಮಾಲೀಕರು, ಸರ್ಕಾರಿ ನೌಕರರು ಮತ್ತು ಆದಾಯ ತೆರಿಗೆ ಪಾವತಿದಾರರಿಗೆ ಈ ಯೋಜನೆಯಡಿ ಯಾವುದೇ ಸವಲತ್ತು ಸಿಗುವುದಿಲ್ಲ.",
+        "5. ಅನರ್ಹ ವ್ಯಕ್ತಿಗಳು ಹಣ ಪಡೆದಿದ್ದರೆ ಸರ್ಕಾರಕ್ಕೆ ಪೂರ್ಣ ಮೊತ್ತವನ್ನು ಹಿಂತಿರುಗಿಸುವುದು ಕಡ್ಡಾಯವಾಗಿದೆ."
+      ],
+      "hi": [
+        "1. पीएम-किसान की ₹2,000 की तिमाही किस्त प्राप्त करने के लिए आधार आधारित ई-केवाईसी (e-KYC) अनिवार्य है।",
+        "2. कृषि भूमि का राज्य भू-राजस्व पोर्टल (भूलेख/भूमि) पर सक्रिय रूप से सीड (Seed) होना आवश्यक है।",
+        "3. वित्तीय हस्तांतरण केवल एनपीसीआई आधार पेमेंट ब्रिज (APB) के माध्यम से बैंक खाते में भेजा जाता है।",
+        "4. संस्थागत भूस्वामी, सरकारी कर्मचारी और आयकर दाता इस योजना के तहत कानूनी रूप से अपात्र हैं।",
+        "5. गलत तरीके से लाभ प्राप्त करने वाले अपात्र व्यक्तियों से वसूली का कानूनी प्रावधान लागू किया गया है।"
+      ]
+    },
+    "important_conditions": {
+      "en": [
+        "Farmer family must hold cultivable agricultural land in their name in the state land records.",
+        "Beneficiary must have completed biometric or OTP-based e-KYC on the PM-KISAN portal.",
+        "Bank account must be seeded with Aadhaar and mapped on the NPCI mapper for Direct Benefit Transfer.",
+        "Must NOT belong to the statutory exclusion categories defined under Clause 5."
+      ],
+      "kn": [
+        "ರೈತ ಕುಟುಂಬವು ರಾಜ್ಯದ ಕಂದಾಯ ದಾಖಲೆಗಳಲ್ಲಿ ತಮ್ಮ ಹೆಸರಿನಲ್ಲಿ ಸಾಗುವಳಿ ಮಾಡಬಹುದಾದ ಕೃಷಿ ಭೂಮಿಯನ್ನು ಹೊಂದಿರಬೇಕು.",
+        "ಫಲಾನುಭವಿಯು ಪಿಎಂ-ಕಿಸಾನ್ ಪೋರ್ಟಲ್‌ನಲ್ಲಿ ಬಯೋಮೆಟ್ರಿಕ್ ಅಥವಾ ಒಟಿಪಿ ಆಧಾರಿತ ಇ-ಕೆವೈಸಿ ಪೂರ್ಣಗೊಳಿಸಿರಬೇಕು.",
+        "ಬ್ಯಾಂಕ್ ಖಾತೆಯು ಆಧಾರ್ ಮತ್ತು NPCI ಮ್ಯಾಪರ್‌ನೊಂದಿಗೆ ಲಿಂಕ್ ಆಗಿರಬೇಕು.",
+        "ಷರತ್ತು 5 ರ ಅಡಿಯಲ್ಲಿ ನಿಗದಿಪಡಿಸಲಾದ ಶಾಸನಬದ್ಧ ಹೊರಗಿಡುವ (Exclusion) ವರ್ಗಗಳಿಗೆ ಸೇರಿರಬಾರದು."
+      ],
+      "hi": [
+        "किसान परिवार के पास राज्य भू-अभिलेखों में अपने नाम पर कृषि योग्य भूमि दर्ज होनी चाहिए।",
+        "लाभार्थी को पीएम-किसान पोर्टल पर बायोमेट्रिक या ओटीपी आधारित ई-केवाईसी पूरा करना अनिवार्य है।",
+        "बैंक खाता आधार से जुड़ा होना चाहिए और डीबीटी (DBT) के लिए एनपीसीआई मैपर पर सक्रिय होना चाहिए।",
+        "धारा 5 के तहत उल्लिखित वैधानिक अपात्रता (Exclusion) श्रेणियों में शामिल नहीं होना चाहिए।"
+      ]
+    },
+    "dates_and_deadlines": [
+      {
+        "label": "e-KYC Mandatory Compliance",
+        "timeframe_or_date": "Mandatory Prior to Each Installment Release",
+        "statutory_authority": "Ministry of Agriculture & Farmers Welfare",
+        "is_critical": true
+      },
+      {
+        "label": "Four-Monthly Tranche Release",
+        "timeframe_or_date": "April-July, August-November, December-March",
+        "statutory_authority": "Government of India",
+        "is_critical": false
+      },
+      {
+        "label": "Wrongful Benefit Recovery Notice",
+        "timeframe_or_date": "30 Days from Recovery Notice Issuance",
+        "statutory_authority": "State Revenue Department & Department of Agriculture",
+        "is_critical": true
+      }
+    ],
+    "required_documents": [
+      {
+        "name": "Land Record Mutation / RTC (Pahani)",
+        "issuing_authority": "State Revenue Department (Bhoomi / Bhulekh)",
+        "format_or_requirement": "Digitally signed Record of Rights showing cultivable area in farmer's name"
+      },
+      {
+        "name": "Aadhaar Card",
+        "issuing_authority": "UIDAI",
+        "format_or_requirement": "Linked to active mobile number for OTP/Face authentication"
+      },
+      {
+        "name": "Bank Passbook / NPCI Mandate",
+        "issuing_authority": "Scheduled Commercial / Regional Rural Bank",
+        "format_or_requirement": "Aadhaar-seeded account active on DBT NPCI clearing mapper"
+      }
+    ],
+    "application_steps": [
+      "Step 1: Check land registration status in the state revenue records (e.g., Bhoomi portal in Karnataka).",
+      "Step 2: Access the PM-KISAN official portal (pmkisan.gov.in) and click 'New Farmer Registration'.",
+      "Step 3: Enter Aadhaar number and mobile number to authenticate identity via OTP.",
+      "Step 4: Enter village, sub-district, survey number, and land holding details as per official RTC.",
+      "Step 5: Complete e-KYC using Aadhaar OTP or facial recognition on the PM-KISAN mobile app.",
+      "Step 6: State nodal officer verifies land details before clearing the quarterly ₹2,000 benefit."
+    ],
+    "important_warnings": [
+      "Income tax payers (who filed ITR in previous assessment year) are strictly disqualified under Clause 5(b).",
+      "Receiving PM-KISAN while serving as a government employee (except Group D/MTS) constitutes an illegal claim.",
+      "If land is transferred or sold, beneficiary status terminates automatically and must be reported immediately."
+    ],
     "official_clauses": [
       {
         "clause_number": "Clause 2.2",
         "clause_title": "Mandatory Aadhaar Payment Bridge (APB) Integration",
-        "official_text": "No installment under PM-KISAN shall be credited via traditional account-based clearing. All States/UTs must ensure that 100% of beneficiary bank accounts are seeded with Aadhaar and mapped with the National Payments Corporation of India (NPCI) for Direct Benefit Transfer."
+        "official_text": "No installment under PM-KISAN shall be credited via traditional account-based clearing. All States/UTs must ensure that 100% of beneficiary bank accounts are seeded with Aadhaar and mapped with the National Payments Corporation of India (NPCI) for Direct Benefit Transfer.",
+        "simplified_meaning": "Funds are sent directly to your Aadhaar-linked bank account through NPCI. You do not need to submit IFSC codes or account numbers manually."
       },
       {
         "clause_number": "Clause 5(b)",
         "clause_title": "Statutory Exclusion Criteria",
-        "official_text": "Institutional landholders, current or former constitutional post holders, current or retired government employees (excluding Multi-Tasking Staff/Class IV/Group D), professionals, and all individuals who paid Income Tax in the previous assessment year are disqualified from PM-KISAN."
+        "official_text": "Institutional landholders, current or former constitutional post holders, current or retired government employees (excluding Multi-Tasking Staff/Class IV/Group D), professionals, and all individuals who paid Income Tax in the previous assessment year are disqualified from PM-KISAN.",
+        "simplified_meaning": "If you paid income tax in the last financial year, or are a government officer or professional, you are legally excluded from PM-KISAN even if you own agricultural land."
       }
     ],
     "flagged_ambiguities": [
@@ -71,6 +269,7 @@
     "publication_date": "2024-01-15",
     "official_gazette_url": "https://scholarships.gov.in/public/FAQ/NSP_OTR_Guidelines.pdf",
     "applicable_cycle": "Academic Year 2024-25 onwards",
+    "category": "National Portal Guidelines",
     "executive_summary": "Replaces annual fresh registrations on the National Scholarship Portal with a single lifelong One-Time Registration (OTR) number generated through Aadhaar/e-KYC Face Authentication. Streamlines renewal and institutional verification across all Central Sector schemes.",
     "citizen_simplified_points": [
       "Students generate one permanent 14-digit OTR number that remains valid throughout their entire academic journey from school to postgraduate study.",
@@ -78,21 +277,505 @@
       "Head of Institution (HoI) and Institute Nodal Officer (INO) must complete biometric authentication to approve student applications.",
       "Prevents duplicate applications across multiple central and state government scholarship portals."
     ],
+    "five_line_summary": {
+      "en": [
+        "1. National Scholarship Portal now requires a lifelong 14-digit One-Time Registration (OTR) number.",
+        "2. OTR is generated through biometric facial recognition using the official Aadhaar FaceRD mobile app.",
+        "3. Once issued, the OTR is permanent and used for all scholarship applications, renewals, and tracking.",
+        "4. Both the Head of Institution and Institute Nodal Officer must authenticate with biometrics to validate applications.",
+        "5. Eliminates paper duplication and prevents unauthorized third parties from submitting fake applications."
+      ],
+      "kn": [
+        "1. ರಾಷ್ಟ್ರೀಯ ವಿದ್ಯಾರ್ಥಿವೇತನ ಪೋರ್ಟಲ್‌ನಲ್ಲಿ (NSP) ಈಗ 14-ಅಂಕಿಯ ಶಾಶ್ವತ ಒಟಿಆರ್ (OTR) ನೋಂದಣಿ ಸಂಖ್ಯೆ ಕಡ್ಡಾಯವಾಗಿದೆ.",
+        "2. ಅಧಿಕೃತ ಆಧಾರ್ ಫೇಸ್ ಆರ್‌ಡಿ (FaceRD) ಆ್ಯಪ್ ಮೂಲಕ ಮುಖ ಗುರುತಿಸುವಿಕೆ ಬಳಸಿ ಒಟಿಆರ್ ಸೃಷ್ಟಿಸಲಾಗುತ್ತದೆ.",
+        "3. ಒಮ್ಮೆ ಪಡೆದ ಒಟಿಆರ್ ಶಾಶ್ವತವಾಗಿದ್ದು, ಎಲ್ಲಾ ವಿದ್ಯಾರ್ಥಿವೇತನ ಅರ್ಜಿಗಳು ಮತ್ತು ನವೀಕರಣಗಳಿಗೆ ಬಳಸಲ್ಪಡುತ್ತದೆ.",
+        "4. ಕಾಲೇಜು ಪ್ರಾಂಶುಪಾಲರು ಮತ್ತು ನೋಡಲ್ ಅಧಿಕಾರಿಗಳು ಬಯೋಮೆಟ್ರಿಕ್ ದೃಢೀಕರಣದ ಮೂಲಕವೇ ಅರ್ಜಿಗಳನ್ನು ಅನುಮೋದಿಸಬೇಕು.",
+        "5. ಕಾಗದಪತ್ರಗಳ ಪುನರಾವರ್ತನೆಯನ್ನು ತಪ್ಪಿಸಿ, ನಕಲಿ ಅರ್ಜಿಗಳನ್ನು ತಡೆಯಲು ಈ ವ್ಯವಸ್ಥೆ ಜಾರಿಗೆ ಬಂದಿದೆ."
+      ],
+      "hi": [
+        "1. राष्ट्रीय छात्रवृत्ति पोर्टल (NSP) पर अब 14-अंकीय स्थायी वन-टाइम रजिस्ट्रेशन (OTR) अनिवार्य कर दिया गया है।",
+        "2. आधार फेसआरडी (FaceRD) मोबाइल ऐप के जरिए चेहरे के बायोमेट्रिक सत्यापन से यह OTR नंबर बनता है।",
+        "3. एक बार जारी होने के बाद, OTR स्थायी रहता है और सभी छात्रवृत्ति आवेदनों तथा नवीनीकरण के लिए मान्य होता है।",
+        "4. संस्था प्रमुख (HoI) और संस्थान नोडल अधिकारी (INO) को बायोमेट्रिक प्रमाणीकरण द्वारा आवेदन सत्यापित करना होगा।",
+        "5. यह प्रणाली कागजी जटिलताओं को समाप्त करती है और फर्जी व दोहरे आवेदनों को रोकती है।"
+      ]
+    },
+    "important_conditions": {
+      "en": [
+        "Student must possess an active Aadhaar card with up-to-date photograph and linked mobile phone.",
+        "OTR number is mandatory for all Central Sector and Centrally Sponsored scholarship schemes.",
+        "Institute where student studies must be registered on AISHE with verified active INO credentials.",
+        "Students under 18 years of age whose biometrics were not updated post age 15 must update Aadhaar biometrics first."
+      ],
+      "kn": [
+        "ವಿದ್ಯಾರ್ಥಿಯು ನವೀಕರಿಸಿದ ಭಾವಚಿತ್ರ ಮತ್ತು ಮೊಬೈಲ್ ಸಂಖ್ಯೆಯೊಂದಿಗೆ ಸಕ್ರಿಯ ಆಧಾರ್ ಕಾರ್ಡ್ ಹೊಂದಿರಬೇಕು.",
+        "ಎಲ್ಲಾ ಕೇಂದ್ರ ವಲಯ ಮತ್ತು ಕೇಂದ್ರ ಪ್ರಾಯೋಜಿತ ವಿದ್ಯಾರ್ಥಿವೇತನಗಳಿಗೆ OTR ಸಂಖ್ಯೆ ಕಡ್ಡಾಯವಾಗಿದೆ.",
+        "ವಿದ್ಯಾರ್ಥಿ ಓದುತ್ತಿರುವ ಶಿಕ್ಷಣ ಸಂಸ್ಥೆಯು ಸಕ್ರಿಯ INO ವಿವರಗಳೊಂದಿಗೆ AISHE ನಲ್ಲಿ ನೋಂದಾಯಿತವಾಗಿರಬೇಕು.",
+        "15 ವರ್ಷ ವಯಸ್ಸಿನ ನಂತರ ಆಧಾರ್ ಬಯೋಮೆಟ್ರಿಕ್ಸ್ ನವೀಕರಿಸದ 18 ವರ್ಷಕ್ಕಿಂತ ಕಡಿಮೆ ವಯಸ್ಸಿನ ವಿದ್ಯಾರ್ಥಿಗಳು ಮೊದಲು ಆಧಾರ್ ನವೀಕರಿಸಬೇಕು."
+      ],
+      "hi": [
+        "छात्र के पास नवीनतम फोटो और लिंक्ड मोबाइल नंबर वाला सक्रिय आधार कार्ड होना अनिवार्य है।",
+        "सभी केंद्रीय क्षेत्र और केंद्र प्रायोजित छात्रवृत्ति योजनाओं के लिए OTR नंबर अनिवार्य है।",
+        "छात्र जिस संस्थान में अध्ययनरत है, वह सक्रिय INO क्रेडेंशियल्स के साथ AISHE पर पंजीकृत होना चाहिए।",
+        "15 वर्ष की आयु के बाद बायोमेट्रिक अपडेट न कराने वाले नाबालिग छात्रों को पहले आधार अपडेट कराना आवश्यक है।"
+      ]
+    },
+    "dates_and_deadlines": [
+      {
+        "label": "OTR Portal Launch & Mandatory Cutoff",
+        "timeframe_or_date": "Mandatory for Academic Year 2024-25 Onwards",
+        "statutory_authority": "Department of Higher Education, Ministry of Education",
+        "is_critical": true
+      },
+      {
+        "label": "Annual Application Deadline on NSP",
+        "timeframe_or_date": "October 31 to December 31 (Scheme Specific)",
+        "statutory_authority": "National Scholarship Portal",
+        "is_critical": true
+      },
+      {
+        "label": "Institutional Biometric Verification Deadline",
+        "timeframe_or_date": "15 Days Post Student Application Submission",
+        "statutory_authority": "Institute Nodal Officers",
+        "is_critical": false
+      }
+    ],
+    "required_documents": [
+      {
+        "name": "Aadhaar Card with Biometric FaceRD",
+        "issuing_authority": "UIDAI",
+        "format_or_requirement": "Biometric face scan or OTP verification on Android device"
+      },
+      {
+        "name": "AISHE Registered College Admission Proof",
+        "issuing_authority": "Higher Education Institution",
+        "format_or_requirement": "Bonafide student certificate signed with college AISHE code"
+      },
+      {
+        "name": "Parent/Guardian Annual Income Proof",
+        "issuing_authority": "Competent Revenue Authority (Tehsildar/SDM)",
+        "format_or_requirement": "Official income certificate valid for the financial year"
+      }
+    ],
+    "application_steps": [
+      "Step 1: Download the 'NSP OTR App' and 'Aadhaar FaceRD App' from Google Play Store.",
+      "Step 2: Enter Aadhaar number and perform live facial biometric capture in adequate lighting.",
+      "Step 3: Receive 14-digit One-Time Registration (OTR) number via SMS and portal display.",
+      "Step 4: Log in to scholarships.gov.in using the OTR number and set a secure password.",
+      "Step 5: Select eligible central scholarship scheme (e.g., CSSS, Pragati, Post-Matric SC).",
+      "Step 6: Submit application for institutional biometric verification by college nodal officers."
+    ],
+    "important_warnings": [
+      "Do not share your OTR credentials or OTP with cyber café agents; unauthorized submission may void claims.",
+      "Attempting to claim benefits under multiple central schemes simultaneously violates NSP duplicate check rules.",
+      "Applications without college biometric verification will be automatically cancelled after the cutoff date."
+    ],
     "official_clauses": [
       {
         "clause_number": "Para 3",
         "clause_title": "Generation of Lifelong OTR Number",
-        "official_text": "Every applicant must register on the NSP portal using the Aadhaar FaceRD application to obtain a 14-digit One-Time Registration (OTR) number. No application for any Central Sector or Centrally Sponsored Scheme will be entertained without an authenticated OTR."
+        "official_text": "Every applicant must register on the NSP portal using the Aadhaar FaceRD application to obtain a 14-digit One-Time Registration (OTR) number. No application for any Central Sector or Centrally Sponsored Scheme will be entertained without an authenticated OTR.",
+        "simplified_meaning": "You must obtain a 14-digit OTR number using face authentication. Without this single lifelong number, no central scholarship application can be submitted."
       },
       {
         "clause_number": "Para 6",
         "clause_title": "Institutional Biometric Verification Mandate",
-        "official_text": "The Institute Nodal Officer (INO) and Head of Institution (HoI) must register their biometric credentials on the portal before validating any student application. Applications not biometrically verified at the institutional level shall not be transmitted to State/Ministry Nodal Officers."
+        "official_text": "The Institute Nodal Officer (INO) and Head of Institution (HoI) must register their biometric credentials on the portal before validating any student application. Applications not biometrically verified at the institutional level shall not be transmitted to State/Ministry Nodal Officers.",
+        "simplified_meaning": "College heads and nodal officers must verify student applications using their own biometric credentials; paper endorsements are no longer accepted."
       }
     ],
     "flagged_ambiguities": [
       "Minor students whose Aadhaar biometric details have not been updated after age 5 or age 15 may experience face authentication rejection.",
       "Students studying in institutions situated outside their home domicile state must ensure the institution's AISHE code is active and mapped on NSP."
+    ]
+  },
+  {
+    "id": "POL-AICTE-PRAGATI-GUIDELINES",
+    "title": "Implementation Guidelines for AICTE Pragati Scholarship Scheme for Girl Students (Degree)",
+    "issuing_department": "All India Council for Technical Education (AICTE), Ministry of Education, Government of India",
+    "notification_number": "AICTE/RIFD/Pragati/2023-24",
+    "publication_date": "2023-08-10",
+    "official_gazette_url": "https://www.aicte-india.org/schemes/students-development-schemes/Pragati",
+    "applicable_cycle": "Academic Year 2024-25 onwards",
+    "category": "Technical Education Guidelines",
+    "executive_summary": "Provides 10,000 annual scholarships of ₹50,000 per year for girl students admitted to first-year Degree or second-year lateral entry technical programmes in AICTE-approved institutions. Enforces strict family income limit of ₹8.00 Lakh per annum.",
+    "citizen_simplified_points": [
+      "Only female students enrolled in AICTE-approved technical degree programmes are eligible.",
+      "Maximum family income from all sources must not exceed ₹8 Lakh per annum.",
+      "Up to two girls per family can receive this scholarship.",
+      "Beneficiaries receive ₹50,000 per year for up to 4 years of study directly via DBT."
+    ],
+    "five_line_summary": {
+      "en": [
+        "1. AICTE Pragati grants ₹50,000 per year to meritorious female students pursuing technical degrees.",
+        "2. Open to 1st year degree students and 2nd year lateral entry students in AICTE-approved institutions.",
+        "3. Annual family income must not exceed ₹8.00 Lakh per annum from all sources.",
+        "4. A maximum of two girl children per family are eligible for concurrent benefits.",
+        "5. Awardees cannot draw any other government scholarship or tuition fee concession simultaneously."
+      ],
+      "kn": [
+        "1. ಎಐಸಿಟಿಇ ಪ್ರಗತಿ ಯೋಜನೆಯು ತಾಂತ್ರಿಕ ಪದವಿ ಓದುತ್ತಿರುವ ಹೆಣ್ಣುಮಕ್ಕಳಿಗೆ ವಾರ್ಷಿಕ ₹50,000 ಪ್ರೋತ್ಸಾಹಧನ ನೀಡುತ್ತದೆ.",
+        "2. ಎಐಸಿಟಿಇ ಅನುಮೋದಿತ ಕಾಲೇಜುಗಳಲ್ಲಿ 1ನೇ ವರ್ಷದ ಪದವಿ ಅಥವಾ 2ನೇ ವರ್ಷದ ಲ್ಯಾಟರಲ್ ಎಂಟ್ರಿ ವಿದ್ಯಾರ್ಥಿನಿಯರಿಗೆ ಇದು ಅನ್ವಯಿಸುತ್ತದೆ.",
+        "3. ಕುಟುಂಬದ ವಾರ್ಷಿಕ ಆದಾಯವು ಎಲ್ಲಾ ಮೂಲಗಳಿಂದ ₹8.00 ಲಕ್ಷವನ್ನು ಮೀರಿರಬಾರದು.",
+        "4. ಒಂದು ಕುಟುಂಬದ ಗರಿಷ್ಠ ಇಬ್ಬರು ಹೆಣ್ಣುಮಕ್ಕಳಿಗೆ ಈ ಸವಲತ್ತು ಪಡೆಯಲು ಅವಕಾಶವಿದೆ.",
+        "5. ಫಲಾನುಭವಿಗಳು ಅದೇ ಸಮಯದಲ್ಲಿ ಯಾವುದೇ ಇತರ ಸರ್ಕಾರಿ ವಿದ್ಯಾರ್ಥಿವೇತನ ಅಥವಾ ಶುಲ್ಕ ರಿಯಾಯಿತಿ ಪಡೆಯುವಂತಿಲ್ಲ."
+      ],
+      "hi": [
+        "1. एआईसीटीई प्रगति योजना तकनीकी डिग्री कर रही मेधावी छात्राओं को प्रति वर्ष ₹50,000 की वित्तीय सहायता देती है।",
+        "2. यह एआईसीटीई-अनुमोदित संस्थानों में प्रथम वर्ष की डिग्री या द्वितीय वर्ष लेटरल एंट्री की छात्राओं के लिए खुली है।",
+        "3. सभी स्रोतों से परिवार की कुल वार्षिक आय ₹8.00 लाख से अधिक नहीं होनी चाहिए।",
+        "4. एक परिवार की अधिकतम दो बेटियां इस योजना के तहत छात्रवृत्ति प्राप्त करने की पात्र हैं।",
+        "5. लाभार्थी एक साथ किसी अन्य सरकारी छात्रवृत्ति या शुल्क छूट का लाभ नहीं ले सकती हैं।"
+      ]
+    },
+    "important_conditions": {
+      "en": [
+        "Applicant must be female admitted through centralized counseling (CET/JEE/CAP).",
+        "Family income must be less than or equal to ₹8,000,000 (8 Lakhs) per annum.",
+        "Institution must hold active AICTE approval for the current academic session.",
+        "Must maintain pass status in each annual examination to receive subsequent renewals."
+      ],
+      "kn": [
+        "ಅರ್ಜಿದಾರರು ಕೇಂದ್ರೀಕೃತ ಕೌನ್ಸಿಲಿಂಗ್ (CET/JEE) ಮೂಲಕ ಪ್ರವೇಶ ಪಡೆದ ಹೆಣ್ಣುಮಕ್ಕಳಾಗಿರಬೇಕು.",
+        "ಕುಟುಂಬದ ವಾರ್ಷಿಕ ಆದಾಯವು ₹8 ಲಕ್ಷ ಅಥವಾ ಅದಕ್ಕಿಂತ ಕಡಿಮೆ ಇರಬೇಕು.",
+        "ಕಾಲೇಜು ಪ್ರಸ್ತುತ ಶೈಕ್ಷಣಿಕ ವರ್ಷಕ್ಕೆ ಸಕ್ರಿಯ ಎಐಸಿಟಿಇ ಅನುಮೋದನೆ ಹೊಂದಿರಬೇಕು.",
+        "ನವೀಕರಣ ಪಡೆಯಲು ಪ್ರತಿ ವರ್ಷದ ಪರೀಕ್ಷೆಯಲ್ಲಿ ಉತ್ತೀರ್ಣರಾಗಿರಬೇಕು."
+      ],
+      "hi": [
+        "आवेदक छात्रा को केंद्रीयकृत काउंसलिंग (सीईटी/जेईई) के माध्यम से प्रवेश प्राप्त होना चाहिए।",
+        "परिवार की वार्षिक आय ₹8.00 लाख या उससे कम होनी चाहिए।",
+        "संस्थान को वर्तमान शैक्षणिक सत्र के लिए एआईसीटीई से वैध मान्यता प्राप्त होनी चाहिए।",
+        "अगली किस्तों के नवीनीकरण के लिए प्रत्येक वर्ष की परीक्षा उत्तीर्ण करना अनिवार्य है।"
+      ]
+    },
+    "dates_and_deadlines": [
+      {
+        "label": "Application Opening Date on NSP",
+        "timeframe_or_date": "Typically August 15 annually",
+        "statutory_authority": "AICTE & National Scholarship Portal",
+        "is_critical": false
+      },
+      {
+        "label": "Online Submission Cutoff",
+        "timeframe_or_date": "December 31 of Admission Year",
+        "statutory_authority": "National Scholarship Portal",
+        "is_critical": true
+      },
+      {
+        "label": "Defective Application Correction Deadline",
+        "timeframe_or_date": "January 15 following the cutoff",
+        "statutory_authority": "AICTE Student Development Cell",
+        "is_critical": true
+      }
+    ],
+    "required_documents": [
+      {
+        "name": "State Centralized Admission Allotment Letter",
+        "issuing_authority": "KEA (CET) / Centralized Seat Allocation Board",
+        "format_or_requirement": "Official seat allotment memo showing merit rank and institution"
+      },
+      {
+        "name": "Family Income Certificate",
+        "issuing_authority": "Tahsildar / Sub-Divisional Magistrate",
+        "format_or_requirement": "Issued within the financial year, certifying total household income <= ₹8 Lakh"
+      },
+      {
+        "name": "Family Composition Affidavit",
+        "issuing_authority": "Executive Magistrate / Notary Public",
+        "format_or_requirement": "Sworn affidavit certifying no more than two girls are claiming the scheme"
+      }
+    ],
+    "application_steps": [
+      "Step 1: Secure admission to an AICTE-approved engineering or pharmacy degree college.",
+      "Step 2: Complete NSP OTR registration with biometric Aadhaar face verification.",
+      "Step 3: Log in to National Scholarship Portal and choose 'AICTE Pragati Scheme'.",
+      "Step 4: Upload allotment letter, fee receipt, family income certificate, and two-child affidavit.",
+      "Step 5: Notify College Institute Nodal Officer (INO) to complete institutional verification.",
+      "Step 6: AICTE disburses ₹50,000 lump sum annually directly into Aadhaar-linked bank account."
+    ],
+    "important_warnings": [
+      "Drawing double benefits from state scholarship and AICTE Pragati simultaneously is strictly prohibited.",
+      "Students failing in university exams lose scholarship entitlement for that year without retroactive benefit.",
+      "Management quota or NRI quota admissions are strictly disqualified from Pragati assistance."
+    ],
+    "official_clauses": [
+      {
+        "clause_number": "Clause 3.1",
+        "clause_title": "Family Limit and Quota Restriction",
+        "official_text": "The scheme is open to girl students admitted to AICTE approved technical institutions with a maximum family income of ₹8.00 Lakh per annum. The grant shall be limited to a maximum of two girl children per family.",
+        "simplified_meaning": "Only daughters of families earning up to ₹8 Lakh per year qualify, limited to at most two girls per household."
+      },
+      {
+        "clause_number": "Clause 6.4",
+        "clause_title": "Exclusivity of Scholarship Assistance",
+        "official_text": "A candidate who is already availing of any other scholarship or freeship from Central/State Government or any other statutory agency shall not be eligible to receive financial assistance under this scheme.",
+        "simplified_meaning": "You cannot combine AICTE Pragati with other government scholarships. You must choose one."
+      }
+    ],
+    "flagged_ambiguities": [
+      "Lateral entry students who completed diploma from an unapproved polytechnic cannot claim degree-level benefits.",
+      "Tuition waiver seats (TFW) are eligible for the maintenance portion of ₹50,000, but fee reimbursable claims cannot be made."
+    ]
+  },
+  {
+    "id": "POL-MOE-CSSS-GUIDELINES",
+    "title": "Operational Guidelines for Central Sector Scheme of Scholarship for College and University Students (PM-USP)",
+    "issuing_department": "Department of Higher Education, Ministry of Education, Government of India",
+    "notification_number": "F.No. 1-1/2022-NS.1",
+    "publication_date": "2023-04-01",
+    "official_gazette_url": "https://scholarships.gov.in/public/FAQ/CSSS_Scheme_Guidelines.pdf",
+    "applicable_cycle": "Academic Year 2024-25 onwards",
+    "category": "Merit Scholarship Guidelines",
+    "executive_summary": "Grants 82,000 fresh annual scholarships (41,000 for boys and 41,000 for girls) to meritorious students who scored above the 80th percentile in the respective state board Class XII examination and whose family income does not exceed ₹4.50 Lakh per annum.",
+    "citizen_simplified_points": [
+      "Requires Class XII percentile score above the 80th percentile cutoff of the student's examination board.",
+      "Annual family income cap is ₹4.50 Lakh per annum from all sources.",
+      "Provides ₹12,000 per year for 3 undergraduate years and ₹20,000 per year for postgraduate/4th-5th year studies.",
+      "Applicable only to regular full-time degree courses (distance education and correspondence are excluded)."
+    ],
+    "five_line_summary": {
+      "en": [
+        "1. PM-USP CSSS awards 82,000 merit-cum-means scholarships annually with equal 50:50 gender allocation.",
+        "2. Candidates must rank above the 80th percentile cutoff announced by their Class XII state or CBSE/CISCE board.",
+        "3. Family annual income must not exceed ₹4.50 Lakh per annum.",
+        "4. Grants ₹12,000/year for undergraduate years 1-3, and ₹20,000/year for postgraduate or 4th/5th professional years.",
+        "5. Minimum 50% marks in annual university exams is mandatory to retain scholarship continuity."
+      ],
+      "kn": [
+        "1. ಪಿಎಂ-ಯುಎಸ್‌ಪಿ ಸಿಎಸ್‌ಎಸ್‌ಎಸ್ ಯೋಜನೆಯು ವಾರ್ಷಿಕ 82,000 ಪ್ರತಿಭಾ ವಿದ್ಯಾರ್ಥಿವೇತನಗಳನ್ನು ಸಮಾನ 50:50 ಲಿಂಗ ಅನುಪಾತದಲ್ಲಿ ನೀಡುತ್ತದೆ.",
+        "2. ಅಭ್ಯರ್ಥಿಗಳು ತಮ್ಮ 12ನೇ ತರಗತಿ (ಪಿಯುಸಿ/CBSE) ಬೋರ್ಡ್ ಪರೀಕ್ಷೆಯಲ್ಲಿ 80ನೇ ಪರ್ಸಂಟೈಲ್‌ಗಿಂತ ಹೆಚ್ಚಿನ ಅಂಕ ಗಳಿಸಿರಬೇಕು.",
+        "3. ಕುಟುಂಬದ ವಾರ್ಷಿಕ ಆದಾಯವು ₹4.50 ಲಕ್ಷವನ್ನು ಮೀರಬಾರದು.",
+        "4. ಪದವಿ ಮೊದಲ 3 ವರ್ಷಗಳಿಗೆ ವಾರ್ಷಿಕ ₹12,000 ಮತ್ತು ಸ್ನಾತಕೋತ್ತರ ಅಥವಾ 4/5ನೇ ವರ್ಷಕ್ಕೆ ವಾರ್ಷಿಕ ₹20,000 ನೀಡಲಾಗುತ್ತದೆ.",
+        "5. ಮುಂದಿನ ವರ್ಷದ ನವೀಕರಣಕ್ಕಾಗಿ ವಿಶ್ವವಿದ್ಯಾಲಯ ಪರೀಕ್ಷೆಗಳಲ್ಲಿ ಕನಿಷ್ಠ 50% ಅಂಕಗಳನ್ನು ಪಡೆಯುವುದು ಕಡ್ಡಾಯವಾಗಿದೆ."
+      ],
+      "hi": [
+        "1. पीएम-यूएसपी सीएसएसएस योजना प्रति वर्ष 82,000 मेधावी छात्रों को 50:50 लड़के-लड़कियों के अनुपात में छात्रवृत्ति देती है।",
+        "2. उम्मीदवार को अपने संबंधित 12वीं बोर्ड (राज्य/सीबीएसई/आईसीएसई) में 80वें पर्सेंटाइल कटऑफ से ऊपर होना चाहिए।",
+        "3. परिवार की कुल वार्षिक आय ₹4.50 लाख से अधिक नहीं होनी चाहिए।",
+        "4. स्नातक के पहले 3 वर्षों के लिए ₹12,000/वर्ष और स्नातकोत्तर/4-5वें वर्ष के लिए ₹20,000/वर्ष दिए जाते हैं।",
+        "5. छात्रवृत्ति नवीनीकरण जारी रखने के लिए वार्षिक परीक्षाओं में न्यूनतम 50% अंक अनिवार्य हैं।"
+      ]
+    },
+    "important_conditions": {
+      "en": [
+        "Must have passed Class XII in the current academic year and enrolled in a regular degree course.",
+        "Annual family income must not exceed ₹450,000 (4.5 Lakhs).",
+        "Distance education, diploma courses, and correspondence studies are strictly disqualified.",
+        "Must not receive any other Central or State government scholarship."
+      ],
+      "kn": [
+        "ಪ್ರಸ್ತುತ ಶೈಕ್ಷಣಿಕ ವರ್ಷದಲ್ಲಿ 12ನೇ ತರಗತಿ ಉತ್ತೀರ್ಣರಾಗಿ ನಿಯಮಿತ ಪದವಿ ಕೋರ್ಸ್‌ಗೆ ಪ್ರವೇಶ ಪಡೆದಿರಬೇಕು.",
+        "ಕುಟುಂಬದ ವಾರ್ಷಿಕ ಆದಾಯವು ₹4,50,000 (4.5 ಲಕ್ಷ) ಕ್ಕಿಂತ ಕಡಿಮೆ ಇರಬೇಕು.",
+        "ದೂರಶಿಕ್ಷಣ, ಡಿಪ್ಲೊಮಾ ಮತ್ತು ಅಂಚೆತೆರಪಿನ ಕೋರ್ಸ್‌ಗಳು ಈ ಯೋಜನೆಗೆ ಅನರ್ಹವಾಗಿವೆ.",
+        "ಯಾವುದೇ ಇತರ ಕೇಂದ್ರ ಅಥವಾ ರಾಜ್ಯ ಸರ್ಕಾರದ ವಿದ್ಯಾರ್ಥಿವೇತನ ಪಡೆಯುತ್ತಿರಬಾರದು."
+      ],
+      "hi": [
+        "चालू शैक्षणिक सत्र में 12वीं उत्तीर्ण होकर नियमित डिग्री पाठ्यक्रम में नामांकित होना चाहिए।",
+        "परिवार की वार्षिक आय ₹4,50,000 (4.5 लाख) से अधिक नहीं होनी चाहिए।",
+        "दूरस्थ शिक्षा, डिप्लोमा और पत्राचार पाठ्यक्रम इस योजना के तहत पूरी तरह अपात्र हैं।",
+        "किसी अन्य केंद्र या राज्य सरकार की छात्रवृत्ति प्राप्त नहीं होनी चाहिए।"
+      ]
+    },
+    "dates_and_deadlines": [
+      {
+        "label": "Annual Application Submission Window",
+        "timeframe_or_date": "August 1 to December 31 (Annual Cycle)",
+        "statutory_authority": "Ministry of Education & NSP",
+        "is_critical": true
+      },
+      {
+        "label": "NSP Institutional Verification Deadline",
+        "timeframe_or_date": "January 15 of Next Calendar Year",
+        "statutory_authority": "Institutional Nodal Officer",
+        "is_critical": false
+      },
+      {
+        "label": "Annual Renewal Verification Window",
+        "timeframe_or_date": "Within 30 Days of University Results Announcement",
+        "statutory_authority": "College Principal / Registrar",
+        "is_critical": true
+      }
+    ],
+    "required_documents": [
+      {
+        "name": "Class XII Marks Sheet & Board Percentile Rank",
+        "issuing_authority": "State Pre-University Board / CBSE / CISCE",
+        "format_or_requirement": "Verified marks statement reflecting 80th percentile cutoff criteria"
+      },
+      {
+        "name": "Family Annual Income Certificate",
+        "issuing_authority": "Competent Revenue Authority (Tehsildar/Revenue Officer)",
+        "format_or_requirement": "Valid revenue certificate certifying family income <= ₹4.50 Lakh"
+      },
+      {
+        "name": "Bonafide College Enrollment Certificate",
+        "issuing_authority": "Admitted Degree College / University",
+        "format_or_requirement": "Original study certificate with student enrollment/roll number and AISHE code"
+      }
+    ],
+    "application_steps": [
+      "Step 1: Check your board's official 80th percentile cutoff list published on the state board/NSP portal.",
+      "Step 2: Generate your 14-digit OTR number using the Aadhaar FaceRD app.",
+      "Step 3: Select 'Central Sector Scheme of Scholarship (CSSS)' under Ministry of Education on NSP.",
+      "Step 4: Upload Class XII marks card, income certificate, and college enrollment certificate.",
+      "Step 5: College nodal officer validates your student enrollment status on the NSP portal.",
+      "Step 6: Scholarship funds are disbursed through DBT directly into your Aadhaar-linked bank account."
+    ],
+    "important_warnings": [
+      "Failing to score 50% aggregate marks in any college annual exam terminates scholarship entitlement permanently.",
+      "Changing college or course midway without prior approval of the Ministry voids scholarship continuity.",
+      "Submitting an expired or uncertified income declaration leads to immediate rejection during state scrutiny."
+    ],
+    "official_clauses": [
+      {
+        "clause_number": "Clause 2.1",
+        "clause_title": "Percentile Criterion and Reservation Allocation",
+        "official_text": "Students who are above 80th percentile of successful candidates in the relevant stream from the respective Board of Examination in Class XII of 10+2 pattern or equivalent and having family income of less than ₹4.5 lakh per annum shall be eligible. Reservation shall be as per central norms: SC 15%, ST 7.5%, OBC 27%, and PwD 5%.",
+        "simplified_meaning": "You must be among the top 20% (80th percentile) in your 12th board exams and have family income under ₹4.5 Lakh. Standard central category reservations apply."
+      },
+      {
+        "clause_number": "Clause 5.2",
+        "clause_title": "Renewal and Academic Progression Standards",
+        "official_text": "Scholarship once awarded is renewable on year-to-year basis till completion of course subject to the student securing at least 50% marks in annual examination and maintaining minimum 75% attendance.",
+        "simplified_meaning": "To renew every year, you must score at least 50% marks in university exams and maintain 75% class attendance."
+      }
+    ],
+    "flagged_ambiguities": [
+      "Students from exam boards with grade-point grading systems (CGPA) must provide the official board conversion formula.",
+      "Integrated undergraduate-postgraduate dual degree students must ensure scholarship renewal category switches to PG rate at Year 4."
+    ]
+  },
+  {
+    "id": "POL-KAR-GRUHALAKSHMI-ORDER",
+    "title": "Government Order for the Implementation of Gruha Lakshmi Scheme in Karnataka",
+    "issuing_department": "Department of Women and Child Development, Government of Karnataka",
+    "notification_number": "WCD-GL-2023-GO-102",
+    "publication_date": "2023-06-05",
+    "official_gazette_url": "https://sevasindhugs.karnataka.gov.in/docs/Gruhalakshmi_GO_Final.pdf",
+    "applicable_cycle": "Continuous (FY 2024-25 onwards)",
+    "category": "State Social Security Order",
+    "executive_summary": "Sanctions recurring monthly financial assistance of ₹2,000 to the recognized female head of the family (Yajamani) listed on Antyodaya, BPL, or APL ration cards in Karnataka to promote domestic economic empowerment and gender equity.",
+    "citizen_simplified_points": [
+      "Provides ₹2,000 per month directly to the woman head of household (Yajamani).",
+      "Applicable to women listed as head of family on Antyodaya, BPL, and APL ration cards issued in Karnataka.",
+      "Women or their husbands who are income tax payers or GST filers are legally excluded.",
+      "Registration is completely free at Grama One, Karnataka One, and Bangalore One centers."
+    ],
+    "five_line_summary": {
+      "en": [
+        "1. Karnataka Gruha Lakshmi grants ₹2,000 monthly direct financial assistance to the female household head (Yajamani).",
+        "2. The applicant woman must be officially recognized as the family head on an active Antyodaya, BPL, or APL ration card.",
+        "3. Assistance is disbursed directly through Aadhaar-seeded bank accounts via the Direct Benefit Transfer (DBT) portal.",
+        "4. Women or spouses who file Income Tax returns or pay Goods and Services Tax (GST) are statutory excluded.",
+        "5. Citizen enrollment is completely free of charge across Seva Sindhu, Grama One, and Karnataka One centers."
+      ],
+      "kn": [
+        "1. ಕರ್ನಾಟಕ ಗೃಹಲಕ್ಷ್ಮಿ ಯೋಜನೆಯು ಕುಟುಂಬದ ಮಹಿಳಾ ಯಜಮಾನಿಗೆ ತಿಂಗಳಿಗೆ ₹2,000 ನೇರ ಆರ್ಥಿಕ ನೆರವು ನೀಡುತ್ತದೆ.",
+        "2. ಅರ್ಜಿದಾರ ಮಹಿಳೆಯು ಅಂತ್ಯೋದಯ, ಬಿಪಿಎಲ್ ಅಥವಾ ಎಪಿಎಲ್ ಪಡಿತರ ಚೀಟಿಯಲ್ಲಿ ಕುಟುಂಬದ ಮುಖ್ಯಸ್ಥೆಯಾಗಿ (ಯಜಮಾನಿ) ನಮೂದಾಗಿರಬೇಕು.",
+        "3. ಈ ಮೊತ್ತವನ್ನು ಆಧಾರ್ ಲಿಂಕ್ ಆಗಿರುವ ಬ್ಯಾಂಕ್ ಖಾತೆಗೆ ನೇರವಾಗಿ ಡಿಬಿಟಿ (DBT) ಮೂಲಕ ಜಮೆ ಮಾಡಲಾಗುತ್ತದೆ.",
+        "4. ಮಹಿಳೆ ಅಥವಾ ಆಕೆಯ ಪತಿ ಆದಾಯ ತೆರಿಗೆ (ITR) ಅಥವಾ ಜಿಎಸ್‌ಟಿ (GST) ಪಾವತಿದಾರರಾಗಿದ್ದರೆ ಈ ಯೋಜನೆಗೆ ಅನರ್ಹರಾಗುತ್ತಾರೆ.",
+        "5. ಸೇವಾಸಿಂಧು, ಗ್ರಾಮ ಒನ್ ಮತ್ತು ಕರ್ನಾಟಕ ಒನ್ ಕೇಂದ್ರಗಳಲ್ಲಿ ಅರ್ಜಿ ನೋಂದಣಿ ಸಂಪೂರ್ಣ ಉಚಿತವಾಗಿರುತ್ತದೆ."
+      ],
+      "hi": [
+        "1. कर्नाटक गृह लक्ष्मी योजना परिवार की महिला मुखिया (यजमानी) को ₹2,000 मासिक प्रत्यक्ष वित्तीय सहायता देती है।",
+        "2. आवेदक महिला को कर्नाटक के अंत्योदय, बीपीएल या एपीएल राशन कार्ड पर परिवार की मुखिया के रूप में नामित होना चाहिए।",
+        "3. यह सहायता राशि आधार से जुड़े बैंक खाते में सीधे डीबीटी (DBT) पोर्टल द्वारा भेजी जाती है।",
+        "4. स्वयं या पति द्वारा आयकर (ITR) या जीएसटी (GST) दाखिल करने वाले परिवार वैधानिक रूप से इस योजना से बाहर हैं।",
+        "5. सेवा सिंधु, ग्राम वन और कर्नाटक वन केंद्रों पर नागरिक पंजीकरण पूरी तरह से निःशुल्क है।"
+      ]
+    },
+    "important_conditions": {
+      "en": [
+        "Applicant must be the designated woman head of family (Yajamani) on an eligible ration card.",
+        "Applicant or spouse must NOT have filed Income Tax returns in the preceding assessment year.",
+        "Applicant or spouse must NOT be a registered GST payer.",
+        "Bank account must be active, Aadhaar-linked, and cleared for NPCI DBT payments."
+      ],
+      "kn": [
+        "ಅರ್ಜಿದಾರರು ಅರ್ಹ ಪಡಿತರ ಚೀಟಿಯಲ್ಲಿ ಕುಟುಂಬದ ಯಜಮಾನಿ ಎಂದು ನಮೂದಾಗಿರಬೇಕು.",
+        "ಅರ್ಜಿದಾರ ಮಹಿಳೆ ಅಥವಾ ಆಕೆಯ ಪತಿ ಹಿಂದಿನ ಸಾಲಿನಲ್ಲಿ ಆದಾಯ ತೆರಿಗೆ ರಿಟರ್ನ್ಸ್ ಸಲ್ಲಿಸಿರಬಾರದು.",
+        "ಅರ್ಜಿದಾರ ಮಹಿಳೆ ಅಥವಾ ಆಕೆಯ ಪತಿ ಜಿಎಸ್‌ಟಿ ನೋಂದಾಯಿತ ಪಾವತಿದಾರರಾಗಿರಬಾರದು.",
+        "ಬ್ಯಾಂಕ್ ಖಾತೆಯು ಆಧಾರ್‌ನೊಂದಿಗೆ ಜೋಡಣೆಗೊಂಡಿದ್ದು, ಡಿಬಿಟಿ (DBT) ಪಾವತಿಗಳಿಗೆ ಸಕ್ರಿಯವಾಗಿರಬೇಕು."
+      ],
+      "hi": [
+        "आवेदक महिला को राशन कार्ड में परिवार की आधिकारिक मुखिया (यजमानी) होना चाहिए।",
+        "आवेदक या उनके पति ने पिछले निर्धारण वर्ष में आयकर रिटर्न दाखिल न किया हो।",
+        "आवेदक या उनके पति पंजीकृत जीएसटी करदाता नहीं होने चाहिए।",
+        "बैंक खाता आधार से जुड़ा और डीबीटी (DBT) भुगतान के लिए सक्रिय होना चाहिए।"
+      ]
+    },
+    "dates_and_deadlines": [
+      {
+        "label": "Continuous Enrollment Window",
+        "timeframe_or_date": "Open Year-Round (No Application Deadline)",
+        "statutory_authority": "Department of Women & Child Development, Karnataka",
+        "is_critical": false
+      },
+      {
+        "label": "Monthly DBT Disbursement Cycle",
+        "timeframe_or_date": "Between 15th and 25th of Every Calendar Month",
+        "statutory_authority": "Directorate of Social Security, Karnataka",
+        "is_critical": false
+      },
+      {
+        "label": "Grievance Redressal Statutory Response",
+        "timeframe_or_date": "14 Working Days from Complaint Registration",
+        "statutory_authority": "Sakala Services / Seva Sindhu Helpdesk (1902)",
+        "is_critical": true
+      }
+    ],
+    "required_documents": [
+      {
+        "name": "Antyodaya / BPL / APL Ration Card",
+        "issuing_authority": "Food, Civil Supplies & Consumer Affairs Department, Karnataka",
+        "format_or_requirement": "Active ration card number with applicant listed as 'Head of Family'"
+      },
+      {
+        "name": "Applicant Aadhaar Card",
+        "issuing_authority": "UIDAI",
+        "format_or_requirement": "Original Aadhaar number linked to active mobile phone"
+      },
+      {
+        "name": "Husband's Aadhaar Card",
+        "issuing_authority": "UIDAI",
+        "format_or_requirement": "Husband's Aadhaar details for automated income tax / GST exclusion cross-check"
+      },
+      {
+        "name": "Aadhaar Seeded Bank Passbook",
+        "issuing_authority": "Scheduled Bank / Postal Payments Bank",
+        "format_or_requirement": "Bank account verified and seeded on NPCI DBT mapper"
+      }
+    ],
+    "application_steps": [
+      "Step 1: Check your ration card details on the Ahara portal to confirm you are designated as 'Yajamani'.",
+      "Step 2: Visit your nearest Grama One, Karnataka One, Bangalore One, or Bapuji Seva Kendra.",
+      "Step 3: Provide your ration card number, your Aadhaar number, and your husband's Aadhaar number.",
+      "Step 4: Complete biometric or OTP authentication at the counter (no fee is charged).",
+      "Step 5: Collect the official printed acknowledgement slip containing your registration ID.",
+      "Step 6: Receive ₹2,000 monthly benefit credited directly to your Aadhaar-linked bank account."
+    ],
+    "important_warnings": [
+      "No fee should be paid to any middleman or operator; registration is 100% free under government mandate.",
+      "If the husband pays income tax or GST, claiming Gruha Lakshmi is illegal and results in recovery of disbursed funds.",
+      "If ration card shows an adult male as head of family, visit the Food Department to change the head to the woman before applying."
+    ],
+    "official_clauses": [
+      {
+        "clause_number": "Clause 2.1",
+        "clause_title": "Designation of Female Head of Family (Yajamani)",
+        "official_text": "The scheme provides financial aid of ₹2,000 per month to the woman head of household as recognized in the Antyodaya, BPL, or APL card issued by the Food, Civil Supplies and Consumer Affairs Department.",
+        "simplified_meaning": "Only the woman listed as 'Yajamani' (family head) on your Karnataka ration card is entitled to receive the ₹2,000 monthly allowance."
+      },
+      {
+        "clause_number": "Clause 4(a)",
+        "clause_title": "Taxpayer Disqualification Condition",
+        "official_text": "Women heads of families or their spouses who are income tax payers or GST filers are not eligible to receive financial assistance under the Gruha Lakshmi Scheme.",
+        "simplified_meaning": "If either the applicant woman or her husband pays income tax or GST, the family cannot receive Gruha Lakshmi payments."
+      }
+    ],
+    "flagged_ambiguities": [
+      "Single-member female households with an individual ration card are eligible, but newly married women pending addition to in-laws ration card must first update card records.",
+      "If the bank account is linked to an account that is dormant, DBT credits will bounce until the bank account is re-KYC'd."
     ]
   }
 ]
