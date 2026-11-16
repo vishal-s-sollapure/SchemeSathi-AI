@@ -24,12 +24,17 @@ def generate_dynamic_checklist(
     """Generates a personalized dynamic checklist based on verified statutory requirements,
     tracking item states (REQUIRED, UPLOADED, CONFIRMED, NEEDS_REVIEW, NOT_APPLICABLE).
     """
+    clean_student_id = student_profile_id if isinstance(student_profile_id, str) else None
+    clean_citizen_id = citizen_profile_id if isinstance(citizen_profile_id, str) else None
+    clean_sch_id = scholarship_id if isinstance(scholarship_id, str) else None
+    clean_scheme_id = scheme_id if isinstance(scheme_id, str) else None
+
     service = ChecklistService(db)
     return service.generate_dynamic_checklist(
-        student_profile_id=student_profile_id,
-        citizen_profile_id=citizen_profile_id,
-        scholarship_id=scholarship_id,
-        scheme_id=scheme_id,
+        student_profile_id=clean_student_id,
+        citizen_profile_id=clean_citizen_id,
+        scholarship_id=clean_sch_id,
+        scheme_id=clean_scheme_id,
     )
 
 

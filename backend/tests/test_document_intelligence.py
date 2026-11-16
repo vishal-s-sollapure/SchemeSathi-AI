@@ -382,9 +382,24 @@ def test_evidence_confirmation_stores_confirmed_separately(db_session):
 
 def test_dynamic_checklist_generation(db_session):
     """Verifies personalized dynamic checklist generation with verified requirements."""
+    # Seed fresh student with no uploaded documents
+    fresh_student = StudentProfile(
+        id="STU-FRESH-GEN",
+        full_name="Aarav Sharma",
+        domicile_state="Karnataka",
+        category="General",
+        annual_family_income=0.0,
+        marks_percentage=0.0,
+        gender="Male",
+        current_course="B.Tech",
+        year_of_study="1st Year",
+    )
+    db_session.add(fresh_student)
+    db_session.commit()
+
     engine = DynamicChecklistEngine(db_session)
     checklist = engine.generate_checklist(
-        student_profile_id="STU-TEST-DOCS",
+        student_profile_id="STU-FRESH-GEN",
         scholarship_id="SCH-TEST-INTELLIGENCE",
     )
 
@@ -406,22 +421,36 @@ def test_checklist_progression_upon_evidence_confirmation(db_session):
     """Verifies that uploading a document and confirming evidence transitions item
     from REQUIRED -> CONFIRMED and updates readiness score proportionally.
     """
+    prog_student = StudentProfile(
+        id="STU-TEST-PROGRESS",
+        full_name="Neha Patil",
+        domicile_state="Karnataka",
+        category="General",
+        annual_family_income=0.0,
+        marks_percentage=0.0,
+        gender="Female",
+        current_course="B.Tech",
+        year_of_study="1st Year",
+    )
+    db_session.add(prog_student)
+    db_session.commit()
+
     engine = DynamicChecklistEngine(db_session)
     doc_service = DocumentService(db_session)
 
     # 1. Generate clean checklist
     checklist = engine.generate_checklist(
-        student_profile_id="STU-TEST-DOCS",
+        student_profile_id="STU-TEST-PROGRESS",
         scholarship_id="SCH-TEST-INTELLIGENCE",
     )
 
     # 2. Upload Income Certificate
-    pdf_text = "ANNUAL INCOME CERTIFICATE\nCandidate Name: Pooja Hegde\nAnnual Family Income: ₹2,40,000\n"
+    pdf_text = "ANNUAL INCOME CERTIFICATE\nCandidate Name: Neha Patil\nAnnual Family Income: ₹2,40,000\n"
     pdf_bytes = create_sample_pdf([pdf_text])
     upload_res = doc_service.process_and_upload_document(
         file_bytes=pdf_bytes,
-        original_filename="income_cert.pdf",
-        student_profile_id="STU-TEST-DOCS",
+        original_filename="income_cert_prog.pdf",
+        student_profile_id="STU-TEST-PROGRESS",
     )
 
     income_ev = next(e for e in upload_res.extracted_candidates if e.field_key == "annual_family_income")
@@ -460,7 +489,7 @@ def test_safety_rule_no_premature_submission_ready(db_session):
     """
     engine = DynamicChecklistEngine(db_session)
     checklist = engine.generate_checklist(
-        student_profile_id="STU-TEST-DOCS",
+        student_profile_id="STU-TEST-PROGRESS",
         scholarship_id="SCH-TEST-INTELLIGENCE",
     )
 
@@ -478,23 +507,37 @@ def test_document_deletion_and_checklist_rollback(db_session):
     """Verifies that deleting an uploaded document safely removes physical file,
     deletes DB evidence, and rolls back linked checklist items to REQUIRED.
     """
+    del_student = StudentProfile(
+        id="STU-TEST-DEL",
+        full_name="Kiran Rao",
+        domicile_state="Karnataka",
+        category="General",
+        annual_family_income=0.0,
+        marks_percentage=0.0,
+        gender="Male",
+        current_course="B.Tech",
+        year_of_study="1st Year",
+    )
+    db_session.add(del_student)
+    db_session.commit()
+
     doc_service = DocumentService(db_session)
     engine = DynamicChecklistEngine(db_session)
 
     # 1. Upload Document
-    pdf_text = "STATEMENT OF MARKS\nStudent Name: Pooja Hegde\nPercentage: 88.50%\n"
+    pdf_text = "STATEMENT OF MARKS\nStudent Name: Kiran Rao\nPercentage: 88.50%\n"
     pdf_bytes = create_sample_pdf([pdf_text])
     upload_res = doc_service.process_and_upload_document(
         file_bytes=pdf_bytes,
         original_filename="marks_to_delete.pdf",
-        student_profile_id="STU-TEST-DOCS",
+        student_profile_id="STU-TEST-DEL",
     )
     doc_id = upload_res.document.id
     marks_ev = next(e for e in upload_res.extracted_candidates if e.field_key == "marks_percentage")
 
     # 2. Link & Confirm on Checklist
     checklist = engine.generate_checklist(
-        student_profile_id="STU-TEST-DOCS",
+        student_profile_id="STU-TEST-DEL",
         scholarship_id="SCH-TEST-INTELLIGENCE",
     )
     engine.confirm_evidence_and_update(
@@ -523,7 +566,7 @@ def test_api_checklist_and_confirmation_endpoints(db_session):
     """Tests checklist generation and confirmation via API router handlers."""
     # 1. Test generate checklist endpoint
     chk_resp = generate_dynamic_checklist(
-        student_profile_id="STU-TEST-DOCS",
+        student_profile_id="STU-FRESH-GEN",
         scholarship_id="SCH-TEST-INTELLIGENCE",
         db=db_session,
     )
