@@ -7,9 +7,7 @@ import {
   Copy, 
   Check, 
   Send, 
-  FileCheck2,
-  ShieldCheck,
-  BookOpen
+  FileCheck2
 } from 'lucide-react';
 import { StatusBadge } from '../components/common/StatusBadge';
 import { DocumentUpload } from '../components/common/DocumentUpload';
@@ -233,40 +231,61 @@ export const PolicyExplainerPage: React.FC = () => {
                 </h4>
               </div>
               <span className="text-[10px] font-bold text-emerald-800 bg-emerald-100 px-2 py-0.5 rounded-full">
-                Zero Legalese
+                {ragResponse ? (ragResponse.is_grounded ? 'Official Grounded' : 'General Clarification') : 'Zero Legalese'}
               </span>
             </div>
 
             <div className="space-y-3 text-xs sm:text-sm text-slate-700 leading-relaxed">
-              <div className="p-3 bg-white rounded-xl border border-emerald-100/90 space-y-1">
-                <div className="font-bold text-emerald-900 text-xs flex items-center gap-1.5">
-                  <CheckCircle2 className="w-4 h-4 text-emerald-600" />
-                  <span>Rule 1: Income Ceiling Waiver for Farmer Wards</span>
+              {ragResponse ? (
+                <div className="p-4 bg-white rounded-xl border border-emerald-100/90 space-y-3 shadow-inner">
+                  <div className="font-bold text-emerald-900 text-xs flex items-center gap-1.5">
+                    <CheckCircle2 className="w-4 h-4 text-emerald-600 flex-shrink-0" />
+                    <span>Evidence-Linked Findings</span>
+                  </div>
+                  <div className="text-xs text-slate-700 whitespace-pre-line leading-relaxed font-sans">
+                    {ragResponse.answer}
+                  </div>
+                  {ragResponse.suggested_follow_ups && ragResponse.suggested_follow_ups.length > 0 && (
+                    <div className="pt-2 border-t border-slate-100">
+                      <span className="text-[10px] font-bold text-slate-400 block mb-1">Suggested Follow-ups:</span>
+                      <div className="flex flex-wrap gap-1">
+                        {ragResponse.suggested_follow_ups.map((f, i) => (
+                          <button
+                            key={i}
+                            type="button"
+                            onClick={() => handleSelectPreset(f)}
+                            className="text-[11px] bg-slate-50 hover:bg-emerald-50 text-slate-600 hover:text-emerald-800 px-2 py-0.5 rounded border border-slate-200 transition"
+                          >
+                            {f}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  )}
                 </div>
-                <p className="text-xs text-slate-600">
-                  If your parent holds a verified Farmer Identification (FID) in the Karnataka FRUITS system, there is <strong>no income ceiling requirement</strong>. If your family is landless, the ceiling is ₹2,50,000 per annum.
-                </p>
-              </div>
+              ) : (
+                <>
+                  <div className="p-3 bg-white rounded-xl border border-emerald-100/90 space-y-1">
+                    <div className="font-bold text-emerald-900 text-xs flex items-center gap-1.5">
+                      <CheckCircle2 className="w-4 h-4 text-emerald-600" />
+                      <span>Rule 1: Statutory Sakala Service Guarantees</span>
+                    </div>
+                    <p className="text-xs text-slate-600">
+                      Under the Karnataka Sakala Guarantee of Services Act, college e-Attestation officers must clear or object to uploaded documents within <strong>7 working days</strong>.
+                    </p>
+                  </div>
 
-              <div className="p-3 bg-white rounded-xl border border-emerald-100/90 space-y-1">
-                <div className="font-bold text-emerald-900 text-xs flex items-center gap-1.5">
-                  <CheckCircle2 className="w-4 h-4 text-emerald-600" />
-                  <span>Rule 2: Concurrent Grants are Allowed</span>
-                </div>
-                <p className="text-xs text-slate-600">
-                  You <strong>can receive both</strong> this Raita Vidya Nidhi scholarship and another central scholarship (like NSP Post-Matric) because this program is designated as welfare assistance rather than an exclusive fee reimbursement.
-                </p>
-              </div>
-
-              <div className="p-3 bg-white rounded-xl border border-emerald-100/90 space-y-1">
-                <div className="font-bold text-emerald-900 text-xs flex items-center gap-1.5">
-                  <CheckCircle2 className="w-4 h-4 text-emerald-600" />
-                  <span>Rule 3: Aadhaar Payment Bridge Requirement</span>
-                </div>
-                <p className="text-xs text-slate-600">
-                  Payouts will fail if your bank account is merely linked to Aadhaar. You must have active NPCI mapping for Direct Benefit Transfer (DBT).
-                </p>
-              </div>
+                  <div className="p-3 bg-white rounded-xl border border-emerald-100/90 space-y-1">
+                    <div className="font-bold text-emerald-900 text-xs flex items-center gap-1.5">
+                      <CheckCircle2 className="w-4 h-4 text-emerald-600" />
+                      <span>Rule 2: Direct Revenue Database Verification</span>
+                    </div>
+                    <p className="text-xs text-slate-600">
+                      Caste and Income certificates are digitally validated via 15-digit Nadakacheri RD numbers. <strong>No physical gazetted officer signatures</strong> are required.
+                    </p>
+                  </div>
+                </>
+              )}
             </div>
           </div>
 
@@ -282,22 +301,29 @@ export const PolicyExplainerPage: React.FC = () => {
                 </h4>
               </div>
               <span className="text-[10px] font-bold text-slate-600 bg-slate-200 px-2 py-0.5 rounded-full">
-                Gazette Grounded
+                {ragResponse && ragResponse.citations?.length ? `${ragResponse.citations.length} Verified Sources` : 'Gazette Grounded'}
               </span>
             </div>
 
             <div className="space-y-3">
-              <CitationCard citation={MOCK_CITATIONS[1]} />
-
-              <div className="p-3 rounded-xl bg-white border border-slate-200 text-xs space-y-1.5">
-                <div className="font-bold text-slate-800 flex items-center justify-between">
-                  <span>Paragraph 7, Clause 3 (Non-overlapping Grants)</span>
-                  <span className="text-[10px] font-mono text-slate-500">GO-AGRI-44-EDN-2021</span>
-                </div>
-                <blockquote className="italic border-l-2 border-slate-400 pl-2 text-slate-600 text-xs">
-                  &ldquo;Assistance sanctioned under this notification shall be supplemental in nature. Students drawing central merit awards are not debarred from availing Raita Vidya Nidhi allowance.&rdquo;
-                </blockquote>
-              </div>
+              {ragResponse && ragResponse.citations && ragResponse.citations.length > 0 ? (
+                ragResponse.citations.map((c, i) => (
+                  <CitationCard key={i} citation={mapValidatedCitation(c, i)} />
+                ))
+              ) : (
+                <>
+                  <CitationCard citation={MOCK_CITATIONS[1]} />
+                  <div className="p-3 rounded-xl bg-white border border-slate-200 text-xs space-y-1.5">
+                    <div className="font-bold text-slate-800 flex items-center justify-between">
+                      <span>Section 7.3 (Statutory Sakala Deadline)</span>
+                      <span className="text-[10px] font-mono text-slate-500">SWD-SSP-2023-CIR-09</span>
+                    </div>
+                    <blockquote className="italic border-l-2 border-slate-400 pl-2 text-slate-600 text-xs">
+                      &ldquo;The institutional e-Attestation Officer is bound by the Karnataka Guarantee of Services to Citizens Act (Sakala) to clear or raise specific objections within seven working days.&rdquo;
+                    </blockquote>
+                  </div>
+                </>
+              )}
             </div>
           </div>
         </div>
