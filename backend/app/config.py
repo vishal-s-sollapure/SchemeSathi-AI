@@ -44,6 +44,19 @@ class Settings(BaseSettings):
     RAG_MIN_SIMILARITY: float = 0.25
     EMBEDDING_DIM: int = 128
 
+    @field_validator("BACKEND_CORS_ORIGINS", mode="before")
+    @classmethod
+    def parse_cors_origins(cls, v: Union[str, List[str]]) -> List[str]:
+        if isinstance(v, str):
+            if v.startswith("[") and v.endswith("]"):
+                import json
+                try:
+                    return json.loads(v)
+                except Exception:
+                    pass
+            return [origin.strip() for origin in v.split(",") if origin.strip()]
+        return v
+
     @field_validator("DEBUG", mode="before")
     @classmethod
     def parse_debug(cls, v: Union[bool, str]) -> bool:
