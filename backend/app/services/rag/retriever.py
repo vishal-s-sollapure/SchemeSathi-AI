@@ -33,6 +33,10 @@ class HybridDocumentRetriever:
         "ಸಕಾಲ": ["sakala", "7 days", "statutory deadline"],
         "ಅರ್ಹತೆ": ["eligibility", "criteria", "requirements"],
         "ದಾಖಲೆ": ["document", "certificate", "ration card"],
+        "ಯಾವ ಸರ್ಕಾರಿ ಯೋಜನೆಗಳು": ["pm-kisan", "gruha lakshmi", "csss", "pragati", "ssp", "scholarship", "scheme", "eligibility"],
+        "ಸರ್ಕಾರಿ ಯೋಜನೆಗಳು": ["pm-kisan", "gruha lakshmi", "csss", "pragati", "ssp", "scholarship", "scheme"],
+        "ಯೋಜನೆಗಳು": ["scheme", "pm-kisan", "gruha lakshmi", "csss", "pragati", "scholarship"],
+        "ಸಿಗಬಹುದು": ["qualify", "eligibility", "eligible", "benefit"],
 
         # Hindi terms
         "पीएम किसान": ["pm-kisan", "pradhan mantri kisan samman nidhi", "farmer"],
@@ -48,6 +52,9 @@ class HybridDocumentRetriever:
         "प्रमाण पत्र": ["certificate", "income certificate"],
         "अंतिम तिथि": ["deadline", "last date"],
         "आवेदन": ["application", "registration", "portal"],
+        "सरकारी योजनाएं": ["pm-kisan", "gruha lakshmi", "csss", "pragati", "ssp", "scholarship", "scheme"],
+        "योजनाएं": ["scheme", "pm-kisan", "gruha lakshmi", "csss", "pragati", "scholarship"],
+        "मिल सकती हैं": ["qualify", "eligibility", "benefit", "scheme"],
     }
 
     # Stopwords to prevent generic function words from overpowering semantic intent
@@ -122,6 +129,10 @@ class HybridDocumentRetriever:
         for vernacular, equivalents in self.MULTILINGUAL_EXPANSIONS.items():
             if vernacular in clean_query:
                 additions.extend(equivalents)
+
+        low = clean_query.lower()
+        if any(p in low for p in ["what government schemes", "which government schemes", "what schemes", "may i qualify", "qualify for"]):
+            additions.extend(["pm-kisan", "gruha lakshmi", "csss", "pragati", "ssp", "scholarship", "eligibility"])
 
         if additions:
             clean_query = f"{clean_query} {' '.join(additions)}"
