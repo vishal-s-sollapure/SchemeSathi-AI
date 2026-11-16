@@ -4,7 +4,7 @@ import tempfile
 from pathlib import Path
 from typing import List, Optional
 
-from fastapi import APIRouter, Depends, File, Form, UploadFile, status
+from fastapi import APIRouter, Depends, File, Form, HTTPException, UploadFile, status
 from sqlalchemy.orm import Session
 
 from app.database import get_db
@@ -16,6 +16,7 @@ from app.schemas.chat import (
     RAGQueryRequest,
 )
 from app.services.chat_service import ChatService
+from app.services.document_intelligence.parser import DocumentParser
 from app.services.rag import RAGPipeline, RAGResponse
 
 router = APIRouter(prefix="/chat", tags=["Consultation & Grounded RAG"])
@@ -86,9 +87,19 @@ async def ingest_official_pdf(
     Extracts text page-by-page, generates section-aware chunks, and indexes into the hybrid retriever.
     """
     pipeline = RAGPipeline.get_instance()
+    filename = file.filename or "official_document.pdf"
+
+    content = await file.read()
+    try:
+        DocumentParser.validate_file(content, filename)
+    except ValueError as val_err:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=str(val_err)
+        )
 
     with tempfile.NamedTemporaryFile(delete=False, suffix=".pdf") as tmp:
-        shutil.copyfileobj(file.file, tmp)
+        tmp.write(content)
         tmp_path = Path(tmp.name)
 
     try:
@@ -107,7 +118,7 @@ async def ingest_official_pdf(
     return {
         "status": "success",
         "document_title": document_title,
-        "filename": file.filename,
+        "filename": filename,
         "evidence_chunks_indexed": chunks_added,
         "verification_status": "VERIFIED",
     }

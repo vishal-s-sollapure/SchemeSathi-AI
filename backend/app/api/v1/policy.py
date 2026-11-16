@@ -11,6 +11,7 @@ from app.schemas.policy import (
     PolicyExplanationResponse,
     PolicySimplificationResult,
 )
+from app.services.document_intelligence.parser import DocumentParser
 from app.services.policy_service import PolicyService
 
 router = APIRouter(prefix="/policy", tags=["Policy and Rights Explainer"])
@@ -85,10 +86,19 @@ async def simplify_uploaded_government_pdf(
 ):
     """Uploads a citizen/official government PDF and parses it using PyMuPDF into the 6-part simplification workflow."""
     service = PolicyService.get_instance()
+    filename = file.filename or "uploaded_circular.pdf"
 
-    suffix = Path(file.filename or "doc.pdf").suffix or ".pdf"
-    with tempfile.NamedTemporaryFile(delete=False, suffix=suffix) as tmp:
-        shutil.copyfileobj(file.file, tmp)
+    content = await file.read()
+    try:
+        DocumentParser.validate_file(content, filename)
+    except ValueError as val_err:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=str(val_err)
+        )
+
+    with tempfile.NamedTemporaryFile(delete=False, suffix=".pdf") as tmp:
+        tmp.write(content)
         tmp_path = Path(tmp.name)
 
     try:
