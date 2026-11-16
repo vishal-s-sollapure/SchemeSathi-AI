@@ -215,11 +215,20 @@ class DynamicChecklistEngine:
 
         # 4. Trigger Deterministic Rule Evaluation if all mandatory items confirmed
         if overall_status == "READY_FOR_SUBMISSION" and checklist.scholarship_id and student_profile:
-            rule_engine = ScholarshipRuleEngine(self.db)
-            assessment = rule_engine.evaluate_single(student_profile.id, checklist.scholarship_id)
-            if assessment.overall_status != "MEETS_REQUIREMENT":
-                # Safety constraint: System MUST NOT mark ready while eligibility criteria remain unmet
-                overall_status = "ACTION_REQUIRED"
+            sch = self.db.query(Scholarship).filter(Scholarship.id == checklist.scholarship_id).first()
+            if sch:
+                stu_dict = {
+                    "domicile_state": student_profile.domicile_state,
+                    "category": student_profile.category,
+                    "annual_family_income": student_profile.annual_family_income,
+                    "marks_percentage": student_profile.marks_percentage,
+                    "current_course": student_profile.current_course,
+                    "institution": student_profile.institution,
+                }
+                assessment = DeterministicRuleEngine.evaluate_scholarship(sch, stu_dict)
+                if assessment.overall_status != "MEETS_REQUIREMENT":
+                    # Safety constraint: System MUST NOT mark ready while eligibility criteria remain unmet
+                    overall_status = "ACTION_REQUIRED"
 
         checklist.checklist_items = items
         checklist.readiness_score = readiness_score

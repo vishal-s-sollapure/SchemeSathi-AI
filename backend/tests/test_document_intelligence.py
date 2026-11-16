@@ -54,9 +54,11 @@ def db_session():
         government_department="Department of Higher Education",
         official_source_url="https://scholarships.gov.in/",
         academic_cycle="2024-25",
-        verification_date="2024-11-01",
+        verification_date=date(2024, 11, 1),
+        course_level="Undergraduate",
+        benefit_amount_annual="₹12,000 / year",
         max_annual_income=450000.0,
-        min_marks_percentage=80.0,
+        min_percentage=80.0,
     )
     session.add(sch)
 

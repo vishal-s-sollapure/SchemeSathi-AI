@@ -234,7 +234,7 @@ class DocumentIntelligenceExtractor:
 
             # 7. Annual Family Income
             inc_match = re.search(
-                r"(?:annual\s+family\s+income|annual\s+income|family\s+income|gross\s+income|income)\s*[:\-]\s*(?:Rs\.?|₹|INR)?\s*([\d,]{4,12})",
+                r"(?:annual\s+family\s+income|annual\s+income|family\s+income|gross\s+income|income)\s*[:\-]\s*[^0-9\n\r]*?([\d,]{4,12})",
                 text,
                 re.IGNORECASE,
             )
