@@ -128,3 +128,102 @@ export interface DocumentAnalysisResult {
   flaggedAmbiguities: string[];
   isDemo: true;
 }
+
+// ============================================================================
+// Phase 6: Deterministic Scheme Discovery & Evaluation Types
+// ============================================================================
+
+export type DeterministicEligibilityStatus =
+  | 'MEETS_REQUIREMENT'
+  | 'DOES_NOT_MEET_REQUIREMENT'
+  | 'MISSING_INFORMATION'
+  | 'NEEDS_REVIEW';
+
+export interface RuleAssessmentItem {
+  rule_id: string;
+  requirement_description: string;
+  rule_type: string;
+  official_condition: Record<string, any>;
+  user_provided_value?: any;
+  status: DeterministicEligibilityStatus;
+  is_mandatory: boolean;
+  explanation: string;
+  official_source_title: string;
+  circular_number: string;
+  clause_or_section: string;
+  page_number?: string;
+  official_source_url: string;
+}
+
+export interface SchemeEvaluationResult {
+  scheme_id: string;
+  official_name: string;
+  category: string;
+  government_department: string;
+  level: string;
+  benefit_type: string;
+  annual_benefit: string;
+  target_beneficiaries: string;
+  application_deadline?: string;
+  official_source_url: string;
+  application_url?: string;
+  verification_date: string;
+  policy_cycle?: string;
+  information_status: string;
+  overall_status: DeterministicEligibilityStatus;
+  match_score: number;
+  requirements_satisfied: RuleAssessmentItem[];
+  requirements_not_satisfied: RuleAssessmentItem[];
+  missing_information: RuleAssessmentItem[];
+  conditions_under_review: RuleAssessmentItem[];
+  suggested_next_actions: string[];
+  important_conditions: string[];
+  required_documents: {
+    id: string;
+    document_type: string;
+    title: string;
+    description?: string;
+    issuing_authority?: string;
+    is_mandatory: boolean;
+  }[];
+  official_source_title?: string;
+  circular_number?: string;
+}
+
+export interface SchemeDiscoverySummary {
+  citizen_name?: string;
+  total_schemes_evaluated: number;
+  eligible_count: number;
+  missing_info_count: number;
+  ineligible_count: number;
+  under_review_count: number;
+  schemes: SchemeEvaluationResult[];
+  evaluated_at: string;
+}
+
+export interface CitizenProfileInput {
+  full_name?: string;
+  domicile_state?: string;
+  district?: string;
+  age?: number;
+  occupation?: string;
+  annual_family_income?: number;
+  area_type?: string;
+  gender?: string;
+  social_category?: string;
+  landholding_hectares?: number;
+  is_income_tax_payer?: boolean;
+  bpl_card_holder?: boolean;
+  is_differently_abled?: boolean;
+  extra_attributes?: Record<string, any>;
+}
+
+export interface SensitiveFieldExplanation {
+  field_name: string;
+  display_name: string;
+  required_by_scheme_id: string;
+  scheme_name: string;
+  official_clause: string;
+  explanation: string;
+}
+
