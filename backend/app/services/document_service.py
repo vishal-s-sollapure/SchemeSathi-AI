@@ -1,8 +1,10 @@
+import copy
 from datetime import datetime, timezone
 import os
 from pathlib import Path
 from typing import Any, Dict, List, Optional
 from sqlalchemy.orm import Session
+from sqlalchemy.orm.attributes import flag_modified
 
 from app.core.exceptions import EntityNotFoundException
 from app.models.checklist import ApplicationChecklist
@@ -191,7 +193,7 @@ class DocumentService:
         # 2. Update any checklists linking to this document
         checklists = self.checklist_repo.list(skip=0, limit=1000)
         for chk in checklists:
-            items = list(chk.checklist_items)
+            items = copy.deepcopy(chk.checklist_items)
             modified = False
             for item in items:
                 if item.get("document_id") == doc.id:
@@ -205,13 +207,14 @@ class DocumentService:
                 engine = DynamicChecklistEngine(self.db)
                 readiness_score, overall_status = engine._calculate_readiness(items)
                 chk.checklist_items = items
+                flag_modified(chk, "checklist_items")
                 chk.readiness_score = readiness_score
                 chk.overall_status = overall_status
                 chk.evaluated_at = datetime.now(timezone.utc)
                 self.checklist_repo.update(chk)
 
         # 3. Delete database record (cascades to extracted_evidence)
-        self.doc_repo.delete(doc_id)
+        self.doc_repo.delete(doc)
 
         return {
             "status": "DELETED",

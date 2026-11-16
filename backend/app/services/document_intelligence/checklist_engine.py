@@ -199,9 +199,9 @@ class DynamicChecklistEngine:
             self.citizen_repo.update(citizen_profile)
 
         # 2. Update Checklist Item corresponding to this document
-        items = list(checklist.checklist_items)
+        items = copy.deepcopy(checklist.checklist_items)
         for item in items:
-            if item.get("document_id") == document_id or item.get("document_type") == doc.document_type:
+            if item.get("document_id") == document_id or item.get("document_type", "").upper() == doc.document_type.upper():
                 item["document_id"] = document_id
                 item["status"] = "CONFIRMED"
                 # Gather all confirmed evidence
@@ -233,6 +233,7 @@ class DynamicChecklistEngine:
                     overall_status = "ACTION_REQUIRED"
 
         checklist.checklist_items = items
+        flag_modified(checklist, "checklist_items")
         checklist.readiness_score = readiness_score
         checklist.overall_status = overall_status
         checklist.evaluated_at = datetime.now(timezone.utc)
