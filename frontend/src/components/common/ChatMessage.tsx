@@ -5,11 +5,13 @@ import {
   Copy, 
   Check, 
   Volume2, 
+  VolumeX,
   BookOpen, 
   ArrowRight
 } from 'lucide-react';
-import { ChatMessage as ChatMessageType } from '../../types';
+import { ChatMessage as ChatMessageType, LanguageCode } from '../../types';
 import { CitationCard } from './CitationCard';
+import { voiceAssistant } from '../../services/voiceAssistant';
 
 interface ChatMessageProps {
   message: ChatMessageType;
@@ -28,8 +30,21 @@ export const ChatMessage: React.FC<ChatMessageProps> = ({ message, onFollowUpCli
   };
 
   const handleSpeak = () => {
-    setSpeaking(true);
-    setTimeout(() => setSpeaking(false), 3000);
+    if (speaking) {
+      voiceAssistant.stopSpeaking();
+      setSpeaking(false);
+    } else {
+      voiceAssistant.speak(
+        message.content,
+        (message.language as LanguageCode) || 'en',
+        () => setSpeaking(true),
+        () => setSpeaking(false),
+        (err) => {
+          console.warn('TTS error:', err);
+          setSpeaking(false);
+        }
+      );
+    }
   };
 
   return (
