@@ -55,3 +55,14 @@ class ChatSessionResponse(ChatSessionBase):
     messages: List[ChatMessageResponse] = []
 
     model_config = ConfigDict(from_attributes=True)
+
+
+class RAGQueryRequest(BaseModel):
+    """Citizen consultation query for source-grounded RAG retrieval and citation."""
+    query: str = Field(..., min_length=2, max_length=1500, description="Question about scheme, scholarship, or rights")
+    session_id: Optional[str] = Field(None, description="Optional active chat session to persist conversation")
+    language: Optional[str] = Field(None, max_length=10, description="en, kn, or hi")
+    scheme_filter: Optional[str] = Field(None, description="Optional scheme_id filter e.g. SCHEME-PM-KISAN")
+
+    model_config = ConfigDict(extra="ignore")
+
