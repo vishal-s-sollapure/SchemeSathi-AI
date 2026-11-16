@@ -64,6 +64,16 @@ from app.schemas.eligibility import (
     ScholarshipEvaluationResult,
     StudentEvaluationInput,
 )
+from app.schemas.policy import (
+    PolicyClauseItem,
+    PolicyDeadlineItem,
+    PolicyDocumentRequiredItem,
+    PolicyDocumentSummary,
+    PolicyExplanationRequest,
+    PolicyExplanationResponse,
+    PolicySimplificationResult,
+    PolicySupportingPassage,
+)
 
 __all__ = [
     "ApiResponse",
@@ -114,4 +124,12 @@ __all__ = [
     "RuleAssessmentItem",
     "ScholarshipEvaluationResult",
     "ScholarReadyEvaluationSummary",
+    "PolicyClauseItem",
+    "PolicyDeadlineItem",
+    "PolicyDocumentRequiredItem",
+    "PolicyDocumentSummary",
+    "PolicySimplificationResult",
+    "PolicyExplanationRequest",
+    "PolicySupportingPassage",
+    "PolicyExplanationResponse",
 ]
