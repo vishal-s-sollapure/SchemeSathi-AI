@@ -5,6 +5,10 @@ import {
   DynamicApplicationChecklist,
   EvidenceConfirmationItem,
   ExtractedEvidenceItem,
+  PolicyDocumentSummary,
+  PolicyExplanationRequest,
+  PolicyExplanationResponse,
+  PolicySimplificationResult,
   RAGQueryRequest,
   RAGResponse,
   ScholarReadyEvaluationSummary,
@@ -292,6 +296,82 @@ export const apiService = {
   async getChecklist(checklistId: string): Promise<DynamicApplicationChecklist> {
     const response = await apiClient.get<DynamicApplicationChecklist>(
       `/api/v1/checklists/${checklistId}`
+    );
+    return response.data;
+  },
+
+  // ============================================================================
+  // Phase 10: Policy and Rights Explainer Engine
+  // ============================================================================
+
+  /**
+   * Discovers and retrieves verified government policies, gazettes, and guidelines
+   */
+  async listPolicyDocuments(search?: string): Promise<PolicyDocumentSummary[]> {
+    const params: Record<string, string> = {};
+    if (search) params.search = search;
+    const response = await apiClient.get<PolicyDocumentSummary[]>('/api/v1/policy/documents', { params });
+    return response.data;
+  },
+
+  /**
+   * Retrieves detailed clauses and structured metadata for a policy circular
+   */
+  async getPolicyDocumentDetail(documentId: string): Promise<any> {
+    const response = await apiClient.get(`/api/v1/policy/documents/${documentId}`);
+    return response.data;
+  },
+
+  /**
+   * Generates the 6-part civic policy simplification workflow
+   */
+  async getPolicySimplification(
+    documentId: string,
+    language: string = 'en'
+  ): Promise<PolicySimplificationResult> {
+    const response = await apiClient.get<PolicySimplificationResult>(
+      `/api/v1/policy/simplify/${documentId}`,
+      { params: { language } }
+    );
+    return response.data;
+  },
+
+  /**
+   * Asks specific clause-level or standard questions grounded in verified government documents
+   */
+  async explainPolicy(request: PolicyExplanationRequest): Promise<PolicyExplanationResponse> {
+    const response = await apiClient.post<PolicyExplanationResponse>(
+      '/api/v1/policy/explain',
+      request
+    );
+    return response.data;
+  },
+
+  /**
+   * Uploads and simplifies a custom government PDF circular via PyMuPDF
+   */
+  async simplifyUploadedPdf(
+    file: File,
+    documentTitle: string,
+    issuingDepartment: string = 'Government Department',
+    officialGazetteUrl: string = 'https://india.gov.in',
+    language: string = 'en'
+  ): Promise<PolicySimplificationResult> {
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append('document_title', documentTitle);
+    formData.append('issuing_department', issuingDepartment);
+    formData.append('official_gazette_url', officialGazetteUrl);
+    formData.append('language', language);
+
+    const response = await apiClient.post<PolicySimplificationResult>(
+      '/api/v1/policy/simplify-pdf',
+      formData,
+      {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      }
     );
     return response.data;
   },

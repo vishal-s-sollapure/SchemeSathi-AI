@@ -398,3 +398,83 @@ export interface RAGResponse {
   official_disclaimer: string;
 }
 
+export interface PolicyDeadlineItem {
+  label: string;
+  timeframe_or_date: string;
+  statutory_authority: string;
+  is_critical: boolean;
+}
+
+export interface PolicyDocumentRequiredItem {
+  name: string;
+  issuing_authority: string;
+  format_or_requirement: string;
+}
+
+export interface PolicyDocumentSummary {
+  id: string;
+  title: string;
+  issuing_department: string;
+  notification_number?: string;
+  publication_date?: string;
+  official_gazette_url: string;
+  applicable_cycle: string;
+  category: string;
+  executive_summary: string;
+  clause_count: number;
+  verification_status: string;
+}
+
+export interface PolicySimplificationResult {
+  document_id: string;
+  document_title: string;
+  issuing_department: string;
+  notification_number?: string;
+  publication_date?: string;
+  official_gazette_url: string;
+  applicable_cycle: string;
+  language: string;
+  five_line_summary: string[];
+  important_conditions: string[];
+  dates_and_deadlines: PolicyDeadlineItem[];
+  required_documents: PolicyDocumentRequiredItem[];
+  application_steps: string[];
+  important_warnings: string[];
+  flagged_ambiguities?: string[];
+  legal_disclaimer: string;
+}
+
+export interface PolicyExplanationRequest {
+  document_id?: string;
+  clause_or_section?: string;
+  question: string;
+  language?: string;
+}
+
+export interface PolicySupportingPassage {
+  source_title: string;
+  clause_or_section: string;
+  page_number?: string;
+  official_text: string;
+  official_source_url: string;
+  issuing_department: string;
+}
+
+export interface PolicyExplanationResponse {
+  question: string;
+  document_id?: string;
+  document_title?: string;
+  language: string;
+  simplified_explanation: string;
+  clause_referenced?: string;
+  verbatim_official_clause?: string;
+  supporting_passages: PolicySupportingPassage[];
+  citations: ValidatedCitation[];
+  sufficient_evidence: boolean;
+  important_dates: string[];
+  restrictions_and_responsibilities: string[];
+  suggested_follow_ups?: string[];
+  legal_disclaimer: string;
+}
+
+

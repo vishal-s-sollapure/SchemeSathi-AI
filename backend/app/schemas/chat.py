@@ -16,6 +16,18 @@ class CitationModel(BaseModel):
     verification_badge: Optional[str] = "Official Verified Source"
 
 
+class ValidatedCitation(BaseModel):
+    """Citation verified to originate strictly from retrieved official evidence."""
+    source_title: str
+    circular_number: Optional[str] = None
+    clause_or_section: str
+    page_number: Optional[str] = None
+    official_source_url: str
+    verification_status: str = "OFFICIALLY_VERIFIED"
+    matched_chunk_id: str
+    excerpt: str
+
+
 class ChatMessageBase(BaseModel):
     sender: str = Field(..., description="user or assistant")
     content: str
