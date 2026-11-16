@@ -1,3 +1,4 @@
+from datetime import date
 import io
 from pathlib import Path
 import pytest
@@ -41,6 +42,8 @@ def db_session():
         id="SRC-TEST-DOCS",
         source_title="Ministry of Education Guidelines",
         issuing_authority="Department of Higher Education",
+        circular_number="F.No. 1-1/2022-NS-I",
+        notification_date=date(2023, 4, 1),
         official_url="https://scholarships.gov.in/",
     )
     session.add(src)
@@ -98,11 +101,12 @@ def db_session():
         full_name="Pooja Hegde",
         domicile_state="Karnataka",
         category="General",
-        annual_family_income=None,  # Intentionally missing until confirmed from document
-        marks_percentage=None,       # Intentionally missing
+        annual_family_income=0.0,
+        marks_percentage=0.0,
+        gender="Female",
         current_course="B.Tech Computer Science",
-        institution="RV College of Engineering, Bengaluru",
         year_of_study="1st Year",
+        extra_attributes={"institution": "RV College of Engineering, Bengaluru"},
     )
     session.add(student)
     session.commit()

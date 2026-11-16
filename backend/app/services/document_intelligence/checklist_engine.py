@@ -273,7 +273,9 @@ class DynamicChecklistEngine:
             student_profile.current_course = confirmed_val
 
         elif "institution" in field_key and student_profile:
-            student_profile.institution = confirmed_val
+            extra = dict(student_profile.extra_attributes or {})
+            extra["institution"] = confirmed_val
+            student_profile.extra_attributes = extra
 
         elif "category" in field_key:
             if student_profile:
