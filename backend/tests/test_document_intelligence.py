@@ -17,6 +17,7 @@ from app.models.profile import StudentProfile
 from app.models.rule import Requirement
 from app.models.scholarship import Scholarship
 from app.models.source import OfficialSource
+from app.schemas.checklist import ApplicationChecklistResponse
 from app.schemas.document import EvidenceConfirmationItem, EvidenceConfirmationRequest
 from app.services.document_intelligence import (
     DocumentIntelligenceExtractor,
@@ -572,4 +573,6 @@ def test_api_checklist_and_confirmation_endpoints(db_session):
     )
     assert chk_resp.id
     assert len(chk_resp.checklist_items) == 3
-    assert chk_resp.disclaimer is not None
+    pydantic_resp = ApplicationChecklistResponse.model_validate(chk_resp)
+    assert pydantic_resp.disclaimer is not None
+    assert "Document uploads and checklist tracking do not guarantee final eligibility" in pydantic_resp.disclaimer
