@@ -3,7 +3,7 @@ import { UploadCloud, FileText, CheckCircle2, Sparkles, Shield, ArrowRight } fro
 import { StatusBadge } from './StatusBadge';
 
 interface DocumentUploadProps {
-  onFileSelected?: (file: { name: string; size: string; isPreset?: boolean }) => void;
+  onFileSelected?: (file: { name: string; size: string; isPreset?: boolean; rawFile?: File }) => void;
   title?: string;
   subtitle?: string;
   acceptedFormats?: string;
@@ -16,7 +16,7 @@ export const DocumentUpload: React.FC<DocumentUploadProps> = ({
   acceptedFormats = ".pdf, .png, .jpg, .jpeg"
 }) => {
   const [dragActive, setDragActive] = useState(false);
-  const [selectedFile, setSelectedFile] = useState<{ name: string; size: string; isPreset?: boolean } | null>(null);
+  const [selectedFile, setSelectedFile] = useState<{ name: string; size: string; isPreset?: boolean; rawFile?: File } | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const samplePresets = [
@@ -54,7 +54,7 @@ export const DocumentUpload: React.FC<DocumentUploadProps> = ({
     if (e.dataTransfer.files && e.dataTransfer.files[0]) {
       const file = e.dataTransfer.files[0];
       const sizeMb = (file.size / (1024 * 1024)).toFixed(2) + ' MB';
-      const fileObj = { name: file.name, size: sizeMb, isPreset: false };
+      const fileObj = { name: file.name, size: sizeMb, isPreset: false, rawFile: file };
       setSelectedFile(fileObj);
       if (onFileSelected) onFileSelected(fileObj);
     }
@@ -65,7 +65,7 @@ export const DocumentUpload: React.FC<DocumentUploadProps> = ({
     if (e.target.files && e.target.files[0]) {
       const file = e.target.files[0];
       const sizeMb = (file.size / (1024 * 1024)).toFixed(2) + ' MB';
-      const fileObj = { name: file.name, size: sizeMb, isPreset: false };
+      const fileObj = { name: file.name, size: sizeMb, isPreset: false, rawFile: file };
       setSelectedFile(fileObj);
       if (onFileSelected) onFileSelected(fileObj);
     }
