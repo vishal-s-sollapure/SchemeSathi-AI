@@ -28,6 +28,44 @@ SchemeSathi AI is an assistive civic-intelligence platform designed to give citi
 
 ## 2. Three-Minute Live Demonstration Script
 
+```mermaid
+flowchart TD
+    Step1["1. Landing & Civic Orientation (0:00 - 0:30)
+• Hero banner & civic mission orientation
+• Trilingual selector (English, Kannada, Hindi)
+• Select ScholarReady or SchemeSathi entry point"]
+    Step2["2. ScholarReady Profile Intake (0:30 - 0:50)
+• Input student course, family income (₹3,50,000), marks (85%), domicile
+• Privacy-first: no unnecessary personal identifiable data requested"]
+    Step3["3. Deterministic Rule Evaluation (0:50 - 1:10)
+• Mathematical rule evaluation against primary gazette circulars
+• CSSS evaluated as MEETS_REQUIREMENT (100% match score)
+• Boundary condition: ₹5,00,000 income flags exact disqualification"]
+    Step4["4. Document Intelligence Parsing (1:10 - 1:30)
+• Upload income_certificate.pdf (PyMuPDF optical extraction)
+• Extract 15-digit RD number, assessed income, and issuing authority
+• Page-level citation indicator for user verification"]
+    Step5["5. Evidence Confirmation & Checklist (1:30 - 1:45)
+• Citizen reviews and confirms candidate extracted values
+• Strict anti-hallucination guard: extraction != legal authenticity
+• Dynamic checklist automatically updates from REQUIRED to CONFIRMED"]
+    Step6["6. Regional Voice & Scheme Discovery (1:45 - 2:20)
+• Switch interface and voice to Kannada ('ನನಗೆ ಯಾವ ಸರ್ಕಾರಿ ಯೋಜನೆಗಳು ಸಿಗಬಹುದು?')
+• Browser Web Speech API capture (STT) and synthesized speech playback (TTS)
+• Grounded regional explanation citing Gruha Lakshmi & PM-KISAN"]
+    Step7["7. Policy & Rights Explainer (2:20 - 3:00)
+• Karnataka Sakala e-Attestation circular: 6-point civic breakdown
+• Highlight Section 7.3: 7-day statutory attestation deadline
+• Wrap-up: 113 automated tests passed and security audit overview"]
+
+    Step1 --> Step2
+    Step2 --> Step3
+    Step3 --> Step4
+    Step4 --> Step5
+    Step5 --> Step6
+    Step6 --> Step7
+```
+
 | Timing | Page / Screen | Presenter Action | Spoken Script / Narration | Key Visual Highlight |
 |---|---|---|---|---|
 | **0:00 - 0:30** | **Landing Page** (`/`) | Scroll through Hero banner and show the dual ScholarReady & SchemeSathi modules. Click **"Explore Schemes"** or **"Check Scholarship Readiness"**. | *"Respected judges, meet SchemeSathi AI. In India, public welfare shouldn't require a law degree. We provide deterministic, verified guidance so citizens and students understand their rights and apply with confidence."* | Modern civic-tech aesthetic, verified data badges, trilingual selector. |
