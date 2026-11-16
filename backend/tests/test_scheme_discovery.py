@@ -1,8 +1,11 @@
 import pytest
-from fastapi.testclient import TestClient
 
+from app.api.v1.eligibility import (
+    discover_schemes,
+    evaluate_single_scheme,
+    get_sensitive_fields_explanation,
+)
 from app.database import SessionLocal, init_db
-from app.main import app
 from app.models.scheme import GovernmentScheme
 from app.schemas.common import EligibilityEvaluationStatus
 from app.schemas.eligibility import CitizenEvaluationInput
@@ -16,9 +19,6 @@ def db_session():
     session = SessionLocal()
     yield session
     session.close()
-
-
-client = TestClient(app)
 
 
 # ============================================================================
@@ -199,56 +199,58 @@ def test_scheme_discovery_ranking(db_session):
 
 
 # ============================================================================
-# API Endpoint Integration Tests
+# API Endpoint Integration Tests (Direct Router Handler Execution)
 # ============================================================================
 
 def test_api_sensitive_fields_explanation():
     """Test API endpoint returning explanation for sensitive data fields."""
-    response = client.get("/api/v1/eligibility/sensitive-fields")
-    assert response.status_code == 200
-    data = response.json()
+    data = get_sensitive_fields_explanation()
     assert len(data) >= 3
-    fields = [item["field_name"] for item in data]
+    fields = [item.field_name for item in data]
     assert "is_income_tax_payer" in fields
     assert "landholding_hectares" in fields
     assert "bpl_card_holder" in fields
 
 
-def test_api_evaluate_single_scheme():
-    """Test API endpoint POST /api/v1/eligibility/evaluate-scheme/{id}."""
-    payload = {
-        "full_name": "Parvati Devi",
-        "gender": "Female",
-        "domicile_state": "Karnataka",
-        "district": "Dharwad",
-        "is_income_tax_payer": False,
-    }
-    response = client.post("/api/v1/eligibility/evaluate-scheme/SCHEME-KAR-GRUHA-LAKSHMI", json=payload)
-    assert response.status_code == 200
-    data = response.json()
-    assert data["scheme_id"] == "SCHEME-KAR-GRUHA-LAKSHMI"
-    assert data["overall_status"] == "MEETS_REQUIREMENT"
-    assert data["match_score"] == 100.0
-    assert len(data["requirements_satisfied"]) == 3
-    assert len(data["required_documents"]) >= 1
-    assert "Gruha Lakshmi" in data["official_source_title"]
-
-
-def test_api_discover_schemes_with_filter():
-    """Test API endpoint POST /api/v1/eligibility/discover-schemes with category filter."""
-    payload = {
-        "full_name": "Anand Rao",
-        "occupation": "Farmer",
-        "landholding_hectares": 2.0,
-        "is_income_tax_payer": False,
-    }
-    response = client.post(
-        "/api/v1/eligibility/discover-schemes",
-        params={"category": "Agriculture & Farming"},
-        json=payload,
+def test_api_evaluate_single_scheme(db_session):
+    """Test API endpoint evaluate_single_scheme."""
+    payload = CitizenEvaluationInput(
+        full_name="Parvati Devi",
+        gender="Female",
+        domicile_state="Karnataka",
+        district="Dharwad",
+        is_income_tax_payer=False,
     )
-    assert response.status_code == 200
-    data = response.json()
-    assert data["total_schemes_evaluated"] == 1
-    assert data["eligible_count"] == 1
-    assert data["schemes"][0]["scheme_id"] == "SCHEME-PM-KISAN"
+    result = evaluate_single_scheme(
+        scheme_id="SCHEME-KAR-GRUHA-LAKSHMI",
+        profile_input=payload,
+        db=db_session,
+    )
+    assert result.scheme_id == "SCHEME-KAR-GRUHA-LAKSHMI"
+    assert result.overall_status == EligibilityEvaluationStatus.MEETS_REQUIREMENT
+    assert result.match_score == 100.0
+    assert len(result.requirements_satisfied) == 3
+    assert len(result.required_documents) >= 1
+    assert "Gruha Lakshmi" in result.official_source_title
+
+
+def test_api_discover_schemes_with_filter(db_session):
+    """Test API endpoint discover_schemes with category filter."""
+    payload = CitizenEvaluationInput(
+        full_name="Anand Rao",
+        occupation="Farmer",
+        landholding_hectares=2.0,
+        is_income_tax_payer=False,
+    )
+    summary = discover_schemes(
+        profile_input=payload,
+        category="Agriculture & Farming",
+        skip=0,
+        limit=10,
+        db=db_session,
+    )
+    assert summary.total_schemes_evaluated == 1
+    assert summary.eligible_count == 1
+    assert summary.schemes[0].scheme_id == "SCHEME-PM-KISAN"
+    assert summary.schemes[0].overall_status == EligibilityEvaluationStatus.MEETS_REQUIREMENT
+

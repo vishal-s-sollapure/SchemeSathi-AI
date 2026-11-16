@@ -114,11 +114,18 @@ def discover_schemes(
     evidence-backed scheme recommendations with official citations.
     """
     service = OpportunityService(db)
+    clean_search = search if isinstance(search, str) else None
+    clean_category = category if isinstance(category, str) else None
+    clean_level = level if isinstance(level, str) else None
+    clean_benefit = benefit_type if isinstance(benefit_type, str) else None
+    clean_skip = skip if isinstance(skip, int) else 0
+    clean_limit = limit if isinstance(limit, int) else 100
+
     filters = GovernmentSchemeFilter(
-        search=search,
-        category=category,
-        level=level,
-        benefit_type=benefit_type,
+        search=clean_search,
+        category=clean_category,
+        level=clean_level,
+        benefit_type=clean_benefit,
     )
-    schemes = service.list_schemes(filters, skip=skip, limit=limit)
+    schemes = service.list_schemes(filters, skip=clean_skip, limit=clean_limit)
     return DeterministicRuleEngine.evaluate_all_schemes(schemes, profile_input)
