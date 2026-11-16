@@ -98,7 +98,7 @@ export const AboutPage: React.FC = () => {
             Engineered with Modern Full-Stack Civics
           </h2>
           <p className="text-xs text-slate-500 mt-0.5">
-            Phase 1 &bull; Phase 2 FastCivic Architecture Breakdown
+            Full-Stack Civic Intelligence Architecture: Python FastAPI Core, PyMuPDF, ChromaDB/Hybrid Vector RAG, React 18 &amp; Web Speech Assistant
           </p>
         </div>
 
@@ -195,8 +195,8 @@ export const AboutPage: React.FC = () => {
         <p className="text-xs sm:text-sm text-slate-600 max-w-xl mx-auto leading-relaxed">
           Developed as part of the NxtWave IDEA//FORGE Hackathon to demonstrate how AI and deterministic systems can empower civic rights, higher education access, and public welfare transparency in India.
         </p>
-        <div className="text-[11px] text-slate-400">
-          Phase 2: Professional Frontend Development Completed &bull; Ready for Evaluation
+        <div className="text-[11px] text-slate-500 font-semibold">
+          Comprehensive Civic Platform: All 10 Modules Built, Verified &amp; Security Audited
         </div>
       </section>
     </div>

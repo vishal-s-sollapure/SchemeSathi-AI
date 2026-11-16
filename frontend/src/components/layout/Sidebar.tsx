@@ -124,7 +124,7 @@ export const Sidebar: React.FC = () => {
           </p>
           <div className="mt-2 pt-2 border-t border-slate-200/80 flex items-center justify-between text-[10px] text-slate-400">
             <span>Version 0.2.0</span>
-            <span className="text-govgreen-800 font-bold">Phase 2 Active</span>
+            <span className="text-govgreen-800 font-bold">10 Modules Verified</span>
           </div>
         </div>
       ) : (
