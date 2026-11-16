@@ -58,6 +58,12 @@ from app.schemas.chat import (
     ChatSessionResponse,
     CitationModel,
 )
+from app.schemas.eligibility import (
+    RuleAssessmentItem,
+    ScholarReadyEvaluationSummary,
+    ScholarshipEvaluationResult,
+    StudentEvaluationInput,
+)
 
 __all__ = [
     "ApiResponse",
@@ -104,4 +110,8 @@ __all__ = [
     "ChatMessageCreate",
     "ChatMessageResponse",
     "CitationModel",
+    "StudentEvaluationInput",
+    "RuleAssessmentItem",
+    "ScholarshipEvaluationResult",
+    "ScholarReadyEvaluationSummary",
 ]
