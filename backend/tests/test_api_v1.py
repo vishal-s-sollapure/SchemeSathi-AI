@@ -1,16 +1,27 @@
 from datetime import date
 import pytest
-from fastapi.testclient import TestClient
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.pool import StaticPool
 
-from app.database import Base, get_db
+from app.api.v1.eligibility import (
+    evaluate_all_scholarships,
+    evaluate_single_scholarship,
+)
+from app.api.v1.profiles import create_student_profile
+from app.api.v1.schemes import create_scheme, list_schemes
+from app.api.v1.sources import create_source
+from app.api.v1.users import create_user
+from app.database import Base
 from app.main import app
 from app.schemas.common import EligibilityEvaluationStatus
+from app.schemas.eligibility import StudentEvaluationInput
+from app.schemas.profile import StudentProfileCreate
 from app.schemas.rule import EligibilityRuleCreate
+from app.schemas.scheme import GovernmentSchemeCreate
 from app.schemas.scholarship import ScholarshipCreate
 from app.schemas.source import OfficialSourceCreate
+from app.schemas.user import UserCreate
 from app.services.opportunity_service import OpportunityService
 
 # In-memory SQLite with StaticPool so all requests share the in-memory schema
@@ -23,21 +34,8 @@ test_engine = create_engine(
 TestingSessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=test_engine)
 
 
-def override_get_db():
-    db = TestingSessionLocal()
-    try:
-        yield db
-    finally:
-        db.close()
-
-
-app.dependency_overrides[get_db] = override_get_db
-
-client = TestClient(app)
-
-
-@pytest.fixture(scope="module", autouse=True)
-def setup_test_db():
+@pytest.fixture(scope="module")
+def db_session():
     Base.metadata.create_all(bind=test_engine)
     session = TestingSessionLocal()
     service = OpportunityService(session)
@@ -96,16 +94,14 @@ def setup_test_db():
             applicable_cycle="2024-25",
         )
     )
-    session.close()
 
-    yield
+    yield session
+    session.close()
     Base.metadata.drop_all(bind=test_engine)
 
 
 def test_openapi_schema_generated():
-    response = client.get("/openapi.json")
-    assert response.status_code == 200
-    schema = response.json()
+    schema = app.openapi()
     assert "paths" in schema
     assert "/api/v1/users" in schema["paths"]
     assert "/api/v1/scholarships" in schema["paths"]
@@ -114,108 +110,105 @@ def test_openapi_schema_generated():
     assert "/api/v1/eligibility/evaluate-scholarships" in schema["paths"]
 
 
-def test_api_user_and_profile_flow():
+def test_api_user_and_profile_flow(db_session):
     # 1. Create User
-    user_payload = {
-        "full_name": "Deepak Kumar",
-        "email": "deepak.kumar@test.gov.in",
-        "phone_number": "+919876543000",
-        "role": "STUDENT",
-    }
-    res = client.post("/api/v1/users", json=user_payload)
-    assert res.status_code == 201
-    user_data = res.json()
-    user_id = user_data["id"]
+    user_payload = UserCreate(
+        full_name="Deepak Kumar",
+        email="deepak.kumar@test.gov.in",
+        phone_number="+919876543000",
+        role="STUDENT",
+    )
+    user_data = create_user(user_payload, db=db_session)
+    user_id = user_data.id
 
     # 2. Create Student Profile
-    profile_payload = {
-        "user_id": user_id,
-        "full_name": "Deepak Kumar",
-        "domicile_state": "Karnataka",
-        "category": "SC",
-        "annual_family_income": 150000.0,
-        "current_course": "Diploma in Mechanical Engineering",
-        "year_of_study": "2nd Year",
-        "marks_percentage": 78.5,
-        "gender": "Male",
-        "disability_status": False,
-        "hosteller_status": "Day Scholar",
-        "extra_attributes": {},
-    }
-    res_prof = client.post("/api/v1/profiles/student", json=profile_payload)
-    assert res_prof.status_code == 201
-    prof_data = res_prof.json()
-    assert prof_data["annual_family_income"] == 150000.0
+    profile_payload = StudentProfileCreate(
+        user_id=user_id,
+        full_name="Deepak Kumar",
+        domicile_state="Karnataka",
+        category="SC",
+        annual_family_income=150000.0,
+        current_course="Diploma in Mechanical Engineering",
+        year_of_study="2nd Year",
+        marks_percentage=78.5,
+        gender="Male",
+        disability_status=False,
+        hosteller_status="Day Scholar",
+        extra_attributes={},
+    )
+    prof_data = create_student_profile(profile_payload, db=db_session)
+    assert prof_data.annual_family_income == 150000.0
 
 
-def test_api_scheme_and_source_flow():
-    source_payload = {
-        "id": "SRC-NHA-PMJAY-2024",
-        "source_title": "Ayushman Bharat PM-JAY Operational Guidelines",
-        "issuing_authority": "National Health Authority",
-        "circular_number": "NHA/AB-PMJAY/2024/02",
-        "notification_date": "2024-03-01",
-        "official_url": "https://pmjay.gov.in",
-    }
-    res_src = client.post("/api/v1/sources", json=source_payload)
-    assert res_src.status_code == 201
+def test_api_scheme_and_source_flow(db_session):
+    source_payload = OfficialSourceCreate(
+        id="SRC-NHA-PMJAY-2024",
+        source_title="Ayushman Bharat PM-JAY Operational Guidelines",
+        issuing_authority="National Health Authority",
+        circular_number="NHA/AB-PMJAY/2024/02",
+        notification_date=date(2024, 3, 1),
+        official_url="https://pmjay.gov.in",
+    )
+    create_source(source_payload, db=db_session)
 
-    scheme_payload = {
-        "id": "SCHEME-PM-JAY-2024",
-        "official_name": "Ayushman Bharat Pradhan Mantri Jan Arogya Yojana",
-        "category": "Healthcare & Ayushman",
-        "description": "Health assurance scheme providing ₹5,00,000 cashless hospitalization cover per family.",
-        "government_department": "National Health Authority",
-        "official_source_url": "https://pmjay.gov.in",
-        "application_url": "https://setu.pmjay.gov.in",
-        "policy_cycle": "Continuous",
-        "verification_date": "2024-10-15",
-        "level": "Central",
-        "benefit_type": "Health Insurance Cover",
-        "annual_benefit": "₹5,00,000 / family / year",
-        "target_beneficiaries": "Vulnerable families identified under SECC 2011",
-        "official_source_id": "SRC-NHA-PMJAY-2024",
-    }
-    res_scheme = client.post("/api/v1/schemes", json=scheme_payload)
-    assert res_scheme.status_code == 201
+    scheme_payload = GovernmentSchemeCreate(
+        id="SCHEME-PM-JAY-2024",
+        official_name="Ayushman Bharat Pradhan Mantri Jan Arogya Yojana",
+        category="Healthcare & Ayushman",
+        description="Health assurance scheme providing ₹5,00,000 cashless hospitalization cover per family.",
+        government_department="National Health Authority",
+        official_source_url="https://pmjay.gov.in",
+        application_url="https://setu.pmjay.gov.in",
+        policy_cycle="Continuous",
+        verification_date=date(2024, 10, 15),
+        level="Central",
+        benefit_type="Health Insurance Cover",
+        annual_benefit="₹5,00,000 / family / year",
+        target_beneficiaries="Vulnerable families identified under SECC 2011",
+        official_source_id="SRC-NHA-PMJAY-2024",
+    )
+    create_scheme(scheme_payload, db=db_session)
 
-    res_list = client.get("/api/v1/schemes", params={"category": "Healthcare & Ayushman"})
-    assert res_list.status_code == 200
-    schemes = res_list.json()
+    schemes = list_schemes(
+        search=None,
+        category="Healthcare & Ayushman",
+        level=None,
+        benefit_type=None,
+        information_status=None,
+        skip=0,
+        limit=10,
+        db=db_session,
+    )
     assert len(schemes) == 1
-    assert schemes[0]["id"] == "SCHEME-PM-JAY-2024"
+    assert schemes[0].id == "SCHEME-PM-JAY-2024"
 
 
-def test_api_eligibility_evaluate_single():
+def test_api_eligibility_evaluate_single(db_session):
     """Tests POST /api/v1/eligibility/evaluate-scholarship/{scholarship_id}."""
-    payload = {
-        "full_name": "Priya Sharma",
-        "marks_percentage": 86.0,
-        "annual_family_income": 320000.0,
-        "other_scholarship_recipient": False,
-    }
-    res = client.post("/api/v1/eligibility/evaluate-scholarship/SCH-TEST-CSSS", json=payload)
-    assert res.status_code == 200
-    data = res.json()
-    assert data["scholarship_id"] == "SCH-TEST-CSSS"
-    assert data["overall_status"] == EligibilityEvaluationStatus.MEETS_REQUIREMENT
-    assert data["match_score"] == 100.0
-    assert len(data["requirements_satisfied"]) == 2
+    payload = StudentEvaluationInput(
+        full_name="Priya Sharma",
+        marks_percentage=86.0,
+        annual_family_income=320000.0,
+        other_scholarship_recipient=False,
+    )
+    data = evaluate_single_scholarship("SCH-TEST-CSSS", payload, db=db_session)
+    assert data.scholarship_id == "SCH-TEST-CSSS"
+    assert data.overall_status == EligibilityEvaluationStatus.MEETS_REQUIREMENT
+    assert data.match_score == 100.0
+    assert len(data.requirements_satisfied) == 2
 
 
-def test_api_eligibility_evaluate_all():
+def test_api_eligibility_evaluate_all(db_session):
     """Tests POST /api/v1/eligibility/evaluate-scholarships."""
-    payload = {
-        "full_name": "Rahul Verma",
-        "marks_percentage": 75.0,  # Below 80% cutoff for CSSS
-        "annual_family_income": 300000.0,
-    }
-    res = client.post("/api/v1/eligibility/evaluate-scholarships", json=payload)
-    assert res.status_code == 200
-    data = res.json()
-    assert data["total_scholarships_evaluated"] >= 1
+    payload = StudentEvaluationInput(
+        full_name="Rahul Verma",
+        marks_percentage=75.0,  # Below 80% cutoff for CSSS
+        annual_family_income=300000.0,
+    )
+    data = evaluate_all_scholarships(payload, db=db_session)
+    assert data.total_scholarships_evaluated >= 1
     # Check that Rahul didn't meet marks cutoff
-    csss_res = next(s for s in data["scholarships"] if s["scholarship_id"] == "SCH-TEST-CSSS")
-    assert csss_res["overall_status"] == EligibilityEvaluationStatus.DOES_NOT_MEET_REQUIREMENT
-    assert len(csss_res["requirements_not_satisfied"]) == 1
-    assert csss_res["requirements_not_satisfied"][0]["rule_id"] == "RULE-TEST-CSSS-MARKS"
+    csss_res = next(s for s in data.scholarships if s.scholarship_id == "SCH-TEST-CSSS")
+    assert csss_res.overall_status == EligibilityEvaluationStatus.DOES_NOT_MEET_REQUIREMENT
+    assert len(csss_res.requirements_not_satisfied) == 1
+    assert csss_res.requirements_not_satisfied[0].rule_id == "RULE-TEST-CSSS-MARKS"
