@@ -1,6 +1,6 @@
 import os
 from pathlib import Path
-from sqlalchemy import create_engine
+from sqlalchemy import create_engine, text
 from sqlalchemy.orm import sessionmaker
 
 from app.config import settings
@@ -49,3 +49,19 @@ def init_db():
     """Initialize all tables defined in models."""
     import app.models  # ensure all models are registered
     Base.metadata.create_all(bind=engine)
+
+    # Lightweight schema migration for SQLite if existing local DB lacks newly added columns
+    if raw_db_url.startswith("sqlite"):
+        try:
+            with engine.connect() as conn:
+                res = conn.execute(text("PRAGMA table_info(uploaded_documents)")).fetchall()
+                cols = {r[1] for r in res}
+                if cols and "page_count" not in cols:
+                    conn.execute(text("ALTER TABLE uploaded_documents ADD COLUMN page_count INTEGER DEFAULT 1"))
+                if cols and "ocr_applied" not in cols:
+                    conn.execute(text("ALTER TABLE uploaded_documents ADD COLUMN ocr_applied BOOLEAN DEFAULT 0"))
+                if cols and "extra_metadata" not in cols:
+                    conn.execute(text("ALTER TABLE uploaded_documents ADD COLUMN extra_metadata JSON DEFAULT '{}'"))
+                conn.commit()
+        except Exception:
+            pass
