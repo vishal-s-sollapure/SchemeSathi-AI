@@ -4,6 +4,7 @@ from app.services.opportunity_service import OpportunityService
 from app.services.document_service import DocumentService
 from app.services.checklist_service import ChecklistService
 from app.services.chat_service import ChatService
+from app.services.rule_engine import DeterministicRuleEngine
 
 __all__ = [
     "UserService",
@@ -12,4 +13,5 @@ __all__ = [
     "DocumentService",
     "ChecklistService",
     "ChatService",
+    "DeterministicRuleEngine",
 ]

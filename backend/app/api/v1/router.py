@@ -4,6 +4,7 @@ from app.api.v1 import (
     chat,
     checklists,
     documents,
+    eligibility,
     health,
     profiles,
     rules,
@@ -25,3 +26,4 @@ api_router.include_router(rules.router)
 api_router.include_router(documents.router)
 api_router.include_router(checklists.router)
 api_router.include_router(chat.router)
+api_router.include_router(eligibility.router)
