@@ -25,10 +25,14 @@ logger = logging.getLogger("schemesathi")
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    # Initialize SQLite database schema safely in threadpool
+    # Initialize database schema safely in threadpool
     logger.info("Initializing SchemeSathi AI database tables...")
     await anyio.to_thread.run_sync(init_db)
-    logger.info("Database initialized successfully.")
+    
+    # Automatically seed verified official knowledge base on fresh deployment
+    from app.data.seed_db import seed_database
+    await anyio.to_thread.run_sync(seed_database)
+    logger.info("Database initialized and verified knowledge base seeded successfully.")
     yield
 
 
@@ -42,10 +46,11 @@ app = FastAPI(
     lifespan=lifespan,
 )
 
-# CORS Middleware
+# CORS Middleware (permits explicit allowed origins + any preview deployment on Vercel)
 app.add_middleware(
     CORSMiddleware,
     allow_origins=settings.BACKEND_CORS_ORIGINS,
+    allow_origin_regex=r"https://.*\.vercel\.app",
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
