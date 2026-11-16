@@ -200,6 +200,17 @@ class OfficialDocumentIngestion:
         if not json_path.exists():
             return []
 
+        # Load official sources mapping if available
+        sources_map: Dict[str, Dict[str, Any]] = {}
+        sources_path = json_path.parent / "official_sources.json"
+        if sources_path.exists():
+            try:
+                with open(sources_path, "r", encoding="utf-8") as sf:
+                    sources_list = json.load(sf)
+                    sources_map = {s.get("id"): s for s in sources_list if isinstance(s, dict) and s.get("id")}
+            except Exception as e:
+                logger.warning(f"Failed to load official sources for rule ingestion: {e}")
+
         with open(json_path, "r", encoding="utf-8") as f:
             data = json.load(f)
 
@@ -213,6 +224,13 @@ class OfficialDocumentIngestion:
             guidance = rule.get("failure_guidance", "")
             cycle = rule.get("applicable_cycle", "2024-25")
             scheme_id = rule.get("scholarship_id") or rule.get("scheme_id") or "GOV"
+            source_id = rule.get("source_id", "")
+
+            source_meta = sources_map.get(source_id, {})
+            doc_title = source_meta.get("source_title") or f"Government Eligibility Rule: {scheme_id} - {clause}"
+            official_url = source_meta.get("official_url") or ("https://scholarships.gov.in" if "SCH-" in scheme_id else "https://pmkisan.gov.in")
+            dept = source_meta.get("issuing_authority") or "Government of India & Government of Karnataka"
+            circular_no = source_meta.get("circular_number")
 
             rule_text = (
                 f"Official Rule under {clause}: {desc} "
@@ -222,15 +240,19 @@ class OfficialDocumentIngestion:
             chunks.extend(
                 self.chunker.chunk_section(
                     text=rule_text,
-                    document_title=f"Authoritative Rule: {clause}",
+                    document_title=doc_title,
                     section_or_clause=clause,
-                    official_source_url="https://scholarships.gov.in" if "SCH-" in scheme_id else "https://pmkisan.gov.in",
-                    government_department="Government of India & Government of Karnataka",
+                    official_source_url=official_url,
+                    government_department=dept,
                     page_number=page,
                     scheme_id=scheme_id,
                     applicable_cycle=cycle,
                     base_chunk_id=f"CHK-{r_id}",
-                    extra_metadata={"rule_type": rule.get("rule_type", "")},
+                    extra_metadata={
+                        "rule_type": rule.get("rule_type", ""),
+                        "source_id": source_id,
+                        "circular_number": circular_no,
+                    },
                 )
             )
 

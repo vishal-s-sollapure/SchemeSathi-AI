@@ -61,7 +61,8 @@ class HybridDocumentRetriever:
 
     # Distinctive scheme aliases for targeted intent boosting
     SCHEME_TARGETS: Dict[str, List[str]] = {
-        "SCHEME-PM-KISAN": ["pm-kisan", "pmkisan", "kisan", "samman", "farmland"],
+        "SCHEME-PM-KISAN": ["pm-kisan", "pmkisan", "kisan", "samman", "farmer"],
+        "POL-PMKISAN-EKYC-EXCLUSION": ["pm-kisan", "pmkisan", "kisan", "samman", "farmer"],
         "SCH-MOE-CSSS-2024": ["csss", "pm-usp", "central sector", "percentile"],
         "SCH-KAR-SSP-SC-2024": ["ssp", "post-matric", "scheduled caste"],
         "SCH-AICTE-PRAGATI-DEGREE": ["pragati", "aicte", "girl student", "daughters"],
@@ -155,27 +156,55 @@ class HybridDocumentRetriever:
             for term, df in doc_frequencies.items()
         }
 
-    def _compute_lexical_score(self, query_tokens: List[str], chunk: DocumentChunk) -> float:
-        """Computes BM25-inspired lexical score with title and clause weighting."""
+    def _get_scheme_intent_boost(self, normalized_q: str, chunk: DocumentChunk) -> float:
+        """Provides strong intent boosting when recognized civic scheme aliases appear in query."""
+        boost = 0.0
+        q_lower = normalized_q.lower()
+        chunk_title = chunk.document_title.lower()
+        chunk_clause = chunk.section_or_clause.lower()
+        chunk_scheme = (chunk.scheme_id or "").upper()
+
+        for scheme_key, aliases in self.SCHEME_TARGETS.items():
+            matched_aliases = [alias for alias in aliases if alias in q_lower]
+            if matched_aliases:
+                # Direct scheme ID association
+                if chunk_scheme == scheme_key or (scheme_key.replace("SCHEME-", "").replace("POL-", "") in chunk_scheme):
+                    boost += 14.0
+                # Content / title association
+                for alias in matched_aliases:
+                    if alias in chunk_title:
+                        boost += 6.0
+                    if alias in chunk_clause:
+                        boost += 4.0
+
+        return boost
+
+    def _compute_lexical_score(self, query_tokens: List[str], chunk: DocumentChunk, normalized_q: str) -> float:
+        """Computes BM25-inspired lexical score with title, clause, and intent weighting."""
         score = 0.0
         chunk_text_lower = chunk.text.lower()
         title_lower = chunk.document_title.lower()
         clause_lower = chunk.section_or_clause.lower()
 
-        for term in query_tokens:
+        # Scheme intent boost
+        score += self._get_scheme_intent_boost(normalized_q, chunk)
+
+        meaningful_tokens = [t for t in query_tokens if t not in self.STOPWORDS and len(t) > 1]
+
+        for term in meaningful_tokens:
             term_idf = self.idf.get(term, 1.0)
 
             # Term frequency in main text
             count = chunk_text_lower.count(term)
             if count > 0:
                 tf = count / (count + 1.2)
-                score += tf * term_idf
+                score += tf * term_idf * 2.0
 
             # High-value boosting for title and clause matches
             if term in title_lower:
-                score += 1.5 * term_idf
+                score += 3.0 * term_idf
             if term in clause_lower:
-                score += 2.0 * term_idf
+                score += 4.0 * term_idf
 
         return score
 
@@ -199,18 +228,15 @@ class HybridDocumentRetriever:
                 sufficient_evidence=False,
             )
 
+        meaningful_tokens = [t for t in q_tokens if t not in self.STOPWORDS and len(t) > 2]
+
         # 1. Dense Cosine Similarities (Pure Python)
         q_vec = self._generate_dense_vector(normalized_q)
         dense_scores = [self._cosine_similarity(chunk_vec, q_vec) for chunk_vec in self.chunk_embeddings]
 
         # 2. Lexical Scores
-        lexical_raw = [self._compute_lexical_score(q_tokens, c) for c in self.chunks]
-        max_lex = max(lexical_raw) if lexical_raw and max(lexical_raw) > 0 else 1.0
-        normalized_lexical = [score / max_lex for score in lexical_raw]
-
-        # 3. Hybrid Fusion Score (Dense + Lexical)
-        hybrid_scores = [
-            0.55 * d + 0.45 * l for d, l in zip(dense_scores, normalized_lexical)
+        lexical_scores = [
+            self._compute_lexical_score(q_tokens, c, normalized_q) for c in self.chunks
         ]
 
         # Filter by scheme_id if requested
@@ -229,16 +255,43 @@ class HybridDocumentRetriever:
                 sufficient_evidence=False,
             )
 
+        # 3. Hybrid Fusion Score (Dominant Lexical Precision + Dense Semantic Context)
+        hybrid_scores = [
+            (lexical_scores[i] * 0.7) + (max(dense_scores[i], 0.0) * 10.0 * 0.3)
+            for i in range(len(self.chunks))
+        ]
+
         # Sort indices by score descending
         sorted_indices = sorted(valid_indices, key=lambda i: hybrid_scores[i], reverse=True)
         top_indices = sorted_indices[:top_k]
 
-        retrieved_chunks = [self.chunks[i] for i in top_indices]
-        retrieved_scores = [round(hybrid_scores[i], 4) for i in top_indices]
+        top_idx = top_indices[0] if top_indices else -1
+        highest_lex = lexical_scores[top_idx] if top_idx >= 0 else 0.0
 
-        # Check sufficiency threshold
-        highest_score = retrieved_scores[0] if retrieved_scores else 0.0
-        sufficient = highest_score >= min_similarity
+        # Check sufficiency: Grounded civic claims must match meaningful query terms
+        if top_idx >= 0 and meaningful_tokens:
+            top_chunk = self.chunks[top_idx]
+            top_chunk_all_text = f"{top_chunk.document_title} {top_chunk.section_or_clause} {top_chunk.text}".lower()
+            matched_terms = [t for t in meaningful_tokens if t in top_chunk_all_text]
+            has_scheme_target = any(
+                alias in normalized_q.lower() and (alias in top_chunk_all_text or top_chunk.scheme_id == skey)
+                for skey, aliases in self.SCHEME_TARGETS.items()
+                for alias in aliases
+            )
+            # Evidence is sufficient if:
+            # - At least 2 meaningful terms matched with strong lexical signal, OR
+            # - A recognized scheme target matched with at least 1 term, OR
+            # - For 1-word queries, that exact term matched
+            sufficient = (
+                (len(matched_terms) >= 2 and highest_lex >= 2.0)
+                or (has_scheme_target and len(matched_terms) >= 1 and highest_lex >= 2.0)
+                or (len(meaningful_tokens) == 1 and len(matched_terms) == 1 and highest_lex >= 1.5)
+            )
+        else:
+            sufficient = False
+
+        retrieved_chunks = [self.chunks[i] for i in top_indices] if sufficient else []
+        retrieved_scores = [round(hybrid_scores[i], 4) for i in top_indices] if sufficient else []
 
         return RetrievalResult(
             query=query,
