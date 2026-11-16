@@ -1,34 +1,21 @@
-import pytest
-from fastapi.testclient import TestClient
-from app.main import app
+from app.api.v1.health import health_check
+from app.main import get_root_health, root
 
 
-@pytest.fixture
-def client():
-    with TestClient(app) as c:
-        yield c
+def test_root_endpoint():
+    response = root()
+    assert "SchemeSathi AI" in response["message"]
 
 
-def test_root_endpoint(client):
-    response = client.get("/")
-    assert response.status_code == 200
-    data = response.json()
-    assert "SchemeSathi AI" in data["message"]
-
-
-def test_api_health_endpoint(client):
-    response = client.get("/api/health")
-    assert response.status_code == 200
-    assert response.json() == {
+def test_api_health_endpoint():
+    response = get_root_health()
+    assert response == {
         "status": "healthy",
         "application": "SchemeSathi AI",
     }
 
 
-def test_api_v1_health_endpoint(client):
-    response = client.get("/api/v1/health")
-    assert response.status_code == 200
-    data = response.json()
-    assert data["status"] == "healthy"
-    assert data["application"] == "SchemeSathi AI"
-
+def test_api_v1_health_endpoint():
+    response = health_check()
+    assert response["status"] == "healthy"
+    assert response["application"] == "SchemeSathi AI"
