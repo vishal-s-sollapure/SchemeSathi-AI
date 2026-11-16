@@ -8,13 +8,14 @@ from app.core.exceptions import EntityNotFoundException
 from app.models.checklist import ApplicationChecklist
 from app.models.document import ExtractedEvidence, UploadedDocument
 from app.models.profile import CitizenProfile, StudentProfile
-from app.models.scholarship import Requirement
+from app.models.rule import Requirement
+from app.models.scholarship import Scholarship
 from app.repositories.checklist_repo import ApplicationChecklistRepository
 from app.repositories.document_repo import ExtractedEvidenceRepository, UploadedDocumentRepository
 from app.repositories.profile_repo import CitizenProfileRepository, StudentProfileRepository
 from app.repositories.rule_repo import RequirementRepository
 from app.schemas.checklist import ChecklistItem
-from app.services.rule_engine import ScholarshipRuleEngine
+from app.services.rule_engine import DeterministicRuleEngine
 
 logger = logging.getLogger("checklist_engine")
 

@@ -13,7 +13,8 @@ from app.api.v1.documents import (
 )
 from app.database import Base
 from app.models.profile import StudentProfile
-from app.models.scholarship import Requirement, Scholarship
+from app.models.rule import Requirement
+from app.models.scholarship import Scholarship
 from app.models.source import OfficialSource
 from app.schemas.document import EvidenceConfirmationItem, EvidenceConfirmationRequest
 from app.services.document_intelligence import (
