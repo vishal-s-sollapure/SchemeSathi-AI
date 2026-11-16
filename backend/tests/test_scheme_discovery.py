@@ -18,10 +18,7 @@ def db_session():
     session.close()
 
 
-@pytest.fixture(scope="module")
-def client():
-    with TestClient(app) as test_client:
-        yield test_client
+client = TestClient(app)
 
 
 # ============================================================================
@@ -205,7 +202,7 @@ def test_scheme_discovery_ranking(db_session):
 # API Endpoint Integration Tests
 # ============================================================================
 
-def test_api_sensitive_fields_explanation(client):
+def test_api_sensitive_fields_explanation():
     """Test API endpoint returning explanation for sensitive data fields."""
     response = client.get("/api/v1/eligibility/sensitive-fields")
     assert response.status_code == 200
@@ -217,7 +214,7 @@ def test_api_sensitive_fields_explanation(client):
     assert "bpl_card_holder" in fields
 
 
-def test_api_evaluate_single_scheme(client):
+def test_api_evaluate_single_scheme():
     """Test API endpoint POST /api/v1/eligibility/evaluate-scheme/{id}."""
     payload = {
         "full_name": "Parvati Devi",
@@ -237,7 +234,7 @@ def test_api_evaluate_single_scheme(client):
     assert "Gruha Lakshmi" in data["official_source_title"]
 
 
-def test_api_discover_schemes_with_filter(client):
+def test_api_discover_schemes_with_filter():
     """Test API endpoint POST /api/v1/eligibility/discover-schemes with category filter."""
     payload = {
         "full_name": "Anand Rao",
