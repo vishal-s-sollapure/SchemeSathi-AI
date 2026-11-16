@@ -175,70 +175,90 @@ class TestSecurityAuditAndResilience:
     # =========================================================================
     def test_rule_engine_boundary_conditions(self):
         """Verifies boundary condition checks: exact caps, conflicting values, negative values."""
-        engine = DeterministicRuleEngine.get_instance()
+        db = SessionLocal()
+        try:
+            from app.services.opportunity_service import OpportunityService
+            from app.schemas.common import EligibilityEvaluationStatus
+            opp_service = OpportunityService(db)
+            sch = opp_service.get_scholarship("SCH-MOE-CSSS-2024")
 
-        # Negative income must trigger NEEDS_REVIEW
-        res_neg = engine.evaluate_scholarship(
-            scholarship_id="SCH-MOE-CSSS-2024",
-            student=StudentEvaluationInput(
-                course_level="Undergraduate",
-                annual_family_income=-50000.0,
-                marks_percentage=85.0,
-                category="General",
-            ),
-        )
-        assert res_neg.overall_status.value == "NEEDS_REVIEW"
+            # Negative income must trigger NEEDS_REVIEW
+            res_neg = DeterministicRuleEngine.evaluate_scholarship(
+                sch,
+                StudentEvaluationInput(
+                    course_level="Undergraduate",
+                    annual_family_income=-50000.0,
+                    marks_percentage=85.0,
+                    category="General",
+                    other_scholarship_recipient=False,
+                ),
+            )
+            assert res_neg.overall_status == EligibilityEvaluationStatus.NEEDS_REVIEW
 
-        # Percentage > 100 must trigger NEEDS_REVIEW
-        res_high_marks = engine.evaluate_scholarship(
-            scholarship_id="SCH-MOE-CSSS-2024",
-            student=StudentEvaluationInput(
-                course_level="Undergraduate",
-                annual_family_income=200000.0,
-                marks_percentage=108.0,
-                category="General",
-            ),
-        )
-        assert res_high_marks.overall_status.value == "NEEDS_REVIEW"
+            # Percentage > 100 must trigger NEEDS_REVIEW
+            res_high_marks = DeterministicRuleEngine.evaluate_scholarship(
+                sch,
+                StudentEvaluationInput(
+                    course_level="Undergraduate",
+                    annual_family_income=200000.0,
+                    marks_percentage=108.0,
+                    category="General",
+                    other_scholarship_recipient=False,
+                ),
+            )
+            assert res_high_marks.overall_status == EligibilityEvaluationStatus.NEEDS_REVIEW
 
-        # Exact income threshold (₹450,000 for CSSS) must MEET requirement (le condition)
-        res_exact_income = engine.evaluate_scholarship(
-            scholarship_id="SCH-MOE-CSSS-2024",
-            student=StudentEvaluationInput(
-                course_level="Undergraduate",
-                annual_family_income=450000.0,
-                marks_percentage=85.0,
-                category="General",
-            ),
-        )
-        # Income check should pass
-        inc_req = [r for r in res_exact_income.requirements_satisfied if "income" in r.rule_id.lower()]
-        assert len(inc_req) >= 1
+            # Exact income threshold (₹450,000 for CSSS) must MEET requirement (le condition)
+            res_exact_income = DeterministicRuleEngine.evaluate_scholarship(
+                sch,
+                StudentEvaluationInput(
+                    course_level="Undergraduate",
+                    annual_family_income=450000.0,
+                    marks_percentage=85.0,
+                    category="General",
+                    other_scholarship_recipient=False,
+                ),
+            )
+            inc_req = [r for r in res_exact_income.requirements_satisfied if "income" in r.rule_id.lower()]
+            assert len(inc_req) >= 1
+        finally:
+            db.close()
 
     # =========================================================================
     # 7. Data Isolation & Profile Privacy
     # =========================================================================
     def test_cross_profile_isolation(self):
         """Verifies that evaluation requests evaluate strictly the provided input without cross-talk."""
-        engine = DeterministicRuleEngine.get_instance()
+        db = SessionLocal()
+        try:
+            from app.services.opportunity_service import OpportunityService
+            from app.schemas.common import EligibilityEvaluationStatus
+            opp_service = OpportunityService(db)
+            sch = opp_service.get_scholarship("SCH-AICTE-PRAGATI-DEGREE")
 
-        # Student A: Eligible Girl Student for Pragati
-        student_a = StudentEvaluationInput(
-            course_level="Technical / Professional",
-            gender="Female",
-            annual_family_income=300000.0,
-            marks_percentage=80.0,
-        )
-        res_a = engine.evaluate_scholarship("SCH-AICTE-PRAGATI-DEGREE", student_a)
+            # Student A: Eligible Girl Student for Pragati
+            student_a = StudentEvaluationInput(
+                course_level="Technical / Professional",
+                gender="Female",
+                annual_family_income=300000.0,
+                marks_percentage=80.0,
+                eligible_daughters_count=1,
+                other_scholarship_recipient=False,
+            )
+            res_a = DeterministicRuleEngine.evaluate_scholarship(sch, student_a)
 
-        # Student B: Male Student for Pragati (Disqualified)
-        student_b = StudentEvaluationInput(
-            course_level="Technical / Professional",
-            gender="Male",
-            annual_family_income=300000.0,
-            marks_percentage=80.0,
-        )
-        res_b = engine.evaluate_scholarship("SCH-AICTE-PRAGATI-DEGREE", student_b)
+            # Student B: Male Student for Pragati (Disqualified)
+            student_b = StudentEvaluationInput(
+                course_level="Technical / Professional",
+                gender="Male",
+                annual_family_income=300000.0,
+                marks_percentage=80.0,
+                eligible_daughters_count=1,
+                other_scholarship_recipient=False,
+            )
+            res_b = DeterministicRuleEngine.evaluate_scholarship(sch, student_b)
 
-        assert res_a.overall_status.value in ("MEETS_REQUIREMENT", "ELIGIBLE")
-        assert res_b.overall_status.value == "DOES_NOT_MEET_REQUIREMENT"
+            assert res_a.overall_status == EligibilityEvaluationStatus.MEETS_REQUIREMENT
+            assert res_b.overall_status == EligibilityEvaluationStatus.DOES_NOT_MEET_REQUIREMENT
+        finally:
+            db.close()
