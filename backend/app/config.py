@@ -23,6 +23,9 @@ class Settings(BaseSettings):
         "http://localhost:3000",
         "http://127.0.0.1:3000",
     ]
+    # Optional regex to match specific preview deployments (e.g. project-specific preview domains)
+    # Never defaults to unrestricted wildcards like ".*\.vercel\.app"
+    CORS_ORIGIN_REGEX: Union[str, None] = None
 
     # Database
     DATABASE_URL: str = "sqlite:///./schemesathi.db"

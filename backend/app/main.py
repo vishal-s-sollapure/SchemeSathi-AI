@@ -46,14 +46,19 @@ app = FastAPI(
     lifespan=lifespan,
 )
 
-# CORS Middleware (permits explicit allowed origins + any preview deployment on Vercel)
+# CORS Middleware — strictly scoped to explicit allowed origins and optional project preview regex
+cors_options = {
+    "allow_origins": settings.BACKEND_CORS_ORIGINS,
+    "allow_credentials": True,
+    "allow_methods": ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+    "allow_headers": ["Content-Type", "Authorization", "Accept", "X-Requested-With"],
+}
+if settings.CORS_ORIGIN_REGEX:
+    cors_options["allow_origin_regex"] = settings.CORS_ORIGIN_REGEX
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=settings.BACKEND_CORS_ORIGINS,
-    allow_origin_regex=r"https://.*\.vercel\.app",
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
+    **cors_options,
 )
 
 
