@@ -1,7 +1,8 @@
 from sqlalchemy import create_engine
-from sqlalchemy.orm import declarative_base, sessionmaker
+from sqlalchemy.orm import sessionmaker
 
 from app.config import settings
+from app.models.base import Base
 
 # Configure SQLite engine with WAL mode and thread-safety
 connect_args = {}
@@ -16,8 +17,6 @@ engine = create_engine(
 
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
-Base = declarative_base()
-
 
 def get_db():
     """Dependency to retrieve DB session per request."""
@@ -27,3 +26,8 @@ def get_db():
     finally:
         db.close()
 
+
+def init_db():
+    """Initialize all tables defined in models."""
+    import app.models  # ensure all models are registered
+    Base.metadata.create_all(bind=engine)
