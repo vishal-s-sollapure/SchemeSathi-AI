@@ -1,0 +1,98 @@
+[
+  {
+    "id": "POL-SSP-EATTEST-CIRCULAR",
+    "title": "Standard Operating Procedure for e-Attestation & Student Entitlements under Karnataka Sakala Services Act",
+    "issuing_department": "Social Welfare Department & Centre for e-Governance, Government of Karnataka",
+    "notification_number": "SWD-SSP-2023-CIR-09",
+    "publication_date": "2023-09-15",
+    "official_gazette_url": "https://ssp.postmatric.karnataka.gov.in/docs/e_attestation_sop_v2.pdf",
+    "applicable_cycle": "Academic Year 2024-25 onwards",
+    "executive_summary": "Mandates that students enrolled in Karnataka higher education institutions do not need physical gazetted officer attestation for their scholarship submissions. Designates college nodal officers to perform digital e-Attestation within 7 working days under the Karnataka Sakala Guarantee of Services to Citizens Act.",
+    "citizen_simplified_points": [
+      "No physical visits to government offices are required for attestation of admission receipts or marks cards.",
+      "Designated college e-Attestation officers must verify uploaded documents within 7 days under the Sakala statutory deadline.",
+      "Caste and income certificates must be verified digitally through Nadakacheri 15-digit RD numbers.",
+      "Students have a legal right to request inspection and report delays to the Departmental Nodal Officer."
+    ],
+    "official_clauses": [
+      {
+        "clause_number": "Section 4.1",
+        "clause_title": "Digital Verification via Revenue Integration",
+        "official_text": "All Caste and Income certificates must be fetched directly through the Atalji Janasnehi Kendra (Nadakacheri) database using the RD Number. In case of mismatch between student name in Aadhaar and Nadakacheri, the Tahsildar certified relationship must be verified by the institutional e-Attestation Officer."
+      },
+      {
+        "clause_number": "Section 7.3",
+        "clause_title": "Statutory Time Limit under Sakala Act",
+        "official_text": "The institutional e-Attestation Officer is bound by the Karnataka Guarantee of Services to Citizens Act (Sakala) to clear or raise specific, actionable objections to a student application within seven working days of online upload."
+      }
+    ],
+    "flagged_ambiguities": [
+      "Students in backlog semesters or course repetition may face delayed scholarship sanction pending university result declaration.",
+      "Deemed-to-be Universities located in Karnataka but not registered on AISHE portal require special manual verification through the Joint Director of Collegiate Education."
+    ]
+  },
+  {
+    "id": "POL-PMKISAN-EKYC-EXCLUSION",
+    "title": "Mandatory e-KYC Verification, Land Record Seeding and Exclusion Enforcement Circular for PM-KISAN",
+    "issuing_department": "Department of Agriculture and Farmers Welfare, Ministry of Agriculture & Farmers Welfare, Govt of India",
+    "notification_number": "F.No. 1-1/2023-Credit-II-PMKISAN",
+    "publication_date": "2023-10-20",
+    "official_gazette_url": "https://pmkisan.gov.in/Documents/eKYC_Advisory_2023.pdf",
+    "applicable_cycle": "Continuous (FY 2024-25 onwards)",
+    "executive_summary": "Enforces three mandatory prerequisites for receiving quarterly financial transfers under PM-KISAN: 1) Aadhaar-based e-KYC (Face Authentication or OTP), 2) Active Land-Seeding in state revenue records, and 3) NPCI Direct Benefit Transfer (DBT) mapped bank account.",
+    "citizen_simplified_points": [
+      "Every eligible farmer must complete e-KYC using the PM-KISAN mobile app or at Common Service Centres (CSC).",
+      "Land ownership must be verified and seeded in the state revenue portal (Bhoomi in Karnataka, Bhulekh elsewhere).",
+      "Bank accounts must be actively mapped to the Aadhaar Payment Bridge (APB); traditional IFSC/Account number transfers are no longer processed.",
+      "Any beneficiary who paid income tax in the preceding financial year is automatically de-registered and required to refund wrongful receipts."
+    ],
+    "official_clauses": [
+      {
+        "clause_number": "Clause 2.2",
+        "clause_title": "Mandatory Aadhaar Payment Bridge (APB) Integration",
+        "official_text": "No installment under PM-KISAN shall be credited via traditional account-based clearing. All States/UTs must ensure that 100% of beneficiary bank accounts are seeded with Aadhaar and mapped with the National Payments Corporation of India (NPCI) for Direct Benefit Transfer."
+      },
+      {
+        "clause_number": "Clause 5(b)",
+        "clause_title": "Statutory Exclusion Criteria",
+        "official_text": "Institutional landholders, current or former constitutional post holders, current or retired government employees (excluding Multi-Tasking Staff/Class IV/Group D), professionals, and all individuals who paid Income Tax in the previous assessment year are disqualified from PM-KISAN."
+      }
+    ],
+    "flagged_ambiguities": [
+      "Joint landholder families where land has not been formally subdivided through mutation records may experience delays in individual entitlement sanction.",
+      "Succession upon the death of a registered farmer requires formal submission of death certificate and legal heir mutation on the state land portal before benefits transfer to the widow/heir."
+    ]
+  },
+  {
+    "id": "POL-NSP-OTR-GUIDELINE",
+    "title": "Implementation of One-Time Registration (OTR) and Biometric Facial Authentication on National Scholarship Portal",
+    "issuing_department": "Department of Higher Education, Ministry of Education, Government of India",
+    "notification_number": "DBT/NSP/OTR/2024-01",
+    "publication_date": "2024-01-15",
+    "official_gazette_url": "https://scholarships.gov.in/public/FAQ/NSP_OTR_Guidelines.pdf",
+    "applicable_cycle": "Academic Year 2024-25 onwards",
+    "executive_summary": "Replaces annual fresh registrations on the National Scholarship Portal with a single lifelong One-Time Registration (OTR) number generated through Aadhaar/e-KYC Face Authentication. Streamlines renewal and institutional verification across all Central Sector schemes.",
+    "citizen_simplified_points": [
+      "Students generate one permanent 14-digit OTR number that remains valid throughout their entire academic journey from school to postgraduate study.",
+      "Face authentication through the Aadhaar FaceRD mobile application eliminates physical document verification trips.",
+      "Head of Institution (HoI) and Institute Nodal Officer (INO) must complete biometric authentication to approve student applications.",
+      "Prevents duplicate applications across multiple central and state government scholarship portals."
+    ],
+    "official_clauses": [
+      {
+        "clause_number": "Para 3",
+        "clause_title": "Generation of Lifelong OTR Number",
+        "official_text": "Every applicant must register on the NSP portal using the Aadhaar FaceRD application to obtain a 14-digit One-Time Registration (OTR) number. No application for any Central Sector or Centrally Sponsored Scheme will be entertained without an authenticated OTR."
+      },
+      {
+        "clause_number": "Para 6",
+        "clause_title": "Institutional Biometric Verification Mandate",
+        "official_text": "The Institute Nodal Officer (INO) and Head of Institution (HoI) must register their biometric credentials on the portal before validating any student application. Applications not biometrically verified at the institutional level shall not be transmitted to State/Ministry Nodal Officers."
+      }
+    ],
+    "flagged_ambiguities": [
+      "Minor students whose Aadhaar biometric details have not been updated after age 5 or age 15 may experience face authentication rejection.",
+      "Students studying in institutions situated outside their home domicile state must ensure the institution's AISHE code is active and mapped on NSP."
+    ]
+  }
+]
