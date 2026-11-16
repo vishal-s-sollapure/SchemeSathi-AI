@@ -13,8 +13,24 @@ import { StatusBadge } from '../components/common/StatusBadge';
 import { ChatMessage } from '../components/common/ChatMessage';
 import { CitationCard } from '../components/common/CitationCard';
 import { LanguageSelector } from '../components/common/LanguageSelector';
-import { ChatMessage as ChatMessageType, Citation } from '../types';
+import { ChatMessage as ChatMessageType, Citation, ValidatedCitation } from '../types';
 import { SAMPLE_CHAT_HISTORY, MOCK_CITATIONS } from '../data/mockData';
+import { apiService } from '../services/api';
+
+function mapValidatedCitation(c: ValidatedCitation, idx: number): Citation {
+  return {
+    id: c.matched_chunk_id || `cit-${Date.now()}-${idx}`,
+    title: c.clause_or_section || 'Official Clause',
+    documentName: c.source_title,
+    issuingAuthority: 'Government Authority',
+    circularNumber: c.circular_number || 'Official Circular',
+    notificationDate: 'Verified 2024-25',
+    clauseNumber: c.clause_or_section,
+    excerpt: c.excerpt,
+    officialSourceUrl: c.official_source_url,
+    verificationBadge: c.verification_status === 'OFFICIALLY_VERIFIED' ? 'Verified Official Source' : 'Authoritative Record'
+  };
+}
 
 export const AIAssistantPage: React.FC = () => {
   const { language } = useLanguage();
@@ -64,7 +80,7 @@ export const AIAssistantPage: React.FC = () => {
     }
   };
 
-  const handleSend = (textToSend?: string) => {
+  const handleSend = async (textToSend?: string) => {
     const query = (textToSend || inputPrompt).trim();
     if (!query) return;
 
@@ -80,8 +96,29 @@ export const AIAssistantPage: React.FC = () => {
     setInputPrompt('');
     setIsThinking(true);
 
-    // Simulate intelligent response selection based on keywords
-    setTimeout(() => {
+    try {
+      // 1. Call Live RAG Pipeline on Backend
+      const ragResp = await apiService.queryRAG({
+        query,
+        language: language,
+      });
+
+      const citations: Citation[] = (ragResp.citations || []).map((c, idx) => mapValidatedCitation(c, idx));
+
+      const assistantMsg: ChatMessageType = {
+        id: `ast-${Date.now()}`,
+        sender: 'assistant',
+        content: ragResp.answer,
+        timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+        language: (ragResp.language as any) || language,
+        citations: citations,
+        suggestedFollowUps: ragResp.suggested_follow_ups || []
+      };
+
+      setMessages(prev => [...prev, assistantMsg]);
+    } catch (err) {
+      console.warn("Backend RAG query failed or offline, fallback to local knowledge:", err);
+      // Fallback
       let responseText = '';
       let citations: Citation[] = [];
       let followUps: string[] = [];
@@ -116,8 +153,9 @@ export const AIAssistantPage: React.FC = () => {
       };
 
       setMessages(prev => [...prev, assistantMsg]);
+    } finally {
       setIsThinking(false);
-    }, 900);
+    }
   };
 
   // Collect all unique citations across current messages

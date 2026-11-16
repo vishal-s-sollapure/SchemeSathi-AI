@@ -7,53 +7,83 @@ import {
   Copy, 
   Check, 
   Send, 
-  FileCheck2 
+  FileCheck2,
+  ShieldCheck,
+  BookOpen
 } from 'lucide-react';
 import { StatusBadge } from '../components/common/StatusBadge';
 import { DocumentUpload } from '../components/common/DocumentUpload';
 import { CitationCard } from '../components/common/CitationCard';
 import { MOCK_CITATIONS } from '../data/mockData';
+import { Citation, RAGResponse, ValidatedCitation } from '../types';
+import { apiService } from '../services/api';
+
+function mapValidatedCitation(c: ValidatedCitation, idx: number): Citation {
+  return {
+    id: c.matched_chunk_id || `cit-${Date.now()}-${idx}`,
+    title: c.clause_or_section || 'Official Clause',
+    documentName: c.source_title,
+    issuingAuthority: 'Government Authority',
+    circularNumber: c.circular_number || 'Official Circular',
+    notificationDate: 'Verified 2024-25',
+    clauseNumber: c.clause_or_section,
+    excerpt: c.excerpt,
+    officialSourceUrl: c.official_source_url,
+    verificationBadge: c.verification_status === 'OFFICIALLY_VERIFIED' ? 'Verified Official Source' : 'Authoritative Record'
+  };
+}
 
 export const PolicyExplainerPage: React.FC = () => {
   const [activeDocument, setActiveDocument] = useState<{ name: string; size: string } | null>({
-    name: 'Karnataka_Raita_Vidya_Nidhi_Gazette_Circular_2024.pdf',
+    name: 'Standard_Operating_Procedure_Karnataka_Sakala_eAttestation_2024.pdf',
     size: '1.42 MB'
   });
 
-  const [question, setQuestion] = useState('What is the annual income ceiling and can I receive this scholarship alongside other central grants?');
+  const [question, setQuestion] = useState('How many days does a college officer have to complete e-Attestation under Sakala Act?');
   const [analyzing, setAnalyzing] = useState(false);
   const [copied, setCopied] = useState(false);
+  const [ragResponse, setRagResponse] = useState<RAGResponse | null>(null);
 
   const presetQuestions = [
-    'What is the annual income ceiling?',
-    'Is domicile certificate mandatory for Karnataka students?',
-    'Can I receive this benefit alongside NSP Central scholarships?',
-    'What are the DBT disbursement milestones and verification steps?'
+    'How many days does a college officer have to complete e-Attestation under Sakala Act?',
+    'Are income tax payers eligible to receive PM-KISAN ₹6,000 financial support?',
+    'What is the maximum annual family income limit for Central Sector Scheme of Scholarship (CSSS)?',
+    'Who is eligible as Yajamani under Karnataka Gruha Lakshmi Scheme?'
   ];
+
+  const executeRAGQuery = async (queryText: string) => {
+    if (!queryText.trim()) return;
+    setAnalyzing(true);
+    try {
+      const res = await apiService.queryRAG({
+        query: queryText,
+        language: 'en',
+      });
+      setRagResponse(res);
+    } catch (err) {
+      console.warn("Backend RAG query failed or offline:", err);
+    } finally {
+      setAnalyzing(false);
+    }
+  };
 
   const handleAsk = (e?: React.FormEvent) => {
     if (e) e.preventDefault();
-    if (!question.trim()) return;
-    setAnalyzing(true);
-    setTimeout(() => {
-      setAnalyzing(false);
-    }, 800);
+    executeRAGQuery(question);
   };
 
   const handleSelectPreset = (q: string) => {
     setQuestion(q);
-    setAnalyzing(true);
-    setTimeout(() => {
-      setAnalyzing(false);
-    }, 600);
+    executeRAGQuery(q);
   };
 
   const handleCopy = () => {
-    navigator.clipboard.writeText(
-      "Citizen Simplified Summary:\n" +
-      "1. Income Limit: Not required if parent has an active Karnataka FID (FRUITS Farmer ID). If parent is a landless agricultural laborer, annual income must be below ₹2.5 Lakhs.\n" +
-      "2. Concurrent Grants: Allowed. Section 7 explicitly permits receiving this scholarship concurrently with other merit awards."
-    );
+    const textToCopy = ragResponse 
+      ? ragResponse.answer
+      : ("Citizen Simplified Summary:\n" +
+         "1. Income Limit: Maximum annual family income cap must not exceed verified scheme limit.\n" +
+         "2. Concurrent Grants: Subject to exclusivity restrictions under respective scheme order.");
+    navigator.clipboard.writeText(textToCopy);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   };

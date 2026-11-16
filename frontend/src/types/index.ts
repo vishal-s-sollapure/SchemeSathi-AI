@@ -227,3 +227,37 @@ export interface SensitiveFieldExplanation {
   explanation: string;
 }
 
+// ============================================================================
+// Phase 7: RAG & Grounded Citation Types
+// ============================================================================
+
+export interface ValidatedCitation {
+  source_title: string;
+  circular_number?: string;
+  clause_or_section: string;
+  page_number?: string;
+  official_source_url: string;
+  verification_status: string;
+  matched_chunk_id: string;
+  excerpt: string;
+}
+
+export interface RAGQueryRequest {
+  query: string;
+  session_id?: string;
+  language?: string;
+  scheme_filter?: string;
+}
+
+export interface RAGResponse {
+  query: string;
+  answer: string;
+  language: string;
+  citations: ValidatedCitation[];
+  confidence_score: number;
+  is_grounded: boolean;
+  sufficient_evidence: boolean;
+  suggested_follow_ups: string[];
+  official_disclaimer: string;
+}
+

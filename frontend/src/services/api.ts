@@ -1,6 +1,8 @@
 import axios from 'axios';
 import { 
   CitizenProfileInput, 
+  RAGQueryRequest,
+  RAGResponse,
   SchemeDiscoverySummary, 
   SchemeEvaluationResult, 
   SensitiveFieldExplanation 
@@ -106,6 +108,38 @@ export const apiService = {
     if (filters?.benefit_type && filters.benefit_type !== 'All') params.benefit_type = filters.benefit_type;
 
     const response = await apiClient.get<any[]>('/api/v1/schemes', { params });
+    return response.data;
+  },
+
+  /**
+   * Phase 7: RAG & Grounded Question Answering with Official-Source Citations
+   */
+  async queryRAG(request: RAGQueryRequest): Promise<RAGResponse> {
+    const response = await apiClient.post<RAGResponse>(
+      '/api/v1/chat/query',
+      request
+    );
+    return response.data;
+  },
+
+  /**
+   * Uploads and parses official PDF circular page-by-page into verified RAG knowledge base
+   */
+  async ingestPdf(file: File, documentTitle?: string, schemeId?: string): Promise<{ status: string; message: string; chunks_indexed: number }> {
+    const formData = new FormData();
+    formData.append('file', file);
+    if (documentTitle) formData.append('document_title', documentTitle);
+    if (schemeId) formData.append('scheme_id', schemeId);
+
+    const response = await apiClient.post<{ status: string; message: string; chunks_indexed: number }>(
+      '/api/v1/chat/ingest-pdf',
+      formData,
+      {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      }
+    );
     return response.data;
   },
 };
