@@ -303,6 +303,71 @@ export interface DocumentIntelligenceResponse {
 }
 
 
+export interface EvidenceConfirmationItem {
+  evidence_id: string;
+  confirmed_value: string;
+  is_confirmed?: boolean;
+}
+
+export interface EvidenceConfirmationRequest {
+  items: EvidenceConfirmationItem[];
+}
+
+export interface StudentEvaluationInput {
+  full_name?: string;
+  age?: number;
+  domicile_state?: string;
+  district?: string;
+  course_level?: string;
+  current_course?: string;
+  institution_name?: string;
+  institution_type?: string;
+  year_of_study?: string;
+  marks_percentage?: number;
+  annual_family_income?: number;
+  category?: string;
+  gender?: string;
+  other_scholarship_recipient?: boolean;
+  eligible_daughters_count?: number;
+  extra_attributes?: Record<string, any>;
+}
+
+export interface ScholarshipEvaluationResult {
+  scholarship_id: string;
+  official_name: string;
+  government_department: string;
+  benefit_amount_annual: string;
+  official_source_url: string;
+  application_url?: string;
+  application_deadline?: string;
+  overall_status: DeterministicEligibilityStatus;
+  match_score: number;
+  requirements_satisfied: RuleAssessmentItem[];
+  requirements_not_satisfied: RuleAssessmentItem[];
+  missing_information: RuleAssessmentItem[];
+  conditions_under_review: RuleAssessmentItem[];
+  suggested_next_actions: string[];
+  required_documents: {
+    id?: string;
+    document_type: string;
+    title: string;
+    description?: string;
+    issuing_authority?: string;
+    is_mandatory: boolean;
+  }[];
+}
+
+export interface ScholarReadyEvaluationSummary {
+  student_name?: string;
+  total_scholarships_evaluated: number;
+  eligible_count: number;
+  missing_info_count: number;
+  ineligible_count: number;
+  under_review_count: number;
+  scholarships: ScholarshipEvaluationResult[];
+  evaluated_at: string;
+}
+
 export interface ValidatedCitation {
   source_title: string;
   circular_number?: string;

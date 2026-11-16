@@ -1,11 +1,18 @@
 import axios from 'axios';
 import { 
   CitizenProfileInput, 
+  DocumentIntelligenceResponse,
+  DynamicApplicationChecklist,
+  EvidenceConfirmationItem,
+  ExtractedEvidenceItem,
   RAGQueryRequest,
   RAGResponse,
+  ScholarReadyEvaluationSummary,
+  ScholarshipEvaluationResult,
   SchemeDiscoverySummary, 
   SchemeEvaluationResult, 
-  SensitiveFieldExplanation 
+  SensitiveFieldExplanation,
+  StudentEvaluationInput
 } from '../types';
 
 const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
