@@ -92,21 +92,23 @@ SchemeSathi AI relies strictly on primary central and state government repositor
 
 ---
 
-## 4. Production Deployment Architecture
+## 4. Production Deployment Readiness
+
+> **Deployment Status**: Deployment configuration prepared. Automated tests and local production builds reported successful. Vercel and Render deployment, live integration testing and production verification remain pending.
 
 ```mermaid
 flowchart LR
-    User["Citizen / Student Device (Mobile / Desktop)"] --> Cloudflare["Cloudflare CDN & HTTPS"]
-    Cloudflare --> Vercel["Vercel Edge Network (React 18 + Vite SPA)"]
-    Vercel -->|REST API over TLS| Render["Render Web Service (FastAPI Core)"]
-    Render --> Postgres[("Managed PostgreSQL (Persistent Storage)")]
-    Render --> PyMuPDF["PyMuPDF Optical Engine"]
+    User["Citizen / Student Device\n(Mobile / Desktop)"] --> Cloudflare["Cloudflare Edge & CDN (Target)"]
+    Cloudflare --> Vercel["Vercel Edge Network (Target)\nReact 18 + Vite SPA"]
+    Vercel -->|REST API over TLS\nScoped Origin Allowlist| Render["Render Web Service (Target)\nFastAPI Core Service"]
+    Render --> Postgres[("Managed PostgreSQL (Target)\nPersistent Storage")]
+    Render --> PyMuPDF["PyMuPDF Document Intelligence"]
     Render --> Chroma["Hybrid Vector + Lexical Retriever"]
 ```
 
-- **Frontend**: Deployed on **Vercel** (`https://schemesathi-ai.vercel.app`), configured with SPA rewrite rules (`vercel.json`) and edge asset compression.
-- **Backend**: Deployed on **Render** (`https://schemesathi-backend.onrender.com`), running asynchronous Uvicorn workers on Python 3.12.
-- **Database Persistence**: Managed PostgreSQL database via Render Blueprint (`render.yaml`) with connection pooling and automated knowledge base seeding on startup.
+- **Frontend Target (Vercel)**: Deployment configuration prepared in `frontend/vercel.json` with SPA rewrite rules (`/(.*)` -> `/index.html`), caching headers, and modern security headers (without obsolete `X-XSS-Protection`). Local production build verified (`npm run build` compiled 1,662 modules with 0 errors).
+- **Backend Target (Render)**: Containerization and Blueprint prepared in `render.yaml` and `backend/Dockerfile` with Python 3.12 and FastAPI. Health check verified locally at `/api/health`. Test suite verified (113 of 113 tests passed).
+- **Database Architecture**: Configured for Render Managed PostgreSQL (`schemesathi-postgres`) with connection pooling (`pool_size=10, max_overflow=20, pool_pre_ping=True`) and idempotent startup seeding. Local SQLite fallback verified. *(Note: Automated database backup and disaster recovery schedules must be established upon live hosting provisioning before production sign-off).*
 
 ---
 

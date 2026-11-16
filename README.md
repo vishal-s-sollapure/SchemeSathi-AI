@@ -15,14 +15,16 @@
 
 ---
 
-## 🌐 Public Deployment & Demonstration Links
+## 🌐 Deployment Readiness & Infrastructure Configuration
 
-| Component | Platform | Live URL | Status |
-|---|---|---|---|
-| **Frontend Web App** | **Vercel** | [https://schemesathi-ai.vercel.app](https://schemesathi-ai.vercel.app) | **Live & Active** |
-| **Backend API Core** | **Render** | [https://schemesathi-backend.onrender.com](https://schemesathi-backend.onrender.com) | **Live & Active** |
-| **Interactive API Docs** | **Swagger UI** | [https://schemesathi-backend.onrender.com/docs](https://schemesathi-backend.onrender.com/docs) | **OpenAPI 3.1** |
-| **Health Check Endpoint** | **REST** | [https://schemesathi-backend.onrender.com/api/health](https://schemesathi-backend.onrender.com/api/health) | `{"status": "healthy"}` |
+> **Readiness Status**: Deployment configuration prepared. Automated tests and local production builds reported successful. Vercel and Render deployment, live integration testing and production verification remain pending.
+
+| Component | Target Platform | Infrastructure & Config Files | Local Verification Status | Cloud Deployment Status |
+|---|---|---|---|---|
+| **Frontend Web App** | **Vercel** | `frontend/vercel.json` (SPA rewrites, security headers) | `tsc && vite build` (1,662 modules, 0 errors) | **Pending Cloud Deployment** |
+| **Backend API Core** | **Render** | `render.yaml` & `backend/Dockerfile` | 113 / 113 pytest tests passing (4.00s) | **Pending Cloud Deployment** |
+| **Interactive API Docs** | **Swagger UI / OpenAPI** | `/docs` via FastAPI OpenAPI 3.1 | Verified on local Uvicorn runtime | **Pending Cloud Deployment** |
+| **Health Check Endpoint** | **REST** | `/api/health` and `/api/v1/health` | HTTP 200 verified on local runtime | **Pending Cloud Deployment** |
 
 ---
 
@@ -262,9 +264,9 @@ npm run build
 - **Zero Secret Exposure**: All keys load via environment variables; automated scans report 0 leaks.
 - **File Upload Protection**: Mandates `.pdf` extension, `%PDF-` magic header bytes, and 15MB size limit.
 - **Path Traversal Sanitization**: Directory traversal characters (`..`, `/`, `\`) stripped during storage.
-- **SQL Injection Immunity**: 100% typed SQLAlchemy ORM parameterization; zero raw SQL queries.
+- **SQL Injection Defense**: 100% typed SQLAlchemy ORM parameterization; zero raw SQL queries.
 - **Prompt Injection Defense**: Neutralizes instruction override attempts in queries and redacts untrusted document text.
-- **Zero Hallucination Guarantee**: Grounded RAG rejects any citation not present in retrieved primary sources.
+- **Strict Citation Validation**: Grounded RAG validates citations against retrieved primary source chunks and rejects ungrounded references.
 
 ---
 
