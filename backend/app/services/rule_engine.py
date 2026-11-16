@@ -4,11 +4,16 @@ from typing import Any, Dict, List, Optional, Tuple, Union
 
 from app.models.rule import EligibilityRule, Requirement
 from app.models.scholarship import Scholarship
+from app.models.scheme import GovernmentScheme
 from app.schemas.common import EligibilityEvaluationStatus
 from app.schemas.eligibility import (
+    CitizenEvaluationInput,
     RuleAssessmentItem,
     ScholarReadyEvaluationSummary,
     ScholarshipEvaluationResult,
+    SchemeDiscoverySummary,
+    SchemeEvaluationResult,
+    SensitiveFieldExplanation,
     StudentEvaluationInput,
 )
 
@@ -24,6 +29,34 @@ class DeterministicRuleEngine:
     - Explicit handling of MISSING_INFORMATION vs DOES_NOT_MEET_REQUIREMENT vs NEEDS_REVIEW.
     - Full traceability linking each decision to official circulars and clauses.
     """
+
+    # Sensitive fields catalog explaining legally mandated data collection
+    SENSITIVE_FIELDS_EXPLANATIONS = [
+        SensitiveFieldExplanation(
+            field_name="is_income_tax_payer",
+            display_name="Income Tax Payer Status",
+            required_by_scheme_id="SCHEME-PM-KISAN",
+            scheme_name="Pradhan Mantri Kisan Samman Nidhi (PM-KISAN) & Karnataka Gruha Lakshmi",
+            official_clause="Clause 5(b)(vi) of PM-KISAN Operational Guidelines & Clause 4 of Karnataka GO-WCD-41-WES-2023",
+            explanation="Both Central and State welfare rules strictly exclude individuals or families who paid income tax or filed GST returns in the preceding assessment year from direct income support benefits.",
+        ),
+        SensitiveFieldExplanation(
+            field_name="landholding_hectares",
+            display_name="Cultivable Landholding (Hectares)",
+            required_by_scheme_id="SCHEME-PM-KISAN",
+            scheme_name="Pradhan Mantri Kisan Samman Nidhi (PM-KISAN)",
+            official_clause="Clause 3.1 (Beneficiary Definition)",
+            explanation="Agricultural income support under PM-KISAN is legally tied to verified land titles registered in state land revenue records (e.g. Bhoomi portal in Karnataka, Bhulekh in UP).",
+        ),
+        SensitiveFieldExplanation(
+            field_name="bpl_card_holder",
+            display_name="Ration Card / BPL Classification",
+            required_by_scheme_id="SCHEME-KAR-GRUHA-LAKSHMI",
+            scheme_name="Karnataka Gruha Lakshmi Scheme",
+            official_clause="Clause 2 & 3 (Jurisdiction & Eligibility)",
+            explanation="Gruha Lakshmi financial assistance is distributed exclusively to the recognized woman head of the household (Yajamani) specified on Antyodaya, BPL, or APL ration cards in Karnataka.",
+        ),
+    ]
 
     # Field aliases mapping common profile keys
     FIELD_ALIASES = {
@@ -42,6 +75,16 @@ class DeterministicRuleEngine:
         "sex": "gender",
         "other_scholarship": "other_scholarship_recipient",
         "daughters_count": "eligible_daughters_count",
+        "land": "landholding_hectares",
+        "landholding": "landholding_hectares",
+        "farmland": "landholding_hectares",
+        "tax_payer": "is_income_tax_payer",
+        "income_tax": "is_income_tax_payer",
+        "it_payer": "is_income_tax_payer",
+        "bpl": "bpl_card_holder",
+        "ration_card": "bpl_card_holder",
+        "residence_type": "area_type",
+        "area": "area_type",
     }
 
     @classmethod
@@ -78,15 +121,22 @@ class DeterministicRuleEngine:
             if value < 0:
                 return True, f"Annual family income cannot be negative (provided: ₹{value:,})."
 
+        # Negative or impossible landholding
+        if field_name in ("landholding_hectares", "landholding", "farmland") and isinstance(value, (int, float)):
+            if value < 0:
+                return True, f"Cultivable landholding cannot be negative (provided: {value} hectares)."
+            if value > 500:
+                return True, f"Unusually large landholding ({value} hectares). Requires manual revenue record review."
+
         # Out-of-bounds percentage
         if field_name in ("marks_percentage", "marks", "percentage") and isinstance(value, (int, float)):
             if value < 0 or value > 100:
                 return True, f"Academic marks percentage must be between 0 and 100% (provided: {value}%)."
 
-        # Out-of-bounds age for student
+        # Out-of-bounds age
         if field_name == "age" and isinstance(value, (int, float)):
-            if value < 10 or value > 100:
-                return True, f"Student age '{value}' is outside realistic operational parameters."
+            if value < 1 or value > 120:
+                return True, f"Age '{value}' is outside realistic operational parameters (1 to 120 years)."
 
         return False, None
 
@@ -431,5 +481,207 @@ class DeterministicRuleEngine:
             ineligible_count=ineligible,
             under_review_count=review,
             scholarships=results,
+            evaluated_at=datetime.now(timezone.utc).isoformat(),
+        )
+
+    # ============================================================================
+    # SchemeSathi Scheme Discovery & Citizen Evaluation
+    # ============================================================================
+
+    @classmethod
+    def get_sensitive_fields_explanation(cls) -> List[SensitiveFieldExplanation]:
+        """Returns the official rationale and citations for sensitive profile questions."""
+        return cls.SENSITIVE_FIELDS_EXPLANATIONS
+
+    @classmethod
+    def evaluate_scheme(
+        cls,
+        scheme: GovernmentScheme,
+        profile_input: Union[CitizenEvaluationInput, Dict[str, Any]],
+    ) -> SchemeEvaluationResult:
+        """Evaluates all rules of a government scheme against citizen profile inputs."""
+        profile_data = (
+            profile_input.model_dump(exclude_unset=False)
+            if isinstance(profile_input, CitizenEvaluationInput)
+            else dict(profile_input)
+        )
+
+        rules = scheme.eligibility_rules or []
+        satisfied: List[RuleAssessmentItem] = []
+        failed: List[RuleAssessmentItem] = []
+        missing: List[RuleAssessmentItem] = []
+        under_review: List[RuleAssessmentItem] = []
+
+        for rule in rules:
+            item = cls.evaluate_rule(rule, profile_data)
+            if item.status == EligibilityEvaluationStatus.MEETS_REQUIREMENT:
+                satisfied.append(item)
+            elif item.status == EligibilityEvaluationStatus.DOES_NOT_MEET_REQUIREMENT:
+                failed.append(item)
+            elif item.status == EligibilityEvaluationStatus.MISSING_INFORMATION:
+                missing.append(item)
+            elif item.status == EligibilityEvaluationStatus.NEEDS_REVIEW:
+                under_review.append(item)
+
+        total_rules = len(rules)
+        if total_rules > 0:
+            match_score = round((len(satisfied) / total_rules) * 100.0, 1)
+        else:
+            match_score = 0.0
+
+        # Overall Status Determination
+        mandatory_failed = any(item.is_mandatory for item in failed)
+        mandatory_missing = any(item.is_mandatory for item in missing)
+        any_review = len(under_review) > 0
+
+        if mandatory_failed:
+            overall_status = EligibilityEvaluationStatus.DOES_NOT_MEET_REQUIREMENT
+        elif mandatory_missing:
+            overall_status = EligibilityEvaluationStatus.MISSING_INFORMATION
+        elif any_review:
+            overall_status = EligibilityEvaluationStatus.NEEDS_REVIEW
+        else:
+            overall_status = EligibilityEvaluationStatus.MEETS_REQUIREMENT
+
+        # Guidance
+        suggested_actions = cls.generate_scheme_actionable_guidance(
+            overall_status, satisfied, failed, missing, under_review, scheme
+        )
+
+        # Important conditions summary
+        important_conditions = [rule.requirement_description for rule in rules]
+
+        # Formulate required documents
+        required_docs = [
+            {
+                "id": req.id,
+                "document_type": req.document_type,
+                "title": req.title,
+                "description": req.description,
+                "issuing_authority": req.issuing_authority,
+                "is_mandatory": req.is_mandatory,
+            }
+            for req in (scheme.requirements or [])
+        ]
+
+        source_title = scheme.official_source.source_title if scheme.official_source else None
+        circular_no = scheme.official_source.circular_number if scheme.official_source else None
+
+        return SchemeEvaluationResult(
+            scheme_id=scheme.id,
+            official_name=scheme.official_name,
+            category=scheme.category,
+            government_department=scheme.government_department,
+            level=scheme.level,
+            benefit_type=scheme.benefit_type,
+            annual_benefit=scheme.annual_benefit,
+            target_beneficiaries=scheme.target_beneficiaries,
+            application_deadline=scheme.application_deadline,
+            official_source_url=scheme.official_source_url,
+            application_url=scheme.application_url,
+            verification_date=scheme.verification_date.isoformat() if scheme.verification_date else "",
+            policy_cycle=scheme.policy_cycle,
+            information_status=scheme.information_status,
+            overall_status=overall_status,
+            match_score=match_score,
+            requirements_satisfied=satisfied,
+            requirements_not_satisfied=failed,
+            missing_information=missing,
+            conditions_under_review=under_review,
+            suggested_next_actions=suggested_actions,
+            important_conditions=important_conditions,
+            required_documents=required_docs,
+            official_source_title=source_title,
+            circular_number=circular_no,
+        )
+
+    @classmethod
+    def generate_scheme_actionable_guidance(
+        cls,
+        overall_status: EligibilityEvaluationStatus,
+        satisfied: List[RuleAssessmentItem],
+        failed: List[RuleAssessmentItem],
+        missing: List[RuleAssessmentItem],
+        under_review: List[RuleAssessmentItem],
+        scheme: GovernmentScheme,
+    ) -> List[str]:
+        """Generates clear, civic-focused instructions for citizens based on evaluation outcome."""
+        actions: List[str] = []
+
+        if overall_status == EligibilityEvaluationStatus.MEETS_REQUIREMENT:
+            actions.append(
+                f"You meet all verified statutory eligibility conditions for '{scheme.official_name}'."
+            )
+            actions.append(
+                "Ensure your bank account is active on the NPCI Aadhaar Direct Benefit Transfer (DBT) payment gateway."
+            )
+            if scheme.application_url:
+                actions.append(
+                    f"Proceed to submit your registration on the verified official portal: {scheme.application_url}"
+                )
+
+        elif overall_status == EligibilityEvaluationStatus.MISSING_INFORMATION:
+            missing_fields = [item.official_condition.get("field", "information") for item in missing]
+            fields_str = ", ".join(f"'{f}'" for f in missing_fields)
+            actions.append(
+                f"Incomplete profile: Missing {fields_str} needed to determine legal entitlement for this scheme."
+            )
+            actions.append(
+                "Provide the missing details in your profile to complete automatic eligibility evaluation."
+            )
+
+        elif overall_status == EligibilityEvaluationStatus.DOES_NOT_MEET_REQUIREMENT:
+            for item in failed:
+                actions.append(f"Statutory Ineligibility: {item.explanation}")
+            actions.append(
+                "Check other categories in SchemeSathi matching your occupation or household profile."
+            )
+
+        elif overall_status == EligibilityEvaluationStatus.NEEDS_REVIEW:
+            for item in under_review:
+                actions.append(f"Administrative review required: {item.explanation}")
+            actions.append(
+                "Review your submitted profile entries against your official government certificates and revenue records."
+            )
+
+        return actions
+
+    @classmethod
+    def evaluate_all_schemes(
+        cls,
+        schemes: List[GovernmentScheme],
+        profile_input: Union[CitizenEvaluationInput, Dict[str, Any]],
+    ) -> SchemeDiscoverySummary:
+        """Evaluates citizen profile across all provided government schemes and ranks matches."""
+        results: List[SchemeEvaluationResult] = []
+
+        for sch in schemes:
+            res = cls.evaluate_scheme(sch, profile_input)
+            results.append(res)
+
+        # Priority ranking: MEETS_REQUIREMENT first, then MISSING_INFORMATION, then NEEDS_REVIEW, then DOES_NOT_MEET
+        priority_order = {
+            EligibilityEvaluationStatus.MEETS_REQUIREMENT: 0,
+            EligibilityEvaluationStatus.MISSING_INFORMATION: 1,
+            EligibilityEvaluationStatus.NEEDS_REVIEW: 2,
+            EligibilityEvaluationStatus.DOES_NOT_MEET_REQUIREMENT: 3,
+        }
+        results.sort(key=lambda x: (priority_order.get(x.overall_status, 4), -x.match_score))
+
+        eligible = sum(1 for r in results if r.overall_status == EligibilityEvaluationStatus.MEETS_REQUIREMENT)
+        missing = sum(1 for r in results if r.overall_status == EligibilityEvaluationStatus.MISSING_INFORMATION)
+        ineligible = sum(1 for r in results if r.overall_status == EligibilityEvaluationStatus.DOES_NOT_MEET_REQUIREMENT)
+        review = sum(1 for r in results if r.overall_status == EligibilityEvaluationStatus.NEEDS_REVIEW)
+
+        citizen_name = getattr(profile_input, "full_name", None) or profile_input.get("full_name")
+
+        return SchemeDiscoverySummary(
+            citizen_name=citizen_name,
+            total_schemes_evaluated=len(schemes),
+            eligible_count=eligible,
+            missing_info_count=missing,
+            ineligible_count=ineligible,
+            under_review_count=review,
+            schemes=results,
             evaluated_at=datetime.now(timezone.utc).isoformat(),
         )
