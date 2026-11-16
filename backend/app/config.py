@@ -27,6 +27,11 @@ class Settings(BaseSettings):
     # Database
     DATABASE_URL: str = "sqlite:///./schemesathi.db"
     
+    # Document Intelligence & Uploads
+    UPLOAD_DIR: str = "app/uploads"
+    MAX_UPLOAD_SIZE_BYTES: int = 15 * 1024 * 1024  # 15 MB
+    ALLOWED_EXTENSIONS: List[str] = [".pdf"]
+    
     # Supported Languages
     DEFAULT_LANGUAGE: str = "en"
     SUPPORTED_LANGUAGES: List[str] = ["en", "kn", "hi"]
