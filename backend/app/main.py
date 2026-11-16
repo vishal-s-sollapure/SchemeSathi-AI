@@ -1,3 +1,4 @@
+from contextlib import asynccontextmanager
 import logging
 from fastapi import FastAPI, Request, status
 from fastapi.middleware.cors import CORSMiddleware
@@ -5,6 +6,13 @@ from fastapi.responses import JSONResponse
 
 from app.api.v1.router import api_router
 from app.config import settings
+from app.core.exceptions import (
+    EntityConflictException,
+    EntityNotFoundException,
+    SchemeSathiException,
+    ValidationException,
+)
+from app.database import init_db
 
 # Configure basic logging
 logging.basicConfig(
@@ -13,6 +21,16 @@ logging.basicConfig(
 )
 logger = logging.getLogger("schemesathi")
 
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    # Initialize SQLite database schema
+    logger.info("Initializing SchemeSathi AI database tables...")
+    init_db()
+    logger.info("Database initialized successfully.")
+    yield
+
+
 app = FastAPI(
     title=settings.PROJECT_NAME,
     version=settings.VERSION,
@@ -20,6 +38,7 @@ app = FastAPI(
     docs_url="/docs",
     redoc_url="/redoc",
     openapi_url="/openapi.json",
+    lifespan=lifespan,
 )
 
 # CORS Middleware
@@ -31,7 +50,47 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Global Exception Handlers for Graceful Error Responses
+
+# Exception Handlers
+@app.exception_handler(EntityNotFoundException)
+async def not_found_exception_handler(request: Request, exc: EntityNotFoundException):
+    return JSONResponse(
+        status_code=status.HTTP_404_NOT_FOUND,
+        content={
+            "error": "NotFoundError",
+            "message": exc.message,
+            "detail": exc.detail,
+            "path": request.url.path,
+        },
+    )
+
+
+@app.exception_handler(EntityConflictException)
+async def conflict_exception_handler(request: Request, exc: EntityConflictException):
+    return JSONResponse(
+        status_code=status.HTTP_409_CONFLICT,
+        content={
+            "error": "ConflictError",
+            "message": exc.message,
+            "detail": exc.detail,
+            "path": request.url.path,
+        },
+    )
+
+
+@app.exception_handler(ValidationException)
+async def validation_exception_handler(request: Request, exc: ValidationException):
+    return JSONResponse(
+        status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+        content={
+            "error": "ValidationError",
+            "message": exc.message,
+            "detail": exc.detail,
+            "path": request.url.path,
+        },
+    )
+
+
 @app.exception_handler(Exception)
 async def global_exception_handler(request: Request, exc: Exception):
     logger.error(f"Unhandled error processing {request.method} {request.url.path}: {exc}", exc_info=True)
@@ -45,7 +104,7 @@ async def global_exception_handler(request: Request, exc: Exception):
     )
 
 
-# Root health endpoint specified in instructions
+# Root health endpoint
 @app.get("/api/health", tags=["Health"])
 def get_root_health():
     """Exact requirement: GET /api/health -> {'status': 'healthy', 'application': 'SchemeSathi AI'}"""
@@ -67,4 +126,3 @@ def root():
         "docs": "/docs",
         "health": "/api/health",
     }
-
