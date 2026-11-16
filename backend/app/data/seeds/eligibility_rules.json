@@ -136,6 +136,40 @@
     "failure_guidance": "Valid annual family income certificate issued by a Competent Revenue Authority not below the rank of Tehsildar is mandatory."
   },
   {
+    "id": "RULE-PRAGATI-ADMISSION",
+    "scholarship_id": "SCH-AICTE-PRAGATI-DEGREE",
+    "requirement_description": "Candidate must be admitted to 1st year Degree technical program (or 2nd year through lateral entry) in an AICTE-approved institution.",
+    "rule_type": "ADMISSION_LEVEL",
+    "structured_condition": {
+      "field": "course_level",
+      "operator": "IN",
+      "value": ["Technical / Professional", "Undergraduate"]
+    },
+    "source_id": "SRC-AICTE-PRAGATI",
+    "page_number": "2",
+    "clause_or_section": "Clause 2.3 (Degree Admission)",
+    "applicable_cycle": "2024-25 / 2025-26",
+    "is_mandatory": true,
+    "failure_guidance": "Only students enrolled in AICTE-approved degree level institutions are eligible."
+  },
+  {
+    "id": "RULE-PRAGATI-FAMILY-CAP",
+    "scholarship_id": "SCH-AICTE-PRAGATI-DEGREE",
+    "requirement_description": "Maximum of two girl children per family are eligible under the Pragati scheme.",
+    "rule_type": "FAMILY_QUOTA_CAP",
+    "structured_condition": {
+      "field": "eligible_daughters_count",
+      "operator": "LTE",
+      "value": 2
+    },
+    "source_id": "SRC-AICTE-PRAGATI",
+    "page_number": "2",
+    "clause_or_section": "Clause 2.4 (Number of Beneficiaries per Family)",
+    "applicable_cycle": "2024-25 / 2025-26",
+    "is_mandatory": true,
+    "failure_guidance": "In families with more than two daughters, only up to two can receive the Pragati scholarship."
+  },
+  {
     "id": "RULE-PMKISAN-LAND",
     "scheme_id": "SCHEME-PM-KISAN",
     "requirement_description": "The farmer family must own cultivable agricultural landholding in their names as recorded in the official state land revenue records.",
