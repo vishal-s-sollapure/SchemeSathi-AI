@@ -1,0 +1,223 @@
+[
+  {
+    "id": "REQ-CSSS-INCOME-CERT",
+    "scholarship_id": "SCH-MOE-CSSS-2024",
+    "document_type": "INCOME_CERTIFICATE",
+    "title": "Annual Family Income Certificate",
+    "description": "Income certificate issued by a Competent Revenue Authority (Tehsildar/Sub-Divisional Magistrate) certifying gross family income not exceeding ₹4,50,000 for the current financial year.",
+    "issuing_authority": "Revenue Department / Taluk Office",
+    "is_mandatory": true,
+    "verification_criteria": {
+      "max_validity_years": 1,
+      "requires_digital_seal": true,
+      "max_income_limit": 450000.0
+    }
+  },
+  {
+    "id": "REQ-CSSS-MARKSHEET",
+    "scholarship_id": "SCH-MOE-CSSS-2024",
+    "document_type": "MARKS_CARD",
+    "title": "Class XII / Higher Secondary Examination Marksheet",
+    "description": "Original or certified copy of the Class XII marksheet showing student scored above the 80th percentile cut-off for their respective board and stream.",
+    "issuing_authority": "State Education Board / CBSE / CISCE",
+    "is_mandatory": true,
+    "verification_criteria": {
+      "requires_board_roll_no": true,
+      "min_aggregate_marks": 80.0
+    }
+  },
+  {
+    "id": "REQ-CSSS-BONAFIDE",
+    "scholarship_id": "SCH-MOE-CSSS-2024",
+    "document_type": "BONAFIDE_CERTIFICATE",
+    "title": "Institutional Verification / Bonafide Certificate",
+    "description": "Bonafide student certificate signed by the Head of the Institution / College Principal confirming enrollment in a regular full-time degree course.",
+    "issuing_authority": "College Principal / University Registrar",
+    "is_mandatory": true,
+    "verification_criteria": {
+      "requires_aishe_code": true,
+      "regular_full_time": true
+    }
+  },
+  {
+    "id": "REQ-CSSS-BANK-PASSBOOK",
+    "scholarship_id": "SCH-MOE-CSSS-2024",
+    "document_type": "AADHAAR_DBT_PASSBOOK",
+    "title": "Aadhaar-Seeded Bank Account Passbook",
+    "description": "Bank passbook front page displaying student name, IFSC code, account number, and active NPCI mapper Aadhaar linkage for Direct Benefit Transfer.",
+    "issuing_authority": "Scheduled Commercial Bank / Core Banking Branch",
+    "is_mandatory": true,
+    "verification_criteria": {
+      "npci_dbt_seeded": true,
+      "single_holder_account": true
+    }
+  },
+  {
+    "id": "REQ-SSP-SC-CASTE",
+    "scholarship_id": "SCH-KAR-SSP-SC-2024",
+    "document_type": "CASTE_CERTIFICATE",
+    "title": "Digital Caste Certificate with Nadakacheri RD Number",
+    "description": "Scheduled Caste certificate issued by the Karnataka Revenue Department featuring a digital RD number verifiable via Nadakacheri portal.",
+    "issuing_authority": "Revenue Department (Nadakacheri / Atalji Janasnehi Kendra), Govt of Karnataka",
+    "is_mandatory": true,
+    "verification_criteria": {
+      "requires_rd_number": true,
+      "verifiable_on_nadakacheri": true,
+      "category_code": "SC"
+    }
+  },
+  {
+    "id": "REQ-SSP-SC-INCOME",
+    "scholarship_id": "SCH-KAR-SSP-SC-2024",
+    "document_type": "INCOME_CERTIFICATE",
+    "title": "Revenue Income Certificate (e-Pramaan Patra)",
+    "description": "Income certificate (Form-F / e-Pramaan Patra) issued by the Tahsildar with digital RD number certifying annual family income below ₹2,50,000.",
+    "issuing_authority": "Tahsildar / Revenue Department, Govt of Karnataka",
+    "is_mandatory": true,
+    "verification_criteria": {
+      "requires_rd_number": true,
+      "max_validity_years": 5,
+      "max_income_limit": 250000.0
+    }
+  },
+  {
+    "id": "REQ-SSP-SC-BONAFIDE",
+    "scholarship_id": "SCH-KAR-SSP-SC-2024",
+    "document_type": "BONAFIDE_CERTIFICATE",
+    "title": "College Admission Fee Receipt & Study Certificate",
+    "description": "Current academic year admission confirmation receipt and study certificate verified by the College e-Attestation Officer.",
+    "issuing_authority": "Recognized Karnataka College / University",
+    "is_mandatory": true,
+    "verification_criteria": {
+      "requires_e_attestation": true,
+      "current_academic_year": true
+    }
+  },
+  {
+    "id": "REQ-SSP-SC-DBT-PASSBOOK",
+    "scholarship_id": "SCH-KAR-SSP-SC-2024",
+    "document_type": "AADHAAR_DBT_PASSBOOK",
+    "title": "Aadhaar Payment Bridge (APB) Seeded Bank Passbook",
+    "description": "Active savings account in student's name linked to Aadhaar number through NPCI mapper for scholarship disbursement.",
+    "issuing_authority": "Core Banking Branch",
+    "is_mandatory": true,
+    "verification_criteria": {
+      "npci_dbt_seeded": true,
+      "requires_karnataka_bank_branch": false
+    }
+  },
+  {
+    "id": "REQ-PRAGATI-ADMISSION",
+    "scholarship_id": "SCH-AICTE-PRAGATI-DEGREE",
+    "document_type": "ADMISSION_LETTER",
+    "title": "Centralized Counseling Technical Degree Admission Allotment Letter",
+    "description": "Official seat allotment letter proving admission to 1st year (or 2nd year lateral entry) in an AICTE-approved degree institution through state or central counseling.",
+    "issuing_authority": "Centralized Admission Authority / KEA / DTE / JoSAA",
+    "is_mandatory": true,
+    "verification_criteria": {
+      "aicte_approved_institution": true,
+      "merit_counseling_quota": true
+    }
+  },
+  {
+    "id": "REQ-PRAGATI-INCOME",
+    "scholarship_id": "SCH-AICTE-PRAGATI-DEGREE",
+    "document_type": "INCOME_CERTIFICATE",
+    "title": "Tehsildar Certified Family Income Certificate",
+    "description": "Family income certificate issued by an officer not below the rank of Tehsildar stating gross annual family income <= ₹8,00,000.",
+    "issuing_authority": "Competent Revenue Authority (Tehsildar or higher)",
+    "is_mandatory": true,
+    "verification_criteria": {
+      "max_income_limit": 800000.0,
+      "current_financial_year": true
+    }
+  },
+  {
+    "id": "REQ-PRAGATI-BONAFIDE",
+    "scholarship_id": "SCH-AICTE-PRAGATI-DEGREE",
+    "document_type": "BONAFIDE_CERTIFICATE",
+    "title": "Institution Bonafide & Tuition Fee Structure Certificate",
+    "description": "Certificate issued by the College Principal confirming student is enrolled in full-time AICTE approved degree program and specifying college fee breakup.",
+    "issuing_authority": "Head of AICTE Approved Institution / Principal",
+    "is_mandatory": true,
+    "verification_criteria": {
+      "aicte_pid_number": true,
+      "principal_signature_and_seal": true
+    }
+  },
+  {
+    "id": "REQ-PMKISAN-LAND-RECORD",
+    "scheme_id": "SCHEME-PM-KISAN",
+    "document_type": "LAND_RECORD",
+    "title": "Land Ownership Record (Khatauni / RTC / Patta)",
+    "description": "Certified extract of the land revenue record (Bhoomi RTC in Karnataka, Khatauni in North India) reflecting cultivable land in the applicant farmer's name.",
+    "issuing_authority": "Revenue Department / Village Administrative Officer (VAO)",
+    "is_mandatory": true,
+    "verification_criteria": {
+      "requires_survey_no": true,
+      "land_record_seeded": true
+    }
+  },
+  {
+    "id": "REQ-PMKISAN-AADHAAR",
+    "scheme_id": "SCHEME-PM-KISAN",
+    "document_type": "AADHAAR_CARD",
+    "title": "Aadhaar Card with e-KYC Verification",
+    "description": "Aadhaar card of the farmer with completed e-KYC (via OTP or Biometric/Face authentication on PM-KISAN portal).",
+    "issuing_authority": "Unique Identification Authority of India (UIDAI)",
+    "is_mandatory": true,
+    "verification_criteria": {
+      "e_kyc_completed": true,
+      "name_matches_land_record": true
+    }
+  },
+  {
+    "id": "REQ-PMKISAN-BANK",
+    "scheme_id": "SCHEME-PM-KISAN",
+    "document_type": "AADHAAR_DBT_PASSBOOK",
+    "title": "Active DBT-Enabled Bank Account",
+    "description": "Bank account passbook copy showing active NPCI DBT status for electronic transfer of ₹2,000 quarterly installments.",
+    "issuing_authority": "Commercial / Grameena Bank",
+    "is_mandatory": true,
+    "verification_criteria": {
+      "npci_dbt_seeded": true
+    }
+  },
+  {
+    "id": "REQ-GL-RATION-CARD",
+    "scheme_id": "SCHEME-KAR-GRUHA-LAKSHMI",
+    "document_type": "RATION_CARD",
+    "title": "Karnataka Antyodaya, BPL, or APL Ration Card",
+    "description": "Ration card issued by Karnataka Food & Civil Supplies Department explicitly naming the applicant woman as the household head (Yajamani).",
+    "issuing_authority": "Department of Food, Civil Supplies and Consumer Affairs, Govt of Karnataka",
+    "is_mandatory": true,
+    "verification_criteria": {
+      "requires_rc_number": true,
+      "woman_designated_head": true
+    }
+  },
+  {
+    "id": "REQ-GL-AADHAAR-YJ",
+    "scheme_id": "SCHEME-KAR-GRUHA-LAKSHMI",
+    "document_type": "AADHAAR_CARD",
+    "title": "Aadhaar Card of Female Household Head (Yajamani)",
+    "description": "Aadhaar card of the woman applicant matching the name on the family ration card.",
+    "issuing_authority": "UIDAI",
+    "is_mandatory": true,
+    "verification_criteria": {
+      "linked_to_ration_card": true
+    }
+  },
+  {
+    "id": "REQ-GL-AADHAAR-HUSBAND",
+    "scheme_id": "SCHEME-KAR-GRUHA-LAKSHMI",
+    "document_type": "AADHAAR_CARD",
+    "title": "Aadhaar Card of Husband (if married)",
+    "description": "Aadhaar card of the husband utilized by Seva Sindhu API to verify that the husband does not pay income tax or file GST.",
+    "issuing_authority": "UIDAI",
+    "is_mandatory": false,
+    "verification_criteria": {
+      "cross_check_it_and_gst": true
+    }
+  }
+]

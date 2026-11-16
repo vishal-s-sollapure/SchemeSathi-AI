@@ -1,0 +1,223 @@
+[
+  {
+    "id": "RULE-CSSS-INCOME",
+    "scholarship_id": "SCH-MOE-CSSS-2024",
+    "requirement_description": "Gross parental/family annual income must not exceed ₹4,50,000 from all sources.",
+    "rule_type": "INCOME_CAP",
+    "structured_condition": {
+      "field": "annual_family_income",
+      "operator": "LTE",
+      "value": 450000.0
+    },
+    "source_id": "SRC-MOE-PMUSP-CSSS",
+    "page_number": "4",
+    "clause_or_section": "Clause 4.1.2 (Income Ceiling)",
+    "applicable_cycle": "2024-25 / 2025-26",
+    "is_mandatory": true,
+    "failure_guidance": "Applicants with family income exceeding ₹4,50,000 per annum are ineligible for Central Sector CSSS scholarship."
+  },
+  {
+    "id": "RULE-CSSS-PERCENTILE",
+    "scholarship_id": "SCH-MOE-CSSS-2024",
+    "requirement_description": "Student must have scored above the 80th percentile in the relevant stream in Class XII / +2 examination of respective Board.",
+    "rule_type": "PERCENTILE_CUTOFF",
+    "structured_condition": {
+      "field": "marks_percentage",
+      "operator": "GTE",
+      "value": 80.0
+    },
+    "source_id": "SRC-MOE-PMUSP-CSSS",
+    "page_number": "3",
+    "clause_or_section": "Clause 4.1.1 (Merit Criterion)",
+    "applicable_cycle": "2024-25 / 2025-26",
+    "is_mandatory": true,
+    "failure_guidance": "State board and CBSE/ICSE declare annual cut-off marks corresponding to the 80th percentile for Science, Commerce, and Humanities."
+  },
+  {
+    "id": "RULE-CSSS-EXCLUSIVITY",
+    "scholarship_id": "SCH-MOE-CSSS-2024",
+    "requirement_description": "Student must not be receiving any other government scholarship or fee concession scheme concurrently.",
+    "rule_type": "EXCLUSIVITY_CHECK",
+    "structured_condition": {
+      "field": "other_scholarship_recipient",
+      "operator": "EQ",
+      "value": false
+    },
+    "source_id": "SRC-MOE-PMUSP-CSSS",
+    "page_number": "5",
+    "clause_or_section": "Clause 4.3 (Non-Duplication)",
+    "applicable_cycle": "2024-25 / 2025-26",
+    "is_mandatory": true,
+    "failure_guidance": "Students holding other central or state government scholarships must surrender one under DBT duplication guidelines."
+  },
+  {
+    "id": "RULE-SSP-SC-CASTE",
+    "scholarship_id": "SCH-KAR-SSP-SC-2024",
+    "requirement_description": "The candidate must belong to a Scheduled Caste (SC) recognized by the Government of Karnataka.",
+    "rule_type": "CASTE_CRITERION",
+    "structured_condition": {
+      "field": "category",
+      "operator": "EQ",
+      "value": "SC"
+    },
+    "source_id": "SRC-MOSJE-SSP-SC",
+    "page_number": "4",
+    "clause_or_section": "Section 3.1 (Beneficiary Category)",
+    "applicable_cycle": "2024-25 / 2025-26",
+    "is_mandatory": true,
+    "failure_guidance": "This specific scheme is restricted to Scheduled Caste students; OBC/ST/General students should apply under their respective departmental schemes."
+  },
+  {
+    "id": "RULE-SSP-SC-INCOME",
+    "scholarship_id": "SCH-KAR-SSP-SC-2024",
+    "requirement_description": "Total parental/guardian annual income from all sources must not exceed ₹2,50,000.",
+    "rule_type": "INCOME_CAP",
+    "structured_condition": {
+      "field": "annual_family_income",
+      "operator": "LTE",
+      "value": 250000.0
+    },
+    "source_id": "SRC-MOSJE-SSP-SC",
+    "page_number": "5",
+    "clause_or_section": "Section 3.2 Clause (a) (Income Limit)",
+    "applicable_cycle": "2024-25 / 2025-26",
+    "is_mandatory": true,
+    "failure_guidance": "A valid revenue department Income Certificate (e-Pramaan Patra with RD number) is required to verify income below ₹2.5 Lakhs."
+  },
+  {
+    "id": "RULE-SSP-SC-DOMICILE",
+    "scholarship_id": "SCH-KAR-SSP-SC-2024",
+    "requirement_description": "The applicant must be a permanent resident of Karnataka.",
+    "rule_type": "DOMICILE_CRITERION",
+    "structured_condition": {
+      "field": "domicile_state",
+      "operator": "EQ",
+      "value": "Karnataka"
+    },
+    "source_id": "SRC-MOSJE-SSP-SC",
+    "page_number": "4",
+    "clause_or_section": "Section 3.3 (Domicile)",
+    "applicable_cycle": "2024-25 / 2025-26",
+    "is_mandatory": true,
+    "failure_guidance": "Students studying in Karnataka who are domiciled in other states must apply to their home state's post-matric scholarship portal."
+  },
+  {
+    "id": "RULE-PRAGATI-GENDER",
+    "scholarship_id": "SCH-AICTE-PRAGATI-DEGREE",
+    "requirement_description": "The applicant must be a female student.",
+    "rule_type": "GENDER_CRITERION",
+    "structured_condition": {
+      "field": "gender",
+      "operator": "EQ",
+      "value": "Female"
+    },
+    "source_id": "SRC-AICTE-PRAGATI",
+    "page_number": "2",
+    "clause_or_section": "Clause 2.1 (Eligibility of Girl Students)",
+    "applicable_cycle": "2024-25 / 2025-26",
+    "is_mandatory": true,
+    "failure_guidance": "The Pragati scheme is exclusively earmarked for meritorious girl students admitted to technical education."
+  },
+  {
+    "id": "RULE-PRAGATI-INCOME",
+    "scholarship_id": "SCH-AICTE-PRAGATI-DEGREE",
+    "requirement_description": "Total family income from all sources must not exceed ₹8,00,000 per annum.",
+    "rule_type": "INCOME_CAP",
+    "structured_condition": {
+      "field": "annual_family_income",
+      "operator": "LTE",
+      "value": 800000.0
+    },
+    "source_id": "SRC-AICTE-PRAGATI",
+    "page_number": "2",
+    "clause_or_section": "Clause 2.2 (Income Ceiling)",
+    "applicable_cycle": "2024-25 / 2025-26",
+    "is_mandatory": true,
+    "failure_guidance": "Valid annual family income certificate issued by a Competent Revenue Authority not below the rank of Tehsildar is mandatory."
+  },
+  {
+    "id": "RULE-PMKISAN-LAND",
+    "scheme_id": "SCHEME-PM-KISAN",
+    "requirement_description": "The farmer family must own cultivable agricultural landholding in their names as recorded in the official state land revenue records.",
+    "rule_type": "LAND_CRITERION",
+    "structured_condition": {
+      "field": "landholding_hectares",
+      "operator": "GT",
+      "value": 0.0
+    },
+    "source_id": "SRC-MOA-PMKISAN",
+    "page_number": "2",
+    "clause_or_section": "Clause 3.1 (Beneficiary Definition)",
+    "applicable_cycle": "Continuous (FY 2024-25 / 2025-26)",
+    "is_mandatory": true,
+    "failure_guidance": "Land title must be duly recorded in the state land database (Bhoomi in Karnataka, Bhulekh in UP, etc.) with verified e-KYC."
+  },
+  {
+    "id": "RULE-PMKISAN-EXCLUSION-IT",
+    "scheme_id": "SCHEME-PM-KISAN",
+    "requirement_description": "All persons who paid Income Tax in the last assessment year are strictly excluded from PM-KISAN benefits.",
+    "rule_type": "EXCLUSION_CHECK",
+    "structured_condition": {
+      "field": "is_income_tax_payer",
+      "operator": "EQ",
+      "value": false
+    },
+    "source_id": "SRC-MOA-PMKISAN",
+    "page_number": "4",
+    "clause_or_section": "Clause 5(b)(vi) (Exclusion Categories)",
+    "applicable_cycle": "Continuous (FY 2024-25 / 2025-26)",
+    "is_mandatory": true,
+    "failure_guidance": "Farmer families where any member filed and paid income tax in the previous assessment year are legally excluded from PM-KISAN."
+  },
+  {
+    "id": "RULE-GL-GENDER-HEAD",
+    "scheme_id": "SCHEME-KAR-GRUHA-LAKSHMI",
+    "requirement_description": "The applicant must be the recognized female head of the household (Yajamani) specified on the Karnataka Ration Card.",
+    "rule_type": "GENDER_CRITERION",
+    "structured_condition": {
+      "field": "gender",
+      "operator": "EQ",
+      "value": "Female"
+    },
+    "source_id": "SRC-KRN-DWCD-GL",
+    "page_number": "2",
+    "clause_or_section": "Clause 2 (Designation of Yajamani)",
+    "applicable_cycle": "Continuous (FY 2024-25 / 2025-26)",
+    "is_mandatory": true,
+    "failure_guidance": "If the ration card does not designate a woman as the family head (Yajamani), the family must update the designation via Ahara portal first."
+  },
+  {
+    "id": "RULE-GL-DOMICILE",
+    "scheme_id": "SCHEME-KAR-GRUHA-LAKSHMI",
+    "requirement_description": "The beneficiary must be a resident of Karnataka holding a valid state ration card (Antyodaya / BPL / APL).",
+    "rule_type": "DOMICILE_CRITERION",
+    "structured_condition": {
+      "field": "domicile_state",
+      "operator": "EQ",
+      "value": "Karnataka"
+    },
+    "source_id": "SRC-KRN-DWCD-GL",
+    "page_number": "2",
+    "clause_or_section": "Clause 3 (Jurisdiction & Eligibility)",
+    "applicable_cycle": "Continuous (FY 2024-25 / 2025-26)",
+    "is_mandatory": true,
+    "failure_guidance": "Applicants must possess an active Karnataka Food and Civil Supplies Department Ration Card."
+  },
+  {
+    "id": "RULE-GL-EXCLUSION-IT",
+    "scheme_id": "SCHEME-KAR-GRUHA-LAKSHMI",
+    "requirement_description": "Neither the female head of the family nor her husband should be an Income Tax payer or GST return filer.",
+    "rule_type": "EXCLUSION_CHECK",
+    "structured_condition": {
+      "field": "is_income_tax_payer",
+      "operator": "EQ",
+      "value": false
+    },
+    "source_id": "SRC-KRN-DWCD-GL",
+    "page_number": "3",
+    "clause_or_section": "Clause 4.1 & 4.2 (Exclusions)",
+    "applicable_cycle": "Continuous (FY 2024-25 / 2025-26)",
+    "is_mandatory": true,
+    "failure_guidance": "Households with income tax or GST filers are ineligible under the social welfare focus of Gruha Lakshmi."
+  }
+]
