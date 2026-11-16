@@ -1,5 +1,5 @@
-from typing import List
-from fastapi import APIRouter, Depends, status
+from typing import List, Optional
+from fastapi import APIRouter, Depends, Query, status
 from sqlalchemy.orm import Session
 
 from app.database import get_db
@@ -11,6 +11,26 @@ from app.schemas.checklist import (
 from app.services.checklist_service import ChecklistService
 
 router = APIRouter(prefix="/checklists", tags=["Application Checklists"])
+
+
+@router.post("/generate", response_model=ApplicationChecklistResponse, status_code=status.HTTP_201_CREATED)
+def generate_dynamic_checklist(
+    student_profile_id: Optional[str] = Query(None),
+    citizen_profile_id: Optional[str] = Query(None),
+    scholarship_id: Optional[str] = Query(None),
+    scheme_id: Optional[str] = Query(None),
+    db: Session = Depends(get_db),
+):
+    """Generates a personalized dynamic checklist based on verified statutory requirements,
+    tracking item states (REQUIRED, UPLOADED, CONFIRMED, NEEDS_REVIEW, NOT_APPLICABLE).
+    """
+    service = ChecklistService(db)
+    return service.generate_dynamic_checklist(
+        student_profile_id=student_profile_id,
+        citizen_profile_id=citizen_profile_id,
+        scholarship_id=scholarship_id,
+        scheme_id=scheme_id,
+    )
 
 
 @router.post("", response_model=ApplicationChecklistResponse, status_code=status.HTTP_201_CREATED)

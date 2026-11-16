@@ -24,7 +24,7 @@ ChecklistOverallStatus = Literal[
 class ChecklistItem(BaseModel):
     requirement_id: Optional[str] = None
     name: str = Field(..., max_length=255)
-    document_type: str = Field(..., max_length=100)
+    document_type: str = Field("GENERAL_DOCUMENT", max_length=100)
     description: Optional[str] = None
     status: str = Field("REQUIRED", description="NOT_STARTED, REQUIRED, UPLOADED, CONFIRMED, NEEDS_REVIEW, NOT_APPLICABLE")
     is_mandatory: bool = Field(True)

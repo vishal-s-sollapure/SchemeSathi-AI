@@ -10,12 +10,30 @@ from app.schemas.checklist import (
     ApplicationChecklistCreate,
     ApplicationChecklistUpdate,
 )
+from app.services.document_intelligence.checklist_engine import DynamicChecklistEngine
 
 
 class ChecklistService:
     def __init__(self, db: Session):
+        self.db = db
         self.checklist_repo = ApplicationChecklistRepository(db)
         self.req_repo = RequirementRepository(db)
+        self.engine = DynamicChecklistEngine(db)
+
+    def generate_dynamic_checklist(
+        self,
+        student_profile_id: Optional[str] = None,
+        citizen_profile_id: Optional[str] = None,
+        scholarship_id: Optional[str] = None,
+        scheme_id: Optional[str] = None,
+    ) -> ApplicationChecklist:
+        """Generates a dynamic checklist based on verified scheme requirements."""
+        return self.engine.generate_checklist(
+            student_profile_id=student_profile_id,
+            citizen_profile_id=citizen_profile_id,
+            scholarship_id=scholarship_id,
+            scheme_id=scheme_id,
+        )
 
     def get_checklist(self, checklist_id: str) -> ApplicationChecklist:
         checklist = self.checklist_repo.get_by_id(checklist_id)
