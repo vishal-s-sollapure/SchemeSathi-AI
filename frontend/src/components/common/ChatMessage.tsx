@@ -80,10 +80,14 @@ export const ChatMessage: React.FC<ChatMessageProps> = ({ message, onFollowUpCli
               <div className="flex items-center gap-2 text-slate-400">
                 <button
                   onClick={handleSpeak}
-                  className="hover:text-govgreen-800 p-1 rounded hover:bg-slate-50 transition"
-                  title="Listen to native voice playback"
+                  className={`p-1 rounded transition ${speaking ? 'text-govgreen-700 bg-govgreen-50' : 'hover:text-govgreen-800 hover:bg-slate-50'}`}
+                  title={speaking ? "Stop reading aloud" : "Read aloud in native language"}
                 >
-                  <Volume2 className={`w-3.5 h-3.5 ${speaking ? 'text-govgreen-700 animate-pulse' : ''}`} />
+                  {speaking ? (
+                    <VolumeX className="w-3.5 h-3.5 text-rose-600 animate-pulse" />
+                  ) : (
+                    <Volume2 className="w-3.5 h-3.5" />
+                  )}
                 </button>
                 <button
                   onClick={handleCopy}
