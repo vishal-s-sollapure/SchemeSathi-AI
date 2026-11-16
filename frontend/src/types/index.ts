@@ -228,8 +228,80 @@ export interface SensitiveFieldExplanation {
 }
 
 // ============================================================================
-// Phase 7: RAG & Grounded Citation Types
+// Phase 8: Document Intelligence & Dynamic Checklist Types
 // ============================================================================
+
+export type DynamicChecklistItemStatus =
+  | 'NOT_STARTED'
+  | 'REQUIRED'
+  | 'UPLOADED'
+  | 'CONFIRMED'
+  | 'NEEDS_REVIEW'
+  | 'NOT_APPLICABLE';
+
+export interface DynamicChecklistItem {
+  requirement_id?: string;
+  name: string;
+  document_type: string;
+  description?: string;
+  status: DynamicChecklistItemStatus;
+  is_mandatory: boolean;
+  issuing_office?: string;
+  document_id?: string;
+  critical_notes?: string;
+  confirmed_evidence?: Record<string, any>;
+  official_clause?: string;
+  verification_advice?: string;
+}
+
+export interface DynamicApplicationChecklist {
+  id: string;
+  student_profile_id?: string;
+  citizen_profile_id?: string;
+  scholarship_id?: string;
+  scheme_id?: string;
+  readiness_score: number;
+  overall_status: string;
+  checklist_items: DynamicChecklistItem[];
+  unresolved_mandatory_count: number;
+  is_ready_for_submission: boolean;
+  disclaimer: string;
+  evaluated_at: string;
+}
+
+export interface ExtractedEvidenceItem {
+  id: string;
+  document_id: string;
+  evidence_type: string;
+  field_key?: string;
+  extracted_value: string;
+  confirmed_value?: string;
+  is_confirmed: boolean;
+  confidence_score: number;
+  page_number?: number;
+  raw_text_snippet?: string;
+  verification_disclaimer?: string;
+}
+
+export interface DocumentIntelligenceResponse {
+  document: {
+    id: string;
+    original_filename: string;
+    file_size_bytes: number;
+    mime_type: string;
+    page_count: number;
+    ocr_applied: boolean;
+    document_type: string;
+    storage_path?: string;
+    processing_status: string;
+  };
+  extracted_candidates: ExtractedEvidenceItem[];
+  page_count: number;
+  ocr_applied: boolean;
+  detected_document_type: string;
+  disclaimer: string;
+}
+
 
 export interface ValidatedCitation {
   source_title: string;
