@@ -19,7 +19,14 @@ import {
   StudentEvaluationInput
 } from '../types';
 
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
+// Smart Base URL resolution:
+// 1. In production (Vercel builds), automatically default to the live Render backend if VITE_API_URL is unset or points to localhost.
+// 2. In local development, default to http://localhost:8000.
+const rawApiUrl = import.meta.env.VITE_API_URL;
+const API_BASE_URL = 
+  (rawApiUrl && !rawApiUrl.includes('localhost') && !rawApiUrl.includes('127.0.0.1'))
+    ? rawApiUrl
+    : (import.meta.env.PROD ? 'https://schemesathi-ai-j1rg.onrender.com' : (rawApiUrl || 'http://localhost:8000'));
 
 export interface HealthResponse {
   status: string;
