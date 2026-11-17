@@ -31,6 +31,9 @@ class Settings(BaseSettings):
     # Database
     DATABASE_URL: str = "sqlite:///./schemesathi.db"
     
+    # Administrative Security
+    ADMIN_API_KEY: str = "dev-schemesathi-admin-key-change-in-prod"
+    
     # Document Intelligence & Uploads
     UPLOAD_DIR: str = "app/uploads"
     MAX_UPLOAD_SIZE_BYTES: int = 15 * 1024 * 1024  # 15 MB

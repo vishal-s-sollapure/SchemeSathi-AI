@@ -13,6 +13,7 @@ from app.core.exceptions import (
     SchemeSathiException,
     ValidationException,
 )
+from app.core.rate_limiter import RateLimitMiddleware
 from app.database import init_db
 
 # Configure basic logging
@@ -46,12 +47,15 @@ app = FastAPI(
     lifespan=lifespan,
 )
 
+# Rate Limiting Middleware
+app.add_middleware(RateLimitMiddleware)
+
 # CORS Middleware — strictly scoped to explicit allowed origins and optional project preview regex
 cors_options = {
     "allow_origins": settings.BACKEND_CORS_ORIGINS,
     "allow_credentials": True,
     "allow_methods": ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
-    "allow_headers": ["Content-Type", "Authorization", "Accept", "X-Requested-With"],
+    "allow_headers": ["Content-Type", "Authorization", "Accept", "X-Requested-With", "X-Admin-Key"],
 }
 if settings.CORS_ORIGIN_REGEX:
     cors_options["allow_origin_regex"] = settings.CORS_ORIGIN_REGEX
@@ -68,6 +72,8 @@ async def add_security_headers(request: Request, call_next):
     response = await call_next(request)
     response.headers["X-Content-Type-Options"] = "nosniff"
     response.headers["X-Frame-Options"] = "DENY"
+    response.headers["X-XSS-Protection"] = "1; mode=block"
+    response.headers["Strict-Transport-Security"] = "max-age=31536000; includeSubDomains"
     response.headers["Referrer-Policy"] = "strict-origin-when-cross-origin"
     return response
 

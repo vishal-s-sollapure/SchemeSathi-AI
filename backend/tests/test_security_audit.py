@@ -262,3 +262,67 @@ class TestSecurityAuditAndResilience:
             assert res_b.overall_status == EligibilityEvaluationStatus.DOES_NOT_MEET_REQUIREMENT
         finally:
             db.close()
+
+    # =========================================================================
+    # 8. Administrative Key Protection & Rate Limiting (Phase 12.4 Hardening)
+    # =========================================================================
+    def test_admin_key_dependency_blocks_unauthorized_access(self):
+        """Verifies require_admin_key raises 401 when header is missing or incorrect."""
+        from fastapi import HTTPException
+        from app.core.auth import require_admin_key
+
+        # Missing header
+        with pytest.raises(HTTPException) as exc_missing:
+            require_admin_key(x_admin_key=None)
+        assert exc_missing.value.status_code == 401
+        assert "Unauthorized" in exc_missing.value.detail
+
+        # Wrong key
+        with pytest.raises(HTTPException) as exc_invalid:
+            require_admin_key(x_admin_key="invalid-attacker-key")
+        assert exc_invalid.value.status_code == 401
+
+        # Correct key succeeds
+        assert require_admin_key(x_admin_key=settings.ADMIN_API_KEY) is True
+
+    def test_in_memory_rate_limiter_enforcement(self):
+        """Verifies the sliding window rate limiter blocks requests exceeding threshold."""
+        from app.core.rate_limiter import InMemorySlidingWindowRateLimiter
+
+        test_limiter = InMemorySlidingWindowRateLimiter()
+        client_ip = "192.168.1.100"
+        bucket = "test_ai_chat"
+        limit = 3
+
+        # First 3 requests should be allowed
+        for i in range(limit):
+            allowed, remaining, _ = test_limiter.is_allowed(client_ip, bucket, limit, window_seconds=60)
+            assert allowed is True
+            assert remaining == limit - 1 - i
+
+        # 4th request must be rejected with 429
+        allowed, remaining, retry_after = test_limiter.is_allowed(client_ip, bucket, limit, window_seconds=60)
+        assert allowed is False
+        assert remaining == 0
+        assert retry_after > 0
+
+    def test_deep_database_health_check(self):
+        """Verifies health endpoint executes deep database connectivity probe."""
+        from app.api.v1.health import health_check
+
+        # Default probe
+        res = health_check()
+        assert res["status"] == "healthy"
+        assert res["database"] == "healthy"
+        assert res["application"] == "SchemeSathi AI"
+
+    def test_gemini_api_key_in_request_headers_not_url_params(self):
+        """Verifies Gemini LLM caller passes API key via x-goog-api-key header and not URL parameter."""
+        import inspect
+        from app.services.rag.generator import GroundedResponseGenerator
+
+        source_code = inspect.getsource(GroundedResponseGenerator._call_gemini_api)
+        # Should NOT contain ?key= in the url
+        assert "?key=" not in source_code
+        # Should contain x-goog-api-key header
+        assert "x-goog-api-key" in source_code

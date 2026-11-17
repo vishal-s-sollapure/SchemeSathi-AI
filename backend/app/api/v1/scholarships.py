@@ -2,6 +2,7 @@ from typing import List, Optional
 from fastapi import APIRouter, Depends, Query, status
 from sqlalchemy.orm import Session
 
+from app.core.auth import require_admin_key
 from app.database import get_db
 from app.schemas.common import InformationStatus
 from app.schemas.scholarship import (
@@ -15,7 +16,7 @@ from app.services.opportunity_service import OpportunityService
 router = APIRouter(prefix="/scholarships", tags=["Scholarships"])
 
 
-@router.post("", response_model=ScholarshipResponse, status_code=status.HTTP_201_CREATED)
+@router.post("", response_model=ScholarshipResponse, status_code=status.HTTP_201_CREATED, dependencies=[Depends(require_admin_key)])
 def create_scholarship(data: ScholarshipCreate, db: Session = Depends(get_db)):
     service = OpportunityService(db)
     return service.create_scholarship(data)
@@ -51,13 +52,13 @@ def get_scholarship(scholarship_id: str, db: Session = Depends(get_db)):
     return service.get_scholarship(scholarship_id)
 
 
-@router.put("/{scholarship_id}", response_model=ScholarshipResponse)
+@router.put("/{scholarship_id}", response_model=ScholarshipResponse, dependencies=[Depends(require_admin_key)])
 def update_scholarship(scholarship_id: str, data: ScholarshipUpdate, db: Session = Depends(get_db)):
     service = OpportunityService(db)
     return service.update_scholarship(scholarship_id, data)
 
 
-@router.delete("/{scholarship_id}", status_code=status.HTTP_204_NO_CONTENT)
+@router.delete("/{scholarship_id}", status_code=status.HTTP_204_NO_CONTENT, dependencies=[Depends(require_admin_key)])
 def delete_scholarship(scholarship_id: str, db: Session = Depends(get_db)):
     service = OpportunityService(db)
     service.delete_scholarship(scholarship_id)

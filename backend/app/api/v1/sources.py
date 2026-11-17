@@ -2,6 +2,7 @@ from typing import List
 from fastapi import APIRouter, Depends, Query, status
 from sqlalchemy.orm import Session
 
+from app.core.auth import require_admin_key
 from app.database import get_db
 from app.schemas.source import (
     OfficialSourceCreate,
@@ -13,7 +14,7 @@ from app.services.opportunity_service import OpportunityService
 router = APIRouter(prefix="/sources", tags=["Official Sources"])
 
 
-@router.post("", response_model=OfficialSourceResponse, status_code=status.HTTP_201_CREATED)
+@router.post("", response_model=OfficialSourceResponse, status_code=status.HTTP_201_CREATED, dependencies=[Depends(require_admin_key)])
 def create_source(data: OfficialSourceCreate, db: Session = Depends(get_db)):
     service = OpportunityService(db)
     return service.create_source(data)
@@ -35,7 +36,7 @@ def get_source(source_id: str, db: Session = Depends(get_db)):
     return service.get_source(source_id)
 
 
-@router.put("/{source_id}", response_model=OfficialSourceResponse)
+@router.put("/{source_id}", response_model=OfficialSourceResponse, dependencies=[Depends(require_admin_key)])
 def update_source(source_id: str, data: OfficialSourceUpdate, db: Session = Depends(get_db)):
     service = OpportunityService(db)
     return service.update_source(source_id, data)

@@ -114,8 +114,11 @@ class GroundedResponseGenerator:
 
         user_content = f"{isolated_context}\n\nUSER QUESTION: {query}"
 
-        url = f"https://generativelanguage.googleapis.com/v1beta/models/{settings.LLM_MODEL}:generateContent?key={settings.GEMINI_API_KEY}"
-        headers = {"Content-Type": "application/json"}
+        url = f"https://generativelanguage.googleapis.com/v1beta/models/{settings.LLM_MODEL}:generateContent"
+        headers = {
+            "Content-Type": "application/json",
+            "x-goog-api-key": settings.GEMINI_API_KEY or "",
+        }
         payload = {
             "contents": [{"parts": [{"text": f"{system_instruction}\n\n{user_content}"}]}],
             "generationConfig": {"temperature": 0.1, "maxOutputTokens": 800},

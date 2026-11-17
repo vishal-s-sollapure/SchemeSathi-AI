@@ -2,6 +2,7 @@ from typing import List, Optional
 from fastapi import APIRouter, Depends, Query, status
 from sqlalchemy.orm import Session
 
+from app.core.auth import require_admin_key
 from app.database import get_db
 from app.schemas.common import InformationStatus
 from app.schemas.scheme import (
@@ -15,7 +16,7 @@ from app.services.opportunity_service import OpportunityService
 router = APIRouter(prefix="/schemes", tags=["Government Schemes"])
 
 
-@router.post("", response_model=GovernmentSchemeResponse, status_code=status.HTTP_201_CREATED)
+@router.post("", response_model=GovernmentSchemeResponse, status_code=status.HTTP_201_CREATED, dependencies=[Depends(require_admin_key)])
 def create_scheme(data: GovernmentSchemeCreate, db: Session = Depends(get_db)):
     service = OpportunityService(db)
     return service.create_scheme(data)
@@ -49,13 +50,13 @@ def get_scheme(scheme_id: str, db: Session = Depends(get_db)):
     return service.get_scheme(scheme_id)
 
 
-@router.put("/{scheme_id}", response_model=GovernmentSchemeResponse)
+@router.put("/{scheme_id}", response_model=GovernmentSchemeResponse, dependencies=[Depends(require_admin_key)])
 def update_scheme(scheme_id: str, data: GovernmentSchemeUpdate, db: Session = Depends(get_db)):
     service = OpportunityService(db)
     return service.update_scheme(scheme_id, data)
 
 
-@router.delete("/{scheme_id}", status_code=status.HTTP_204_NO_CONTENT)
+@router.delete("/{scheme_id}", status_code=status.HTTP_204_NO_CONTENT, dependencies=[Depends(require_admin_key)])
 def delete_scheme(scheme_id: str, db: Session = Depends(get_db)):
     service = OpportunityService(db)
     service.delete_scheme(scheme_id)
