@@ -9,7 +9,9 @@ from app.models.base import Base
 # Normalize database URL for PostgreSQL hosting (Render, Supabase, Neon)
 raw_db_url = settings.DATABASE_URL
 if raw_db_url.startswith("postgres://"):
-    raw_db_url = raw_db_url.replace("postgres://", "postgresql://", 1)
+    raw_db_url = raw_db_url.replace("postgres://", "postgresql+psycopg2://", 1)
+elif raw_db_url.startswith("postgresql://"):
+    raw_db_url = raw_db_url.replace("postgresql://", "postgresql+psycopg2://", 1)
 
 # Configure engine parameters depending on DB backend
 connect_args = {}
