@@ -17,7 +17,7 @@ class Settings(BaseSettings):
     PORT: int = 8000
     
     # CORS
-    BACKEND_CORS_ORIGINS: List[str] = [
+    BACKEND_CORS_ORIGINS: Union[List[str], str] = [
         "http://localhost:5173",
         "http://127.0.0.1:5173",
         "http://localhost:3000",
@@ -33,11 +33,11 @@ class Settings(BaseSettings):
     # Document Intelligence & Uploads
     UPLOAD_DIR: str = "app/uploads"
     MAX_UPLOAD_SIZE_BYTES: int = 15 * 1024 * 1024  # 15 MB
-    ALLOWED_EXTENSIONS: List[str] = [".pdf"]
+    ALLOWED_EXTENSIONS: Union[List[str], str] = [".pdf"]
     
     # Supported Languages
     DEFAULT_LANGUAGE: str = "en"
-    SUPPORTED_LANGUAGES: List[str] = ["en", "kn", "hi"]
+    SUPPORTED_LANGUAGES: Union[List[str], str] = ["en", "kn", "hi"]
 
     # AI & RAG Configuration
     GEMINI_API_KEY: Union[str, None] = None
@@ -47,9 +47,9 @@ class Settings(BaseSettings):
     RAG_MIN_SIMILARITY: float = 0.25
     EMBEDDING_DIM: int = 128
 
-    @field_validator("BACKEND_CORS_ORIGINS", mode="before")
+    @field_validator("BACKEND_CORS_ORIGINS", "SUPPORTED_LANGUAGES", "ALLOWED_EXTENSIONS", mode="after")
     @classmethod
-    def parse_cors_origins(cls, v: Union[str, List[str]]) -> List[str]:
+    def parse_string_or_list(cls, v: Union[str, List[str]]) -> List[str]:
         if isinstance(v, str):
             if v.startswith("[") and v.endswith("]"):
                 import json
@@ -57,7 +57,7 @@ class Settings(BaseSettings):
                     return json.loads(v)
                 except Exception:
                     pass
-            return [origin.strip() for origin in v.split(",") if origin.strip()]
+            return [item.strip() for item in v.split(",") if item.strip()]
         return v
 
     @field_validator("DEBUG", mode="before")
