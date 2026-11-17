@@ -92,23 +92,20 @@ SchemeSathi AI relies strictly on primary central and state government repositor
 
 ---
 
-## 4. Production Deployment Readiness
-
-> **Deployment Status**: Deployment configuration prepared. Automated tests and local production builds reported successful. Vercel and Render deployment, live integration testing and production verification remain pending.
+## 4. Production Deployment & Live Endpoints
 
 ```mermaid
 flowchart LR
-    User["Citizen / Student Device\n(Mobile / Desktop)"] --> Cloudflare["Cloudflare Edge & CDN (Target)"]
-    Cloudflare --> Vercel["Vercel Edge Network (Target)\nReact 18 + Vite SPA"]
-    Vercel -->|REST API over TLS\nScoped Origin Allowlist| Render["Render Web Service (Target)\nFastAPI Core Service"]
-    Render --> Postgres[("Managed PostgreSQL (Target)\nPersistent Storage")]
+    User["Citizen / Student Device\n(Mobile / Desktop)"] --> Vercel["Vercel Edge Network\n(https://scheme-sathi-ai-teal.vercel.app)\nReact 18 + Vite SPA"]
+    Vercel -->|REST API over TLS\nScoped Origin Allowlist| Render["Render Web Service\n(https://schemesathi-ai-j1rg.onrender.com)\nFastAPI Core Service"]
+    Render --> Postgres[("Render Managed PostgreSQL\n(schemesathi-postgres)\nPersistent Storage")]
     Render --> PyMuPDF["PyMuPDF Document Intelligence"]
     Render --> Chroma["Hybrid Vector + Lexical Retriever"]
 ```
 
-- **Frontend Target (Vercel)**: Deployment configuration prepared in `frontend/vercel.json` with SPA rewrite rules (`/(.*)` -> `/index.html`), caching headers, and modern security headers (without obsolete `X-XSS-Protection`). Local production build verified (`npm run build` compiled 1,662 modules with 0 errors).
-- **Backend Target (Render)**: Containerization and Blueprint prepared in `render.yaml` and `backend/Dockerfile` with Python 3.12 and FastAPI. Health check verified locally at `/api/health`. Test suite verified (113 of 113 tests passed).
-- **Database Architecture**: Configured for Render Managed PostgreSQL (`schemesathi-postgres`) with connection pooling (`pool_size=10, max_overflow=20, pool_pre_ping=True`) and idempotent startup seeding. Local SQLite fallback verified. *(Note: Automated database backup and disaster recovery schedules must be established upon live hosting provisioning before production sign-off).*
+- **Frontend (Vercel)**: Deployed at `https://scheme-sathi-ai-teal.vercel.app/` with SPA rewrite rules (`/(.*)` -> `/index.html`), caching headers, and modern security headers.
+- **Backend (Render)**: Deployed at `https://schemesathi-ai-j1rg.onrender.com/` running FastAPI on Python 3.12. Health check active at `/api/health`.
+- **Database Architecture**: Managed PostgreSQL (`schemesathi-postgres`) connected via `DATABASE_URL` with connection pooling (`pool_size=10, max_overflow=20, pool_pre_ping=True`) and automated idempotent startup seeding. Local SQLite fallback retained for development.
 
 ---
 

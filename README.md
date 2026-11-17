@@ -15,16 +15,14 @@
 
 ---
 
-## 🌐 Deployment Readiness & Infrastructure Configuration
+## 🌐 Deployment Configuration & Production URLs
 
-> **Readiness Status**: Deployment configuration prepared. Automated tests and local production builds reported successful. Vercel and Render deployment, live integration testing and production verification remain pending.
-
-| Component | Target Platform | Infrastructure & Config Files | Local Verification Status | Cloud Deployment Status |
-|---|---|---|---|---|
-| **Frontend Web App** | **Vercel** | `frontend/vercel.json` (SPA rewrites, security headers) | `tsc && vite build` (1,662 modules, 0 errors) | **Pending Cloud Deployment** |
-| **Backend API Core** | **Render** | `render.yaml` & `backend/Dockerfile` | 113 / 113 pytest tests passing (4.00s) | **Pending Cloud Deployment** |
-| **Interactive API Docs** | **Swagger UI / OpenAPI** | `/docs` via FastAPI OpenAPI 3.1 | Verified on local Uvicorn runtime | **Pending Cloud Deployment** |
-| **Health Check Endpoint** | **REST** | `/api/health` and `/api/v1/health` | HTTP 200 verified on local runtime | **Pending Cloud Deployment** |
+| Component | Platform | Production URL | Status |
+|---|---|---|---|
+| **Frontend Web App** | **Vercel** | [https://scheme-sathi-ai-teal.vercel.app/](https://scheme-sathi-ai-teal.vercel.app/) | **Live on Vercel** |
+| **Backend API Core** | **Render** | [https://schemesathi-ai-j1rg.onrender.com/](https://schemesathi-ai-j1rg.onrender.com/) | **Live on Render** |
+| **Interactive API Docs** | **Swagger UI** | [https://schemesathi-ai-j1rg.onrender.com/docs](https://schemesathi-ai-j1rg.onrender.com/docs) | **OpenAPI 3.1** |
+| **Health Check Endpoint** | **REST** | [https://schemesathi-ai-j1rg.onrender.com/api/health](https://schemesathi-ai-j1rg.onrender.com/api/health) | `{"status": "healthy"}` |
 
 ---
 
