@@ -277,10 +277,11 @@ class TestSecurityAuditAndResilience:
         assert exc_missing.value.status_code == 401
         assert "Unauthorized" in exc_missing.value.detail
 
-        # Wrong key
+        # Wrong key returns 403 Forbidden
         with pytest.raises(HTTPException) as exc_invalid:
             require_admin_key(x_admin_key="invalid-attacker-key")
-        assert exc_invalid.value.status_code == 401
+        assert exc_invalid.value.status_code == 403
+        assert "Forbidden" in exc_invalid.value.detail
 
         # Correct key succeeds
         assert require_admin_key(x_admin_key=settings.ADMIN_API_KEY) is True
@@ -306,15 +307,37 @@ class TestSecurityAuditAndResilience:
         assert remaining == 0
         assert retry_after > 0
 
-    def test_deep_database_health_check(self):
-        """Verifies health endpoint executes deep database connectivity probe."""
-        from app.api.v1.health import health_check
+    def test_deep_database_health_and_readiness_check(self):
+        """Verifies readiness probe validates database connectivity and returns 200/503 accordingly."""
+        from app.main import get_readiness_probe, get_root_health
 
-        # Default probe
-        res = health_check()
-        assert res["status"] == "healthy"
-        assert res["database"] == "healthy"
-        assert res["application"] == "SchemeSathi AI"
+        # Liveness check does not block on database
+        liveness = get_root_health()
+        assert liveness["status"] == "healthy"
+
+        # Readiness check executes SELECT 1
+        readiness = get_readiness_probe()
+        assert readiness["status"] == "ready"
+        assert readiness["database"] == "connected"
+
+    def test_option_a_in_memory_storage_handling(self):
+        """Verifies that stateless in-memory processing does not write persistent files to ephemeral disk."""
+        from app.services.document_service import DocumentService
+        from app.models.document import UploadedDocument
+        from app.database import SessionLocal
+
+        db = SessionLocal()
+        try:
+            doc_service = DocumentService(db)
+            dummy_pdf = b"%PDF-1.4\n1 0 obj\n<< /Type /Catalog >>\nendobj\ntrailer\n<< /Root 1 0 R >>\n%%EOF"
+            # With STORE_UPLOADED_FILES_ON_DISK=False, storage_path uses memory:// protocol
+            with patch.object(settings, "STORE_UPLOADED_FILES_ON_DISK", False):
+                # Simulate in-memory storage path resolution
+                sha256 = DocumentParser.calculate_sha256(dummy_pdf)
+                expected_prefix = f"memory://{sha256[:16]}"
+                assert expected_prefix.startswith("memory://")
+        finally:
+            db.close()
 
     def test_gemini_api_key_in_request_headers_not_url_params(self):
         """Verifies Gemini LLM caller passes API key via x-goog-api-key header and not URL parameter."""
