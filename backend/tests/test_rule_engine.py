@@ -1,7 +1,7 @@
 import pytest
 from app.database import SessionLocal, init_db
 from app.schemas.common import EligibilityEvaluationStatus
-from app.schemas.eligibility import StudentEvaluationInput
+from app.schemas.eligibility import CitizenEvaluationInput, StudentEvaluationInput
 from app.services.opportunity_service import OpportunityService
 from app.services.rule_engine import DeterministicRuleEngine
 
@@ -292,3 +292,179 @@ def test_evaluate_all_scholarships_prioritizes_eligible(db_session):
     assert summary.eligible_count >= 2
     # First item in list must be MEETS_REQUIREMENT
     assert summary.scholarships[0].overall_status == EligibilityEvaluationStatus.MEETS_REQUIREMENT
+
+
+# -----------------------------------------------------------------------------
+# 8. Regression Tests: FINDING-REL-01 (Safe Profile Name Resolution)
+# -----------------------------------------------------------------------------
+
+def test_extract_profile_name_helper():
+    """Validates that _extract_profile_name safely extracts and normalizes names across all input types."""
+    # 1. Pydantic model with valid full_name
+    assert DeterministicRuleEngine._extract_profile_name(StudentEvaluationInput(full_name="Ananya Sharma")) == "Ananya Sharma"
+    assert DeterministicRuleEngine._extract_profile_name(CitizenEvaluationInput(full_name="Savitri Devi")) == "Savitri Devi"
+
+    # 2. Pydantic model with full_name=None
+    assert DeterministicRuleEngine._extract_profile_name(StudentEvaluationInput(full_name=None)) is None
+    assert DeterministicRuleEngine._extract_profile_name(CitizenEvaluationInput(full_name=None)) is None
+
+    # 3. Pydantic model with omitted optional full_name
+    assert DeterministicRuleEngine._extract_profile_name(StudentEvaluationInput()) is None
+    assert DeterministicRuleEngine._extract_profile_name(CitizenEvaluationInput()) is None
+
+    # 4. Dictionary with valid full_name
+    assert DeterministicRuleEngine._extract_profile_name({"full_name": "Ramesh Patil"}) == "Ramesh Patil"
+
+    # 5. Dictionary with missing full_name
+    assert DeterministicRuleEngine._extract_profile_name({}) is None
+    assert DeterministicRuleEngine._extract_profile_name({"annual_family_income": 200000.0}) is None
+
+    # 6. Dictionary with full_name=None
+    assert DeterministicRuleEngine._extract_profile_name({"full_name": None}) is None
+
+    # 7. Whitespace normalization
+    assert DeterministicRuleEngine._extract_profile_name({"full_name": "   "}) is None
+    assert DeterministicRuleEngine._extract_profile_name(StudentEvaluationInput(full_name="   ")) is None
+    assert DeterministicRuleEngine._extract_profile_name({"full_name": "  Pooja Hegde  "}) == "Pooja Hegde"
+
+    # 8. Non-dict, non-pydantic or None input
+    assert DeterministicRuleEngine._extract_profile_name(None) is None
+    assert DeterministicRuleEngine._extract_profile_name(12345) is None
+
+
+def test_evaluate_all_scholarships_name_resolution_scenarios(db_session):
+    """Verifies evaluate_all_scholarships handles all 6 profile name scenarios without AttributeError
+    while preserving deterministic eligibility calculations."""
+    service = OpportunityService(db_session)
+    all_schs = service.scholarship_repo.list()
+    assert len(all_schs) >= 3
+
+    base_kwargs = {
+        "gender": "Female",
+        "category": "SC",
+        "domicile_state": "Karnataka",
+        "course_level": "Technical / Professional",
+        "marks_percentage": 85.0,
+        "annual_family_income": 200000.0,
+        "other_scholarship_recipient": False,
+        "eligible_daughters_count": 1,
+    }
+
+    # Scenario 1: Pydantic model with valid full_name
+    p1 = StudentEvaluationInput(full_name="Ananya Sharma", **base_kwargs)
+    s1 = DeterministicRuleEngine.evaluate_all_scholarships(all_schs, p1)
+    assert s1.student_name == "Ananya Sharma"
+    assert s1.total_scholarships_evaluated == len(all_schs)
+    assert s1.eligible_count >= 2
+
+    # Scenario 2: Pydantic model with full_name=None (Previously raised AttributeError)
+    p2 = StudentEvaluationInput(full_name=None, **base_kwargs)
+    s2 = DeterministicRuleEngine.evaluate_all_scholarships(all_schs, p2)
+    assert s2.student_name is None
+    assert s2.total_scholarships_evaluated == len(all_schs)
+    assert s2.eligible_count == s1.eligible_count
+
+    # Scenario 3: Pydantic model with omitted optional full_name
+    p3 = StudentEvaluationInput(**base_kwargs)
+    s3 = DeterministicRuleEngine.evaluate_all_scholarships(all_schs, p3)
+    assert s3.student_name is None
+    assert s3.total_scholarships_evaluated == len(all_schs)
+    assert s3.eligible_count == s1.eligible_count
+
+    # Scenario 4: Dictionary with valid full_name
+    d4 = {"full_name": "Ananya Sharma", **base_kwargs}
+    s4 = DeterministicRuleEngine.evaluate_all_scholarships(all_schs, d4)
+    assert s4.student_name == "Ananya Sharma"
+    assert s4.total_scholarships_evaluated == len(all_schs)
+    assert s4.eligible_count == s1.eligible_count
+
+    # Scenario 5: Dictionary with missing full_name
+    d5 = dict(base_kwargs)
+    s5 = DeterministicRuleEngine.evaluate_all_scholarships(all_schs, d5)
+    assert s5.student_name is None
+    assert s5.total_scholarships_evaluated == len(all_schs)
+    assert s5.eligible_count == s1.eligible_count
+
+    # Scenario 6: Dictionary with full_name=None
+    d6 = {"full_name": None, **base_kwargs}
+    s6 = DeterministicRuleEngine.evaluate_all_scholarships(all_schs, d6)
+    assert s6.student_name is None
+    assert s6.total_scholarships_evaluated == len(all_schs)
+    assert s6.eligible_count == s1.eligible_count
+
+    # Scenario 7: Whitespace-only name normalized to None
+    p7 = StudentEvaluationInput(full_name="   ", **base_kwargs)
+    s7 = DeterministicRuleEngine.evaluate_all_scholarships(all_schs, p7)
+    assert s7.student_name is None
+    assert s7.eligible_count == s1.eligible_count
+
+
+def test_evaluate_all_schemes_name_resolution_scenarios(db_session):
+    """Verifies evaluate_all_schemes handles all 6 profile name scenarios without AttributeError
+    while preserving deterministic eligibility calculations."""
+    service = OpportunityService(db_session)
+    schemes = service.scheme_repo.list()
+    assert len(schemes) >= 2
+
+    base_citizen = {
+        "gender": "Male",
+        "domicile_state": "Uttar Pradesh",
+        "occupation": "Farmer",
+        "landholding_hectares": 1.2,
+        "is_income_tax_payer": False,
+    }
+
+    # Scenario 1: Pydantic model with valid full_name
+    c1 = CitizenEvaluationInput(full_name="Ramesh Singh", **base_citizen)
+    s1 = DeterministicRuleEngine.evaluate_all_schemes(schemes, c1)
+    assert s1.citizen_name == "Ramesh Singh"
+    assert s1.total_schemes_evaluated == len(schemes)
+    assert s1.eligible_count == 1
+    assert s1.ineligible_count == 1
+
+    # Scenario 2: Pydantic model with full_name=None (Previously raised AttributeError)
+    c2 = CitizenEvaluationInput(full_name=None, **base_citizen)
+    s2 = DeterministicRuleEngine.evaluate_all_schemes(schemes, c2)
+    assert s2.citizen_name is None
+    assert s2.total_schemes_evaluated == len(schemes)
+    assert s2.eligible_count == s1.eligible_count
+    assert s2.ineligible_count == s1.ineligible_count
+
+    # Scenario 3: Pydantic model with omitted optional full_name
+    c3 = CitizenEvaluationInput(**base_citizen)
+    s3 = DeterministicRuleEngine.evaluate_all_schemes(schemes, c3)
+    assert s3.citizen_name is None
+    assert s3.total_schemes_evaluated == len(schemes)
+    assert s3.eligible_count == s1.eligible_count
+    assert s3.ineligible_count == s1.ineligible_count
+
+    # Scenario 4: Dictionary with valid full_name
+    d4 = {"full_name": "Ramesh Singh", **base_citizen}
+    s4 = DeterministicRuleEngine.evaluate_all_schemes(schemes, d4)
+    assert s4.citizen_name == "Ramesh Singh"
+    assert s4.total_schemes_evaluated == len(schemes)
+    assert s4.eligible_count == s1.eligible_count
+    assert s4.ineligible_count == s1.ineligible_count
+
+    # Scenario 5: Dictionary with missing full_name
+    d5 = dict(base_citizen)
+    s5 = DeterministicRuleEngine.evaluate_all_schemes(schemes, d5)
+    assert s5.citizen_name is None
+    assert s5.total_schemes_evaluated == len(schemes)
+    assert s5.eligible_count == s1.eligible_count
+    assert s5.ineligible_count == s1.ineligible_count
+
+    # Scenario 6: Dictionary with full_name=None
+    d6 = {"full_name": None, **base_citizen}
+    s6 = DeterministicRuleEngine.evaluate_all_schemes(schemes, d6)
+    assert s6.citizen_name is None
+    assert s6.total_schemes_evaluated == len(schemes)
+    assert s6.eligible_count == s1.eligible_count
+    assert s6.ineligible_count == s1.ineligible_count
+
+    # Scenario 7: Whitespace-only name normalized to None
+    c7 = CitizenEvaluationInput(full_name="   ", **base_citizen)
+    s7 = DeterministicRuleEngine.evaluate_all_schemes(schemes, c7)
+    assert s7.citizen_name is None
+    assert s7.eligible_count == s1.eligible_count
+    assert s7.ineligible_count == s1.ineligible_count
