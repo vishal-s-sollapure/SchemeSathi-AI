@@ -151,18 +151,45 @@ def get_root_health():
     }
 
 
-# Root readiness probe (Validates database connectivity)
+# Root readiness probe (Validates database connectivity and disk storage availability)
 @app.get("/api/ready", tags=["Health"])
 def get_readiness_probe():
-    """Readiness probe that validates application readiness and database connectivity."""
+    """Readiness probe that validates application readiness, database connectivity, and storage availability."""
     from sqlalchemy import text
     from app.database import SessionLocal
+
+    # 1. Probe storage availability
+    try:
+        total, used, free = shutil.disk_usage(os.path.abspath("."))
+        free_mb = round(free / (1024 * 1024), 2)
+        if free_mb < 10.0:  # Critically low storage (<10MB)
+            logger.error(f"Readiness probe failed: critically low disk space ({free_mb} MB available).")
+            return JSONResponse(
+                status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
+                content={
+                    "status": "not_ready",
+                    "database": "connected",
+                    "disk": "exhausted",
+                    "disk_free_mb": free_mb,
+                    "application": settings.PROJECT_NAME,
+                    "error": "Critically low disk storage (<10 MB remaining).",
+                },
+            )
+        disk_status = "warning" if free_mb < 50.0 else "healthy"
+    except Exception as d_exc:
+        logger.warning(f"Disk space inspection warning: {d_exc}")
+        disk_status = "unknown"
+        free_mb = -1.0
+
+    # 2. Probe database connectivity
     try:
         with SessionLocal() as session:
             session.execute(text("SELECT 1"))
         return {
             "status": "ready",
             "database": "connected",
+            "disk": disk_status,
+            "disk_free_mb": free_mb,
             "application": settings.PROJECT_NAME,
             "version": settings.VERSION,
         }
@@ -173,6 +200,8 @@ def get_readiness_probe():
             content={
                 "status": "not_ready",
                 "database": "unavailable",
+                "disk": disk_status,
+                "disk_free_mb": free_mb,
                 "application": settings.PROJECT_NAME,
                 "error": "Database connectivity check failed.",
             },
