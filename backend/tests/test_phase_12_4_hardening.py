@@ -180,6 +180,56 @@ def test_readiness_probe_returns_503_on_database_disconnect():
         assert body["database"] == "unavailable"
 
 
+def test_readiness_probe_includes_storage_metrics():
+    """Readiness probe reports disk storage health and remaining capacity."""
+    res = get_readiness_probe()
+    assert res["status"] == "ready"
+    assert res["database"] == "connected"
+    assert res["disk"] in ("healthy", "warning")
+    assert res["disk_free_mb"] > 0
+
+
+def test_readiness_probe_returns_503_on_disk_exhaustion():
+    """Readiness probe returns 503 when disk space drops below 10MB threshold."""
+    # Mock free space as 4 MB (below 10MB threshold)
+    mock_usage = (100 * 1024 * 1024, 96 * 1024 * 1024, 4 * 1024 * 1024)
+    with patch("shutil.disk_usage", return_value=mock_usage):
+        resp = get_readiness_probe()
+        assert resp.status_code == 503
+        import json
+        body = json.loads(resp.body.decode())
+        assert body["status"] == "not_ready"
+        assert body["disk"] == "exhausted"
+        assert body["disk_free_mb"] == 4.0
+
+
+def test_liveness_probe_isolated_from_database_and_disk_exhaustion():
+    """Liveness probe /api/health remains 200 OK even when DB is down and disk is exhausted."""
+    mock_usage = (100 * 1024 * 1024, 100 * 1024 * 1024, 0)
+    with patch("app.database.SessionLocal", side_effect=Exception("DB down")), \
+         patch("shutil.disk_usage", return_value=mock_usage):
+        res = get_root_health()
+        assert res["status"] == "healthy"
+        assert res["application"] == "SchemeSathi AI"
+
+
+@pytest.mark.anyio
+async def test_lifespan_graceful_shutdown_disposes_engine():
+    """Verifies that FastAPI lifespan context manager cleanly disposes database connection pool on shutdown."""
+    from app.main import lifespan
+    from fastapi import FastAPI
+    dummy_app = FastAPI()
+    
+    with patch("app.database.init_db") as mock_init, \
+         patch("app.data.seed_db.seed_database") as mock_seed, \
+         patch("app.database.engine.dispose") as mock_dispose:
+        async with lifespan(dummy_app):
+            mock_init.assert_called_once()
+            mock_seed.assert_called_once()
+            mock_dispose.assert_not_called()
+        mock_dispose.assert_called_once()
+
+
 # ============================================================================
 # 5. REL-02: Modern Security Response Headers
 # ============================================================================
