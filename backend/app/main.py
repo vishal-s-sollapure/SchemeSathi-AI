@@ -37,6 +37,11 @@ async def lifespan(app: FastAPI):
     await anyio.to_thread.run_sync(seed_database)
     logger.info("Database initialized and verified knowledge base seeded successfully.")
     yield
+    # Graceful shutdown: cleanly dispose database engine and connection pool
+    logger.info("SchemeSathi AI shutdown initiated: disposing database connection pool...")
+    from app.database import engine
+    await anyio.to_thread.run_sync(engine.dispose)
+    logger.info("SchemeSathi AI shutdown complete: database connections successfully drained.")
 
 
 app = FastAPI(
