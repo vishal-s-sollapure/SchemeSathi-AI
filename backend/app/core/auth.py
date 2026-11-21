@@ -25,7 +25,7 @@ def require_admin_key(x_admin_key: Optional[str] = Header(None, alias="X-Admin-K
     configured_key = settings.ADMIN_API_KEY
 
     # In strict production mode, reject any invocation if key is missing or unchanged from dev default
-    if settings.ENVIRONMENT == "production" or not settings.DEBUG:
+    if settings.ENVIRONMENT == "production":
         if not configured_key or configured_key == DEFAULT_DEV_KEY:
             logger.error("Administrative mutation attempted but ADMIN_API_KEY is not configured for production.")
             raise HTTPException(
