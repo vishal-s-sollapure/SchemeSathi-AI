@@ -26,7 +26,7 @@ function PageLoadingFallback() {
 export default function App() {
   useEffect(() => {
     // Non-blocking background health check
-    apiService.checkHealth().catch(() => {});
+    apiService.checkHealth().catch(() => { });
   }, []);
 
   return (
