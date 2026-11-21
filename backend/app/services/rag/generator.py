@@ -124,24 +124,30 @@ class GroundedResponseGenerator:
             "generationConfig": {"temperature": 0.1, "maxOutputTokens": 800},
         }
 
-        resp = requests.post(url, headers=headers, json=payload, timeout=8)
-        if resp.status_code == 200:
-            data = resp.json()
-            candidates = data.get("candidates", [])
-            if candidates:
-                raw_text = candidates[0].get("content", {}).get("parts", [{}])[0].get("text", "")
-                if raw_text:
-                    citations = CitationValidator.generate_citations_from_evidence(chunks, max_citations=3)
-                    return RAGResponse(
-                        query=query,
-                        answer=raw_text.strip(),
-                        language=language,
-                        citations=citations,
-                        confidence_score=0.95,
-                        is_grounded=True,
-                        sufficient_evidence=True,
-                        suggested_follow_ups=cls._generate_follow_ups(chunks, language),
-                    )
+        try:
+            with httpx.Client(timeout=httpx.Timeout(8.0, connect=3.0)) as client:
+                resp = client.post(url, headers=headers, json=payload)
+            if resp.status_code == 200:
+                data = resp.json()
+                candidates = data.get("candidates", [])
+                if candidates:
+                    raw_text = candidates[0].get("content", {}).get("parts", [{}])[0].get("text", "")
+                    if raw_text:
+                        citations = CitationValidator.generate_citations_from_evidence(chunks, max_citations=3)
+                        return RAGResponse(
+                            query=query,
+                            answer=raw_text.strip(),
+                            language=language,
+                            citations=citations,
+                            confidence_score=0.95,
+                            is_grounded=True,
+                            sufficient_evidence=True,
+                            suggested_follow_ups=cls._generate_follow_ups(chunks, language),
+                        )
+        except Exception as exc:
+            logger.warning(
+                f"External Gemini API request failed ({type(exc).__name__}). Falling back to grounded local engine."
+            )
 
         return None
 

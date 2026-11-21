@@ -131,7 +131,7 @@ async def global_exception_handler(request: Request, exc: Exception):
     )
 
 
-# Root health endpoint
+# Root health endpoint (Liveness probe: returns 200 without blocking on downstream dependencies)
 @app.get("/api/health", tags=["Health"])
 def get_root_health():
     """Exact requirement: GET /api/health -> {'status': 'healthy', 'application': 'SchemeSathi AI'}"""
@@ -139,6 +139,34 @@ def get_root_health():
         "status": "healthy",
         "application": settings.PROJECT_NAME,
     }
+
+
+# Root readiness probe (Validates database connectivity)
+@app.get("/api/ready", tags=["Health"])
+def get_readiness_probe():
+    """Readiness probe that validates application readiness and database connectivity."""
+    from sqlalchemy import text
+    from app.database import SessionLocal
+    try:
+        with SessionLocal() as session:
+            session.execute(text("SELECT 1"))
+        return {
+            "status": "ready",
+            "database": "connected",
+            "application": settings.PROJECT_NAME,
+            "version": settings.VERSION,
+        }
+    except Exception as exc:
+        logger.error(f"Readiness probe failed: {type(exc).__name__}")
+        return JSONResponse(
+            status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
+            content={
+                "status": "not_ready",
+                "database": "unavailable",
+                "application": settings.PROJECT_NAME,
+                "error": "Database connectivity check failed.",
+            },
+        )
 
 
 # Mount API v1 router
@@ -152,4 +180,5 @@ def root():
         "version": settings.VERSION,
         "docs": "/docs",
         "health": "/api/health",
+        "ready": "/api/ready",
     }

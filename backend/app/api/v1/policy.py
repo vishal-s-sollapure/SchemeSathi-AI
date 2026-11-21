@@ -1,3 +1,4 @@
+import anyio
 import shutil
 import tempfile
 from pathlib import Path
@@ -102,12 +103,14 @@ async def simplify_uploaded_government_pdf(
         tmp_path = Path(tmp.name)
 
     try:
-        return service.simplify_uploaded_pdf(
-            pdf_path=tmp_path,
-            document_title=document_title,
-            issuing_department=issuing_department,
-            official_gazette_url=official_gazette_url,
-            language=language,
+        return await anyio.to_thread.run_sync(
+            lambda: service.simplify_uploaded_pdf(
+                pdf_path=tmp_path,
+                document_title=document_title,
+                issuing_department=issuing_department,
+                official_gazette_url=official_gazette_url,
+                language=language,
+            )
         )
     except Exception as e:
         raise HTTPException(

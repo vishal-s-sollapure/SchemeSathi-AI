@@ -1,4 +1,5 @@
 from typing import Any, Dict, List, Optional
+import anyio
 from fastapi import APIRouter, Depends, File, Form, HTTPException, Query, UploadFile, status
 from sqlalchemy.orm import Session
 
@@ -31,13 +32,15 @@ async def upload_and_process_document(
     service = DocumentService(db)
     try:
         content = await file.read()
-        return service.process_and_upload_document(
-            file_bytes=content,
-            original_filename=file.filename or "uploaded_document.pdf",
-            document_type_hint=document_type_hint,
-            student_profile_id=student_profile_id,
-            citizen_profile_id=citizen_profile_id,
-            user_id=user_id,
+        return await anyio.to_thread.run_sync(
+            lambda: service.process_and_upload_document(
+                file_bytes=content,
+                original_filename=file.filename or "uploaded_document.pdf",
+                document_type_hint=document_type_hint,
+                student_profile_id=student_profile_id,
+                citizen_profile_id=citizen_profile_id,
+                user_id=user_id,
+            )
         )
     except ValueError as e:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(e))
