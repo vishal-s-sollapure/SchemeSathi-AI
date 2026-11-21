@@ -6,6 +6,7 @@ from typing import Any, Dict, List, Optional
 from sqlalchemy.orm import Session
 from sqlalchemy.orm.attributes import flag_modified
 
+from app.config import settings
 from app.core.exceptions import EntityNotFoundException
 from app.models.checklist import ApplicationChecklist
 from app.models.document import ExtractedEvidence, UploadedDocument
