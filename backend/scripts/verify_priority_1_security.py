@@ -112,29 +112,31 @@ def run_verification():
     # 3a. CF-Connecting-IP vs X-Forwarded-For precedence
     ip_cf = "198.51.100.50"
     ip_xff_spoofed = "203.0.113.99"
-    client.get(
-        "/api/v1/schemes/",
+    r3a = client.get(
+        "/api/v1/schemes",
         headers={
             "CF-Connecting-IP": ip_cf,
             "X-Forwarded-For": f"{ip_xff_spoofed}, 10.0.0.1",
-        }
+        },
+        follow_redirects=False
     )
     cf_key = (ip_cf, "general_discovery_api")
     xff_key = (ip_xff_spoofed, "general_discovery_api")
-    print(f"[3a] Cloudflare Precedence Test:")
+    print(f"[3a] Cloudflare Precedence Test (status={r3a.status_code}):")
     print(f"     CF-Connecting-IP bucket ({ip_cf}) request count: {len(limiter._history[cf_key])}")
     print(f"     Spoofed XFF bucket ({ip_xff_spoofed}) request count: {len(limiter._history[xff_key])}")
-    assert len(limiter._history[cf_key]) == 1, "CF-Connecting-IP must take precedence"
+    assert len(limiter._history[cf_key]) == 1, f"Expected 1 hit for CF-Connecting-IP, got {len(limiter._history[cf_key])}"
     assert len(limiter._history[xff_key]) == 0, "Spoofed XFF must be ignored when CF header present"
 
     # 3b. Multi-hop X-Forwarded-For resolution when CF header absent
     limiter.reset()
-    client.get(
-        "/api/v1/schemes/",
-        headers={"X-Forwarded-For": "203.0.113.77, 10.0.0.2, 172.16.0.1"}
+    r3b = client.get(
+        "/api/v1/schemes",
+        headers={"X-Forwarded-For": "203.0.113.77, 10.0.0.2, 172.16.0.1"},
+        follow_redirects=False
     )
     resolved_key = ("203.0.113.77", "general_discovery_api")
-    print(f"[3b] Multi-hop X-Forwarded-For Resolution:")
+    print(f"[3b] Multi-hop X-Forwarded-For Resolution (status={r3b.status_code}):")
     print(f"     Header value: '203.0.113.77, 10.0.0.2, 172.16.0.1'")
     print(f"     Resolved client IP: 203.0.113.77 -> Bucket count: {len(limiter._history[resolved_key])}")
     assert len(limiter._history[resolved_key]) == 1
