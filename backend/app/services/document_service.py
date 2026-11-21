@@ -89,8 +89,12 @@ class DocumentService:
         # 3. Extract candidate fields across pages
         candidates = DocumentIntelligenceExtractor.extract_candidates_from_pages(pages_text)
 
-        # 4. Save file to secure storage preventing path traversal
-        dest_path, _ = DocumentParser.save_file_securely(file_bytes, original_filename)
+        # 4. Storage handling: Option A (In-memory stateless for ephemeral hosting) vs persistent disk
+        if getattr(settings, "STORE_UPLOADED_FILES_ON_DISK", False):
+            dest_path, _ = DocumentParser.save_file_securely(file_bytes, original_filename)
+            storage_path = str(dest_path)
+        else:
+            storage_path = f"memory://{sha256[:16]}_{original_filename}"
 
         # 5. Persist UploadedDocument record
         doc = UploadedDocument(
@@ -99,7 +103,7 @@ class DocumentService:
             citizen_profile_id=citizen_profile_id,
             document_type=detected_type,
             original_filename=original_filename,
-            storage_path=str(dest_path),
+            storage_path=storage_path,
             file_size_bytes=len(file_bytes),
             mime_type="application/pdf",
             sha256_hash=sha256,
@@ -182,13 +186,14 @@ class DocumentService:
         and dynamically updates associated checklist items.
         """
         doc = self.get_document(doc_id)
-        storage_path = Path(doc.storage_path)
 
-        # 1. Secure physical file cleanup
-        if storage_path.exists():
+        # 1. Secure physical file cleanup if stored on disk
+        if not doc.storage_path.startswith("memory://"):
             try:
-                storage_path.unlink(missing_ok=True)
-            except Exception as e:
+                storage_path = Path(doc.storage_path)
+                if storage_path.exists():
+                    storage_path.unlink(missing_ok=True)
+            except Exception:
                 pass
 
         # 2. Update any checklists linking to this document

@@ -2,7 +2,7 @@ import json
 import logging
 from typing import Any, Dict, List, Optional, Tuple
 
-import requests
+import httpx
 
 from app.config import settings
 from app.services.rag.citation_validator import CitationValidator
