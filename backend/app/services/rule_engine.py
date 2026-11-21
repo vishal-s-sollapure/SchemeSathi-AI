@@ -444,6 +444,19 @@ class DeterministicRuleEngine:
 
         return actions
 
+    @staticmethod
+    def _extract_profile_name(profile_input: Any) -> Optional[str]:
+        """Safely extracts full_name from Pydantic models, dicts, or other objects without raising AttributeError."""
+        if isinstance(profile_input, dict):
+            raw_name = profile_input.get("full_name")
+        else:
+            raw_name = getattr(profile_input, "full_name", None)
+
+        if isinstance(raw_name, str):
+            clean_name = raw_name.strip()
+            return clean_name if clean_name else None
+        return None
+
     @classmethod
     def evaluate_all_scholarships(
         cls,
@@ -471,7 +484,7 @@ class DeterministicRuleEngine:
         ineligible = sum(1 for r in results if r.overall_status == EligibilityEvaluationStatus.DOES_NOT_MEET_REQUIREMENT)
         review = sum(1 for r in results if r.overall_status == EligibilityEvaluationStatus.NEEDS_REVIEW)
 
-        student_name = getattr(profile_input, "full_name", None) or profile_input.get("full_name")
+        student_name = cls._extract_profile_name(profile_input)
 
         return ScholarReadyEvaluationSummary(
             student_name=student_name,
@@ -673,7 +686,7 @@ class DeterministicRuleEngine:
         ineligible = sum(1 for r in results if r.overall_status == EligibilityEvaluationStatus.DOES_NOT_MEET_REQUIREMENT)
         review = sum(1 for r in results if r.overall_status == EligibilityEvaluationStatus.NEEDS_REVIEW)
 
-        citizen_name = getattr(profile_input, "full_name", None) or profile_input.get("full_name")
+        citizen_name = cls._extract_profile_name(profile_input)
 
         return SchemeDiscoverySummary(
             citizen_name=citizen_name,
