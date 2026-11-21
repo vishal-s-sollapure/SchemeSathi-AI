@@ -1,10 +1,13 @@
 from collections import defaultdict, deque
+import logging
 import threading
 import time
 from typing import Dict, Tuple
 from starlette.middleware.base import BaseHTTPMiddleware
 from starlette.requests import Request
 from starlette.responses import JSONResponse, Response
+
+logger = logging.getLogger("schemesathi.ratelimit")
 
 
 class InMemorySlidingWindowRateLimiter:
@@ -36,7 +39,7 @@ class InMemorySlidingWindowRateLimiter:
                 retry_after = max(1, int(earliest + window_seconds - now))
                 return False, 0, retry_after
 
-            # Allow request and append timestamp
+            # Allow request and record timestamp
             queue.append(now)
             remaining = limit - len(queue)
             return True, remaining, 0
@@ -52,54 +55,74 @@ limiter = InMemorySlidingWindowRateLimiter()
 class RateLimitMiddleware(BaseHTTPMiddleware):
     """
     Middleware applying tiered rate limits based on endpoint sensitivity:
-    - High-load AI & Document processing (Chat, PDF Upload, PDF Simplification): 15 req/min
-    - Standard discovery & evaluation endpoints: 120 req/min
-    - Health checks & system info: Exempt
+    - AI chat (/api/v1/chat/query): 10 requests/minute
+    - Document uploads (/api/v1/documents/upload): 10 requests/minute
+    - PDF policy simplification (/api/v1/policy/simplify-pdf): 10 requests/minute
+    - Policy explainer queries (/api/v1/policy/explain): 20 requests/minute
+    - General discovery & read APIs (/api/v1/...): 60 requests/minute
+    - System health & readiness probes (/api/health, /api/ready, /api/v1/health): Exempt
     """
 
     EXEMPT_PATHS = {
         "/",
         "/api/health",
+        "/api/ready",
         "/api/v1/health",
         "/docs",
         "/redoc",
         "/openapi.json",
     }
 
-    AI_DOC_PATHS = {
+    STRICT_EXPENSIVE_PATHS = {
         "/api/v1/chat/query",
         "/api/v1/documents/upload",
         "/api/v1/policy/simplify-pdf",
-        "/api/v1/policy/explain",
     }
 
     async def dispatch(self, request: Request, call_next) -> Response:
         path = request.url.path
 
-        # Bypass exempt system paths
+        # Bypass exempt system paths and CORS preflights
         if path in self.EXEMPT_PATHS or request.method == "OPTIONS":
             return await call_next(request)
 
-        # Extract client IP (handle proxies & reverse load balancers like Render/Cloudflare)
-        client_ip = request.headers.get("x-forwarded-for")
-        if client_ip:
-            client_ip = client_ip.split(",")[0].strip()
-        else:
+        # Extract client IP accounting for reverse proxies (Render, Cloudflare, AWS ALB)
+        client_ip = None
+        # 1. Cloudflare True Client IP
+        cf_ip = request.headers.get("cf-connecting-ip")
+        if cf_ip:
+            client_ip = cf_ip.strip()
+
+        # 2. X-Forwarded-For: Client IP is the leftmost entry
+        if not client_ip:
+            xff = request.headers.get("x-forwarded-for")
+            if xff:
+                client_ip = xff.split(",")[0].strip()
+
+        # 3. Direct socket client host fallback
+        if not client_ip:
             client_ip = request.client.host if request.client else "127.0.0.1"
 
         # Determine route bucket and limit
-        if any(path.startswith(ai_path) for ai_path in self.AI_DOC_PATHS):
-            bucket = "ai_doc_intensive"
-            limit = 15
+        if any(path.startswith(strict_path) for strict_path in self.STRICT_EXPENSIVE_PATHS):
+            bucket = "expensive_ai_doc"
+            limit = 10
+            window = 60
+        elif path.startswith("/api/v1/policy/explain"):
+            bucket = "policy_explainer"
+            limit = 20
             window = 60
         else:
-            bucket = "standard_api"
-            limit = 120
+            bucket = "general_discovery_api"
+            limit = 60
             window = 60
 
         allowed, remaining, retry_after = limiter.is_allowed(client_ip, bucket, limit, window)
 
         if not allowed:
+            logger.warning(
+                f"Rate limit exceeded for IP {client_ip} on {path} (bucket={bucket}, limit={limit}/min)"
+            )
             return JSONResponse(
                 status_code=429,
                 content={

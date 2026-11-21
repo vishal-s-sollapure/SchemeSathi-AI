@@ -38,6 +38,7 @@ class Settings(BaseSettings):
     UPLOAD_DIR: str = "app/uploads"
     MAX_UPLOAD_SIZE_BYTES: int = 15 * 1024 * 1024  # 15 MB
     ALLOWED_EXTENSIONS: Union[List[str], str] = [".pdf"]
+    STORE_UPLOADED_FILES_ON_DISK: bool = False  # Option A: In-memory processing (stateless for ephemeral hosting)
     
     # Supported Languages
     DEFAULT_LANGUAGE: str = "en"
