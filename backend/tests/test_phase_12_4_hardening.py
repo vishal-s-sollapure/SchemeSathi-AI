@@ -220,7 +220,7 @@ async def test_lifespan_graceful_shutdown_disposes_engine():
     from fastapi import FastAPI
     dummy_app = FastAPI()
     
-    with patch("app.database.init_db") as mock_init, \
+    with patch("app.main.init_db") as mock_init, \
          patch("app.data.seed_db.seed_database") as mock_seed, \
          patch("app.database.engine.dispose") as mock_dispose:
         async with lifespan(dummy_app):
